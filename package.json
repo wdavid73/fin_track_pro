@@ -1,0 +1,31 @@
+{
+  "name": "fin_track_pro",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
+  },
+  "scripts": {
+    "release": "standard-version",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "conventional-changelog-gitmoji-config": "^1.5.2",
+    "cz-gitmoji": "^0.0.7",
+    "husky": "^9.1.7",
+    "standard-version": "^9.5.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "npx commitlint --edit $1"
+    }
+  }
+}

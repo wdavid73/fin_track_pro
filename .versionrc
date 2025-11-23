@@ -1,0 +1,13 @@
+{
+  "types": [
+    { "type": "feat", "section": "✨ Features" },
+    { "type": "fix", "section": "🐛 Fixes" },
+    { "type": "docs", "section": "📝 Documentation" },
+    { "type": "style", "section": "🎨 Code Style" },
+    { "type": "refactor", "section": "♻️ Refactoring" },
+    { "type": "perf", "section": "⚡ Performance" },
+    { "type": "test", "section": "✅ Tests" },
+    { "type": "chore", "section": "📦 Chores" }
+  ],
+  "preset": "conventional-changelog-gitmoji-config"
+}
