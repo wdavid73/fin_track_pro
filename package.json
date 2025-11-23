@@ -18,6 +18,7 @@
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
+    "commitizen": "^4.3.1",
     "conventional-changelog-gitmoji-config": "^1.5.2",
     "cz-gitmoji": "^0.0.7",
     "husky": "^9.1.7",
