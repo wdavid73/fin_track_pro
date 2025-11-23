@@ -1,6 +1,7 @@
 import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/core/config/env_config.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
+import 'package:fin_track_pro/core/database/hive_service.dart';
 import 'package:flutter/material.dart';
 
 import 'app/app.dart';
@@ -22,6 +23,10 @@ Future<void> mainCommon(Flavor flavor, String envFile) async {
 
   // Initialize dependency injection
   await configureDependencies();
+
+  // Initialize Hive database
+  final hiveService = getIt<HiveService>();
+  await hiveService.init();
 
   runApp(const MyApp());
 }
