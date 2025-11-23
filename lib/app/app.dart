@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
 
@@ -11,6 +12,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: flavorConfig.appName,
       debugShowCheckedModeBanner: flavorConfig.showDebugBanner,
+      theme: AppTheme.getLightTheme(context),
+      darkTheme: AppTheme.getDarkTheme(context),
+      themeMode: ThemeMode.system,
       home: HomePage(flavorConfig: flavorConfig),
     );
   }
