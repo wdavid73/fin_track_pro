@@ -1,6 +1,9 @@
 import 'dart:ui';
 
 class ColorTheme {
+  static const Color textPrimary = Color(0xFF202124);
+  static const Color textSecondary = Color(0xFF757575);
+
   static const Color primaryColor = Color(0xFF4285F4);
   static const Color secondaryColor = Color(0xFF34A853);
   static const Color tertiaryColor = Color(0xFFFBBC05);
@@ -12,4 +15,6 @@ class ColorTheme {
   static const Color onTertiaryColor = Color(0xFFFEF3D9);
   static const Color onSurfaceColor = Color(0xFF202124);
   static const Color onErrorColor = Color(0xFFFCE8E6);
+
+  static const Color borderColor = Color(0xFFDADCE0);
 }

@@ -135,9 +135,17 @@ class ThemeConstants {
 
   static final baseButtonTheme = const ButtonThemeData();
 
-  static final baseCardTheme = const CardTheme();
+  static final baseCardTheme = const CardThemeData(
+    elevation: 0,
+    color: Colors.white,
+    surfaceTintColor: Colors.white,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(24)),
+      side: BorderSide(width: 1, color: ColorTheme.borderColor),
+    ),
+  );
 
-  static final baseAppBarTheme = const AppBarTheme();
+  static final baseAppBarTheme = const AppBarTheme(centerTitle: false);
 
   static final baseBottomSheetTheme = const BottomSheetThemeData();
 
@@ -154,12 +162,28 @@ class ThemeConstants {
 
   /// Dark Theme
   ///
-  static final baseAppBarThemeDark = const AppBarTheme();
-  static final baseBottomSheetThemeDark = const BottomSheetThemeData();
-  static final baseDialogThemeDark = const DialogTheme();
-  static final baseSnackBarThemeDark = const SnackBarThemeData();
-  static final baseTooltipThemeDark = const TooltipThemeData();
-  static final baseTabBarThemeDark = const TabBarTheme();
-  static final baseBottomNavigationBarThemeDark =
-      const BottomNavigationBarThemeData();
+  static final baseAppBarThemeDark = baseAppBarTheme.copyWith(
+    backgroundColor: ColorTheme.surfaceColor,
+    iconTheme: const IconThemeData(color: ColorTheme.onSurfaceColor),
+    titleTextStyle: const TextStyle(color: ColorTheme.onSurfaceColor),
+  );
+
+  static final baseBottomSheetThemeDark = baseBottomSheetTheme.copyWith(
+    backgroundColor: ColorTheme.surfaceColor,
+  );
+
+  static final baseDialogThemeDark = baseDialogTheme.copyWith(
+    backgroundColor: ColorTheme.surfaceColor,
+  );
+
+  static final baseSnackBarThemeDark = baseSnackBarTheme.copyWith(
+    backgroundColor: ColorTheme.surfaceColor,
+  );
+
+  static final baseTooltipThemeDark = baseTooltipTheme.copyWith();
+
+  static final baseTabBarThemeDark = baseTabBarTheme.copyWith();
+
+  static final baseBottomNavigationBarThemeDark = baseBottomNavigationBarTheme
+      .copyWith(backgroundColor: ColorTheme.surfaceColor);
 }
