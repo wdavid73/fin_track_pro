@@ -1,0 +1,77 @@
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+
+/// A donut chart widget for displaying budget data using fl_chart
+class DonutChart extends StatelessWidget {
+  final double totalSpent;
+  final double totalBudget;
+  final List<DonutSegment> segments;
+  final double size;
+
+  const DonutChart({
+    super.key,
+    required this.totalSpent,
+    required this.totalBudget,
+    required this.segments,
+    this.size = 160,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        children: [
+          PieChart(
+            PieChartData(
+              sectionsSpace: 4,
+              centerSpaceRadius: size * 0.35,
+              sections: segments.map((segment) {
+                return PieChartSectionData(
+                  color: segment.color,
+                  value: segment.value,
+                  title: '',
+                  radius: 20,
+                  showTitle: false,
+                );
+              }).toList(),
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Spent',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '\$${totalSpent.toStringAsFixed(0)}',
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1C1C1E),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Represents a segment in the donut chart
+class DonutSegment {
+  final double value;
+  final Color color;
+
+  const DonutSegment({required this.value, required this.color});
+}
