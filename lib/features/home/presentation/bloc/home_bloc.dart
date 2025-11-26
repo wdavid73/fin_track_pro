@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fin_track_pro/core/config/flavor_config.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
@@ -47,6 +48,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<void> _loadData(Emitter<HomeState> emit) async {
     try {
+      if (FlavorConfig.instance.isDev) {
+        await Future.delayed(const Duration(seconds: 2));
+      }
+
       // Load recent transactions, total balance, categories, and budget data
       final transactions = await _getRecentTransactions(limit: 5);
       final balance = await _getTotalBalance();

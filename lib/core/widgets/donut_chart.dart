@@ -23,19 +23,24 @@ class DonutChart extends StatelessWidget {
       height: size,
       child: Stack(
         children: [
-          PieChart(
-            PieChartData(
-              sectionsSpace: 4,
-              centerSpaceRadius: size * 0.35,
-              sections: segments.map((segment) {
-                return PieChartSectionData(
-                  color: segment.color,
-                  value: segment.value,
-                  title: '',
-                  radius: 20,
-                  showTitle: false,
-                );
-              }).toList(),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(size / 2),
+            child: PieChart(
+              PieChartData(
+                sectionsSpace: 3,
+                centerSpaceRadius: size * 0.35,
+                startDegreeOffset: -90,
+                borderData: FlBorderData(show: false),
+                sections: segments.map((segment) {
+                  return PieChartSectionData(
+                    color: segment.color,
+                    value: segment.value,
+                    title: '',
+                    radius: 24,
+                    showTitle: false,
+                  );
+                }).toList(),
+              ),
             ),
           ),
           Center(

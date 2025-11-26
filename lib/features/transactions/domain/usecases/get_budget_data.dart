@@ -1,35 +1,27 @@
 import 'package:injectable/injectable.dart';
-import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
 import 'package:fin_track_pro/features/categories/domain/repositories/category_repository.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/budget_data.dart';
 import 'package:fin_track_pro/features/transactions/domain/repositories/transaction_repository.dart';
+import 'package:fin_track_pro/features/budgets/domain/usecases/get_budgets.dart';
 
-/// Use case to calculate budget data with hardcoded budgets
+/// Use case to calculate budget data from Hive database
 @injectable
 class GetBudgetData {
   final TransactionRepository transactionRepository;
   final CategoryRepository categoryRepository;
+  final GetBudgets getBudgets;
 
-  GetBudgetData(this.transactionRepository, this.categoryRepository);
-
-  /// Hardcoded budgets per category name
-  static const Map<String, double> _categoryBudgets = {
-    'Alimentación': 500.0,
-    'Shopping': 800.0,
-    'Compras': 800.0,
-    'Entretenimiento': 400.0,
-    'Transporte': 300.0,
-    'Vivienda': 1500.0,
-    'Salud': 500.0,
-    'Educación': 600.0,
-    'Servicios': 400.0,
-    'Otros Gastos': 300.0,
-  };
+  GetBudgetData(
+    this.transactionRepository,
+    this.categoryRepository,
+    this.getBudgets,
+  );
 
   Future<BudgetData> call() async {
-    // Get all transactions and categories
+    // Get all transactions, categories, and budgets
     final transactions = await transactionRepository.getTransactions();
     final categories = await categoryRepository.getCategories();
+    final budgets = await getBudgets();
 
     // Filter only expense transactions
     final expenses = transactions.where((t) => t.type == 'expense').toList();
@@ -41,6 +33,12 @@ class GetBudgetData {
           (spentByCategory[expense.categoryId] ?? 0) + expense.amount;
     }
 
+    // Create a map of budgets by category ID for quick lookup
+    final Map<String, double> budgetByCategory = {};
+    for (final budget in budgets) {
+      budgetByCategory[budget.categoryId] = budget.amount;
+    }
+
     // Create CategoryBudget list
     final List<CategoryBudget> categoryBudgets = [];
     double totalBudget = 0.0;
@@ -49,8 +47,7 @@ class GetBudgetData {
     for (final category in categories) {
       if (category.type == 'expense') {
         final spent = spentByCategory[category.id] ?? 0.0;
-        final budget =
-            _categoryBudgets[category.name] ?? 500.0; // Default budget
+        final budget = budgetByCategory[category.id] ?? 500.0; // Default budget
 
         if (spent > 0 || budget > 0) {
           categoryBudgets.add(

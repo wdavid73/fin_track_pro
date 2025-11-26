@@ -10,13 +10,24 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
+import 'package:hive/hive.dart' as _i979;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../core/database/hive_service.dart' as _i82;
+import '../core/database/seeders/budget_seeder.dart' as _i406;
 import '../core/database/seeders/category_seeder.dart' as _i12;
 import '../core/database/seeders/database_seeder.dart' as _i118;
 import '../core/database/seeders/transaction_seeder.dart' as _i264;
 import '../core/utils/logger_service.dart' as _i910;
+import '../features/budgets/data/datasources/budget_datasource.dart' as _i196;
+import '../features/budgets/data/datasources/budget_local_datasource.dart'
+    as _i285;
+import '../features/budgets/data/models/budget_model.dart' as _i731;
+import '../features/budgets/data/repositories/budget_repository_impl.dart'
+    as _i310;
+import '../features/budgets/domain/repositories/budget_repository.dart' as _i43;
+import '../features/budgets/domain/usecases/get_budgets.dart' as _i299;
+import '../features/budgets/domain/usecases/save_budget.dart' as _i1020;
 import '../features/categories/data/datasources/category_local_datasource.dart'
     as _i409;
 import '../features/categories/data/repositories/category_repository_impl.dart'
@@ -64,11 +75,19 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i82.HiveService>(() => _i82.HiveService());
     gh.singleton<_i910.LoggerService>(() => _i910.LoggerService());
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
+    gh.lazySingleton<_i979.Box<_i731.BudgetModel>>(
+      () => registerModule.budgetBox,
+      instanceName: 'budgetBox',
+    );
     gh.singleton<_i12.CategorySeeder>(() => _i12.CategorySeeder(
           gh<_i82.HiveService>(),
           gh<_i910.LoggerService>(),
         ));
     gh.singleton<_i264.TransactionSeeder>(() => _i264.TransactionSeeder(
+          gh<_i82.HiveService>(),
+          gh<_i910.LoggerService>(),
+        ));
+    gh.singleton<_i406.BudgetSeeder>(() => _i406.BudgetSeeder(
           gh<_i82.HiveService>(),
           gh<_i910.LoggerService>(),
         ));
@@ -78,12 +97,17 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i409.CategoryLocalDataSource(gh<_i82.HiveService>()));
     gh.singleton<_i118.DatabaseSeeder>(() => _i118.DatabaseSeeder(
           gh<_i12.CategorySeeder>(),
+          gh<_i406.BudgetSeeder>(),
           gh<_i264.TransactionSeeder>(),
           gh<_i910.LoggerService>(),
         ));
+    gh.lazySingleton<_i196.BudgetDatasource>(() => _i285.BudgetLocalDatasource(
+        gh<_i979.Box<_i731.BudgetModel>>(instanceName: 'budgetBox')));
     gh.lazySingleton<_i443.TransactionRepository>(() =>
         _i667.TransactionRepositoryImpl(
             gh<_i730.TransactionLocalDataSource>()));
+    gh.lazySingleton<_i43.BudgetRepository>(
+        () => _i310.BudgetRepositoryImpl(gh<_i196.BudgetDatasource>()));
     gh.factory<_i1058.GetTransactions>(
         () => _i1058.GetTransactions(gh<_i443.TransactionRepository>()));
     gh.factory<_i333.CreateTransaction>(
@@ -92,6 +116,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i974.UpdateTransaction(gh<_i443.TransactionRepository>()));
     gh.factory<_i424.DeleteTransaction>(
         () => _i424.DeleteTransaction(gh<_i443.TransactionRepository>()));
+    gh.factory<_i1020.SaveBudget>(
+        () => _i1020.SaveBudget(gh<_i43.BudgetRepository>()));
+    gh.factory<_i299.GetBudgets>(
+        () => _i299.GetBudgets(gh<_i43.BudgetRepository>()));
     gh.factory<_i905.TransactionBloc>(() => _i905.TransactionBloc(
           gh<_i913.GetTransactions>(),
           gh<_i913.CreateTransaction>(),
@@ -104,12 +132,13 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i909.GetRecentTransactions(gh<_i443.TransactionRepository>()));
     gh.factory<_i605.GetTotalBalance>(
         () => _i605.GetTotalBalance(gh<_i443.TransactionRepository>()));
-    gh.factory<_i197.GetCategories>(
-        () => _i197.GetCategories(gh<_i745.CategoryRepository>()));
     gh.factory<_i230.GetBudgetData>(() => _i230.GetBudgetData(
           gh<_i443.TransactionRepository>(),
           gh<_i745.CategoryRepository>(),
+          gh<_i299.GetBudgets>(),
         ));
+    gh.factory<_i197.GetCategories>(
+        () => _i197.GetCategories(gh<_i745.CategoryRepository>()));
     gh.factory<_i824.HomeBloc>(() => _i824.HomeBloc(
           gh<_i909.GetRecentTransactions>(),
           gh<_i605.GetTotalBalance>(),

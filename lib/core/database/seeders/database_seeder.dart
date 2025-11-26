@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:fin_track_pro/core/database/seeders/seeder.dart';
 import 'package:fin_track_pro/core/database/seeders/category_seeder.dart';
+import 'package:fin_track_pro/core/database/seeders/budget_seeder.dart';
 import 'package:fin_track_pro/core/database/seeders/transaction_seeder.dart';
 import 'package:fin_track_pro/core/utils/logger_service.dart';
 
@@ -11,10 +12,16 @@ import 'package:fin_track_pro/core/utils/logger_service.dart';
 @singleton
 class DatabaseSeeder {
   final CategorySeeder _categorySeeder;
+  final BudgetSeeder _budgetSeeder;
   final TransactionSeeder _transactionSeeder;
   final LoggerService _logger;
 
-  DatabaseSeeder(this._categorySeeder, this._transactionSeeder, this._logger);
+  DatabaseSeeder(
+    this._categorySeeder,
+    this._budgetSeeder,
+    this._transactionSeeder,
+    this._logger,
+  );
 
   /// Run all seeders in order
   ///
@@ -23,7 +30,11 @@ class DatabaseSeeder {
   Future<void> seedAll() async {
     _logger.info('🌱 Starting database seeding...', tag: 'DatabaseSeeder');
 
-    final seeders = <Seeder>[_categorySeeder, _transactionSeeder];
+    final seeders = <Seeder>[
+      _categorySeeder,
+      _budgetSeeder, // Must run after categories
+      _transactionSeeder,
+    ];
 
     for (final seeder in seeders) {
       try {
@@ -45,6 +56,7 @@ class DatabaseSeeder {
   Future<void> seedOne(String seederName) async {
     final seederMap = {
       'CategorySeeder': _categorySeeder,
+      'BudgetSeeder': _budgetSeeder,
       'TransactionSeeder': _transactionSeeder,
     };
 
