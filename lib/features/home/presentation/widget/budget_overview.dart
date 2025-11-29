@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:fin_track_pro/core/utils/icon_helper.dart';
 import 'package:fin_track_pro/core/widgets/budget_category_item.dart';
 import 'package:fin_track_pro/core/widgets/donut_chart.dart';
@@ -29,13 +30,13 @@ class BudgetOverview extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(),
+              _buildHeader(context),
               const SizedBox(height: 20),
-              _buildContent(),
+              _buildContent(context),
               const SizedBox(height: 20),
               const Divider(),
               const SizedBox(height: 12),
-              _buildFooter(),
+              _buildFooter(context),
             ],
           ),
         ),
@@ -43,19 +44,18 @@ class BudgetOverview extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (_isLoading)
           const Skeleton(width: 140, height: 20).shimmer(isLoading: true)
         else
-          const Text(
+          Text(
             'Budget Overview',
-            style: TextStyle(
+            style: context.textTheme.titleLarge?.copyWith(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF1C1C1E),
             ),
           ),
         if (_isLoading)
@@ -63,16 +63,19 @@ class BudgetOverview extends StatelessWidget {
         else
           TextButton(
             onPressed: () {},
-            child: const Text(
+            child: Text(
               'View Details',
-              style: TextStyle(fontSize: 15, color: Colors.blue),
+              style: context.textTheme.labelLarge?.copyWith(
+                fontSize: 15,
+                color: context.primaryColor,
+              ),
             ),
           ),
       ],
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     if (_isLoading) {
       return SizedBox(
         width: double.infinity,
@@ -98,12 +101,15 @@ class BudgetOverview extends StatelessWidget {
     }
 
     if (budgetData == null || budgetData!.categories.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24.0),
           child: Text(
             'No budget data available',
-            style: TextStyle(color: Colors.grey, fontSize: 16),
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: context.colorScheme.onSurfaceVariant,
+              fontSize: 16,
+            ),
           ),
         ),
       );
@@ -142,28 +148,28 @@ class BudgetOverview extends StatelessWidget {
     );
   }
 
-  Widget _buildFooter() {
+  Widget _buildFooter(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (_isLoading)
           const Skeleton(width: 130, height: 16).shimmer(isLoading: true)
         else
-          const Text(
+          Text(
             'Budget Remaining',
-            style: TextStyle(fontSize: 16, color: Color(0xFF1C1C1E)),
+            style: context.textTheme.titleMedium?.copyWith(fontSize: 16),
           ),
         if (_isLoading)
           const Skeleton(width: 100, height: 28).shimmer(isLoading: true)
         else
           Text(
             '\$${budgetData?.remaining.toStringAsFixed(2) ?? '0.00'}',
-            style: TextStyle(
+            style: context.textTheme.headlineMedium?.copyWith(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: (budgetData?.remaining ?? 0) >= 0
-                  ? Colors.green
-                  : Colors.red,
+                  ? context.secondaryColor
+                  : context.errorColor,
             ),
           ),
       ],

@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 
 /// A skeleton widget that can be used as a placeholder during loading
@@ -36,7 +37,7 @@ class Skeleton extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: context.colorScheme.surfaceContainerHighest,
         shape: shape,
         borderRadius: shape == BoxShape.rectangle
             ? BorderRadius.circular(borderRadius)

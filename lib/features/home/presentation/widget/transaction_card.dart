@@ -1,5 +1,6 @@
+import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:intl/intl.dart';
 
 class TransactionCard extends StatelessWidget {
@@ -26,12 +27,12 @@ class TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
+    final formatter = NumberFormat.currency(symbol: '\$');
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -62,10 +63,8 @@ class TransactionCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF1C1C1E),
+                  style: context.textTheme.titleMedium?.copyWith(
+                    color: context.colorScheme.onSurface,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -73,10 +72,8 @@ class TransactionCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   date,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey[600],
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -86,10 +83,9 @@ class TransactionCard extends StatelessWidget {
           // Monto
           Text(
             '${isIncome ? '+' : '-'}${formatter.format(amount)}',
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
+            style: context.textTheme.titleMedium?.copyWith(
               color: amountColor,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],

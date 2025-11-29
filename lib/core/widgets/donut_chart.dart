@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -47,21 +48,19 @@ class DonutChart extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   'Spent',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
+                  style: context.textTheme.labelMedium?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '\$${totalSpent.toStringAsFixed(0)}',
-                  style: const TextStyle(
-                    fontSize: 28,
+                  style: context.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1C1C1E),
+                    color: context.colorScheme.onSurface,
                   ),
                 ),
               ],

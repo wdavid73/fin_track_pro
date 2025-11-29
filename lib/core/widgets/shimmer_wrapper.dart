@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -30,9 +31,15 @@ class ShimmerWrapper extends StatelessWidget {
       return child;
     }
 
+    final isDark = context.brightness == Brightness.dark;
+    final defaultBaseColor = context.colorScheme.surfaceContainerHighest;
+    final defaultHighlightColor = isDark
+        ? const Color(0xFF484848)
+        : Colors.grey[100]!;
+
     return Shimmer.fromColors(
-      baseColor: baseColor ?? Colors.grey[300]!,
-      highlightColor: highlightColor ?? Colors.grey[100]!,
+      baseColor: baseColor ?? defaultBaseColor,
+      highlightColor: highlightColor ?? defaultHighlightColor,
       child: child,
     );
   }

@@ -4,7 +4,7 @@ import 'package:fin_track_pro/core/widgets/shimmer_wrapper.dart';
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/transaction_card.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/transaction.dart';
-import 'package:fin_track_pro/theme/utils/color_theme.dart';
+import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:fin_track_pro/theme/utils/resposive.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -40,11 +40,9 @@ class Transactions extends StatelessWidget {
           if (_isLoading)
             const Skeleton(width: 180, height: 18).shimmer(isLoading: true)
           else
-            const Text(
+            Text(
               'Recent Transactions',
-              style: TextStyle(
-                color: ColorTheme.textPrimary,
-                fontSize: 16,
+              style: context.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -52,7 +50,7 @@ class Transactions extends StatelessWidget {
           Expanded(
             child: _isLoading
                 ? _buildLoadingSkeleton()
-                : _buildTransactionsList(),
+                : _buildTransactionsList(context),
           ),
         ],
       ),
@@ -95,17 +93,23 @@ class Transactions extends StatelessWidget {
     );
   }
 
-  Widget _buildTransactionsList() {
+  Widget _buildTransactionsList(BuildContext context) {
     if (transactions.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.receipt_long_outlined, size: 48, color: Colors.grey),
-            Gap(16),
+            Icon(
+              Icons.receipt_long_outlined,
+              size: 48,
+              color: context.colorScheme.onSurfaceVariant,
+            ),
+            const Gap(16),
             Text(
               'No transactions yet',
-              style: TextStyle(color: Colors.grey, fontSize: 16),
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: context.colorScheme.onSurfaceVariant,
+              ),
             ),
           ],
         ),
@@ -125,7 +129,7 @@ class Transactions extends StatelessWidget {
             : (isIncome ? Icons.arrow_downward : Icons.arrow_upward);
         final categoryColor = category != null
             ? IconHelper.getColor(category.color)
-            : (isIncome ? Colors.green : Colors.red);
+            : (isIncome ? context.secondaryColor : context.errorColor);
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -136,7 +140,7 @@ class Transactions extends StatelessWidget {
             iconColor: categoryColor,
             title: category?.name ?? transaction.note ?? 'Transaction',
             date: DateFormat('MMM dd, yyyy').format(transaction.date),
-            amountColor: isIncome ? Colors.green : Colors.red,
+            amountColor: isIncome ? context.secondaryColor : context.errorColor,
             isIncome: isIncome,
           ),
         );

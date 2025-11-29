@@ -56,6 +56,8 @@ import '../features/transactions/domain/usecases/get_transactions.dart'
 import '../features/transactions/domain/usecases/update_transaction.dart'
     as _i974;
 import '../features/transactions/domain/usecases/usecases.dart' as _i913;
+import '../features/transactions/presentation/bloc/add_transaction_cubit/add_transaction_cubit.dart'
+    as _i70;
 import '../features/transactions/presentation/bloc/transaction_bloc/transaction_bloc.dart'
     as _i905;
 import 'register_module.dart' as _i291;
@@ -79,15 +81,15 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.budgetBox,
       instanceName: 'budgetBox',
     );
+    gh.singleton<_i406.BudgetSeeder>(() => _i406.BudgetSeeder(
+          gh<_i82.HiveService>(),
+          gh<_i910.LoggerService>(),
+        ));
     gh.singleton<_i12.CategorySeeder>(() => _i12.CategorySeeder(
           gh<_i82.HiveService>(),
           gh<_i910.LoggerService>(),
         ));
     gh.singleton<_i264.TransactionSeeder>(() => _i264.TransactionSeeder(
-          gh<_i82.HiveService>(),
-          gh<_i910.LoggerService>(),
-        ));
-    gh.singleton<_i406.BudgetSeeder>(() => _i406.BudgetSeeder(
           gh<_i82.HiveService>(),
           gh<_i910.LoggerService>(),
         ));
@@ -144,6 +146,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i605.GetTotalBalance>(),
           gh<_i197.GetCategories>(),
           gh<_i230.GetBudgetData>(),
+        ));
+    gh.factory<_i70.AddTransactionCubit>(() => _i70.AddTransactionCubit(
+          gh<_i197.GetCategories>(),
+          gh<_i333.CreateTransaction>(),
         ));
     return this;
   }

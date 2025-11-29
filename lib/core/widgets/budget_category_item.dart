@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -39,15 +40,16 @@ class BudgetCategoryItem extends StatelessWidget {
             children: [
               Text(
                 name,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: context.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF1C1C1E),
+                  color: context.colorScheme.onSurface,
                 ),
               ),
               Text(
                 '${formatter.format(spent)} / ${formatter.format(budget)}',
-                style: TextStyle(fontSize: 15, color: Colors.grey[600]),
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colorScheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),

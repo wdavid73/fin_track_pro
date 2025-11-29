@@ -17,4 +17,6 @@ class ColorTheme {
   static const Color onErrorColor = Color(0xFFFCE8E6);
 
   static const Color borderColor = Color(0xFFDADCE0);
+
+  static const Color darkBackgroundColor = Color(0xFF121212);
 }

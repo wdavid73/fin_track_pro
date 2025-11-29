@@ -3,7 +3,8 @@ import 'package:fin_track_pro/features/home/presentation/bloc/home_bloc.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/balance_summary.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/budget_overview.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/transactions.dart';
-import 'package:fin_track_pro/theme/utils/color_theme.dart';
+import 'package:fin_track_pro/features/transactions/presentation/pages/add_transaction_page.dart';
+import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -16,28 +17,38 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => getIt<HomeBloc>()..add(const LoadHomeData()),
       child: Scaffold(
-        appBar: _appBar(),
+        appBar: _appBar(context),
         body: SafeArea(child: _body()),
-        bottomNavigationBar: _bottomNavigationBar(),
+        floatingActionButton: FloatingActionButton(
+          tooltip: 'Add Transaction',
+          onPressed: () {
+            showAddTransactionModal(context);
+          },
+          backgroundColor: context.primaryColor,
+          child: const Icon(Icons.add, color: Colors.white),
+        ),
       ),
     );
   }
 
-  AppBar _appBar() {
+  AppBar _appBar(BuildContext context) {
     return AppBar(
-      title: const Row(
+      title: Row(
         children: [
           Icon(
             Icons.account_balance_wallet_outlined,
-            color: ColorTheme.primaryColor,
+            color: context.primaryColor,
           ),
-          Gap(8),
-          Text('FinTrack Pro', style: TextStyle(color: ColorTheme.textPrimary)),
-          Spacer(),
+          const Gap(8),
+          Text('FinTrack Pro', style: context.textTheme.titleLarge),
+          const Spacer(),
           CircleAvatar(
             radius: 20,
-            backgroundColor: ColorTheme.onPrimaryColor,
-            child: Icon(Icons.person_outline_rounded),
+            backgroundColor: context.colorScheme.primaryContainer,
+            child: Icon(
+              Icons.person_outline_rounded,
+              color: context.colorScheme.onPrimaryContainer,
+            ),
           ),
         ],
       ),
@@ -52,7 +63,7 @@ class HomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                Icon(Icons.error_outline, size: 48, color: context.errorColor),
                 const Gap(16),
                 Text(state.message),
                 const Gap(16),
@@ -112,56 +123,6 @@ class HomePage extends StatelessWidget {
 
         return const SizedBox.shrink();
       },
-    );
-  }
-
-  Widget _bottomNavigationBar() {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 0,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        selectedLabelStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-        ),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_outlined),
-            activeIcon: Icon(Icons.bar_chart),
-            label: 'Analytics',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.category_outlined),
-            activeIcon: Icon(Icons.category),
-            label: 'Categories',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
-            activeIcon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-      ),
     );
   }
 }

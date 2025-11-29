@@ -24,20 +24,22 @@ class ThemeConstants {
     onError: ColorTheme.onErrorColor,
     surface: ColorTheme.surfaceColor,
     onSurface: ColorTheme.onSurfaceColor,
+    surfaceContainerHighest: Color(0xFFE0E0E0),
   );
 
   static const ColorScheme darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
     primary: ColorTheme.primaryColor,
-    onPrimary: ColorTheme.onPrimaryColor,
+    onPrimary: Colors.white,
     secondary: ColorTheme.secondaryColor,
     onSecondary: ColorTheme.onSecondaryColor,
     tertiary: ColorTheme.tertiaryColor,
     onTertiary: ColorTheme.onTertiaryColor,
     error: ColorTheme.errorColor,
     onError: ColorTheme.onErrorColor,
-    surface: ColorTheme.surfaceColor,
-    onSurface: ColorTheme.onSurfaceColor,
+    surface: ColorTheme.onSurfaceColor,
+    onSurface: ColorTheme.surfaceColor,
+    surfaceContainerHighest: Color(0xFF303134),
   );
 
   /// Icon Theme
@@ -135,6 +137,29 @@ class ThemeConstants {
 
   static final baseButtonTheme = const ButtonThemeData();
 
+  static final baseElevatedButtonTheme = ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: ColorTheme.primaryColor,
+      foregroundColor: Colors.white,
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(100)),
+      ),
+      elevation: 0,
+      disabledBackgroundColor: ColorTheme.borderColor,
+      disabledForegroundColor: ColorTheme.textSecondary,
+      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+    ),
+  );
+
+  static final baseTextButtonTheme = TextButtonThemeData(
+    style: TextButton.styleFrom(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      foregroundColor: ColorTheme.textSecondary,
+      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+    ),
+  );
+
   static final baseCardTheme = const CardThemeData(
     elevation: 0,
     color: Colors.white,
@@ -145,13 +170,29 @@ class ThemeConstants {
     ),
   );
 
+  static final baseCardThemeDark = CardThemeData(
+    elevation: 0,
+    color: ColorTheme.onSurfaceColor,
+    surfaceTintColor: ColorTheme.onSurfaceColor,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(24)),
+      side: BorderSide(width: 1, color: Colors.white12),
+    ),
+  );
+
   static final baseAppBarTheme = const AppBarTheme(centerTitle: false);
 
-  static final baseBottomSheetTheme = const BottomSheetThemeData();
+  static final baseBottomSheetTheme = const BottomSheetThemeData(
+    showDragHandle: true,
+  );
 
   static final baseDialogTheme = const DialogTheme();
 
-  static final baseSnackBarTheme = const SnackBarThemeData();
+  static final baseSnackBarTheme = const SnackBarThemeData(
+    backgroundColor: ColorTheme.onSurfaceColor,
+    contentTextStyle: TextStyle(color: ColorTheme.surfaceColor),
+    behavior: SnackBarBehavior.floating,
+  );
 
   static final baseTooltipTheme = const TooltipThemeData();
 
@@ -163,13 +204,19 @@ class ThemeConstants {
   /// Dark Theme
   ///
   static final baseAppBarThemeDark = baseAppBarTheme.copyWith(
-    backgroundColor: ColorTheme.surfaceColor,
-    iconTheme: const IconThemeData(color: ColorTheme.onSurfaceColor),
-    titleTextStyle: const TextStyle(color: ColorTheme.onSurfaceColor),
+    backgroundColor: ColorTheme.onSurfaceColor,
+    iconTheme: const IconThemeData(color: ColorTheme.surfaceColor),
+    titleTextStyle: const TextStyle(
+      color: ColorTheme.surfaceColor,
+      fontSize: 20,
+      fontWeight: FontWeight.w500,
+    ),
   );
 
   static final baseBottomSheetThemeDark = baseBottomSheetTheme.copyWith(
-    backgroundColor: ColorTheme.surfaceColor,
+    backgroundColor: ColorTheme.onSurfaceColor,
+    dragHandleColor: ColorTheme.surfaceColor,
+    showDragHandle: true,
   );
 
   static final baseDialogThemeDark = baseDialogTheme.copyWith(
