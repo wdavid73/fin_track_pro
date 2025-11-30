@@ -5,6 +5,9 @@ import 'package:mocktail/mocktail.dart';
 
 class MockGetTransactions extends Mock implements GetTransactions {}
 
+class MockGetPaginatedTransactions extends Mock
+    implements GetPaginatedTransactions {}
+
 class MockCreateTransaction extends Mock implements CreateTransaction {}
 
 class MockUpdateTransaction extends Mock implements UpdateTransaction {}

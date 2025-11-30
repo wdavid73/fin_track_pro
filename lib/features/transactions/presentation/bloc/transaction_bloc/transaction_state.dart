@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import '../../../domain/entities/transaction.dart';
+part of 'transaction_bloc.dart';
 
 abstract class TransactionState extends Equatable {
   const TransactionState();
@@ -41,4 +40,31 @@ class TransactionOperationSuccess extends TransactionState {
 
   @override
   List<Object?> get props => [message];
+}
+
+class TransactionPaginatedLoaded extends TransactionState {
+  final List<Transaction> transactions;
+  final bool hasMore;
+  final int currentOffset;
+
+  const TransactionPaginatedLoaded({
+    required this.transactions,
+    required this.hasMore,
+    required this.currentOffset,
+  });
+
+  @override
+  List<Object?> get props => [transactions, hasMore, currentOffset];
+
+  TransactionPaginatedLoaded copyWith({
+    List<Transaction>? transactions,
+    bool? hasMore,
+    int? currentOffset,
+  }) {
+    return TransactionPaginatedLoaded(
+      transactions: transactions ?? this.transactions,
+      hasMore: hasMore ?? this.hasMore,
+      currentOffset: currentOffset ?? this.currentOffset,
+    );
+  }
 }

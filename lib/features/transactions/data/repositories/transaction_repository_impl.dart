@@ -56,4 +56,16 @@ class TransactionRepositoryImpl implements TransactionRepository {
     final models = await _localDataSource.getTransactionsByType(type);
     return models.map((model) => model.toEntity()).toList();
   }
+
+  @override
+  Future<List<Transaction>> getPaginatedTransactions({
+    required int limit,
+    required int offset,
+  }) async {
+    final models = await _localDataSource.getPaginatedTransactions(
+      limit: limit,
+      offset: offset,
+    );
+    return models.map((model) => model.toEntity()).toList();
+  }
 }

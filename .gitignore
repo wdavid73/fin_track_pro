@@ -53,3 +53,5 @@ node_modules/
 .env.staging
 .env.prod
 .env
+
+lib/app/injection_container.config.dart

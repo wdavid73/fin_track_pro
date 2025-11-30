@@ -3,11 +3,13 @@ import 'package:fin_track_pro/core/widgets/skeleton.dart';
 import 'package:fin_track_pro/core/widgets/shimmer_wrapper.dart';
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/transaction_card.dart';
+import 'package:fin_track_pro/features/transactions/presentation/widgets/transaction_details_modal.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/transaction.dart';
 import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:fin_track_pro/theme/utils/resposive.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class Transactions extends StatelessWidget {
@@ -40,11 +42,26 @@ class Transactions extends StatelessWidget {
           if (_isLoading)
             const Skeleton(width: 180, height: 18).shimmer(isLoading: true)
           else
-            Text(
-              'Recent Transactions',
-              style: context.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Recent Transactions',
+                  style: context.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => context.push('/home/transactions'),
+                  child: Text(
+                    'View all',
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: context.primaryColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
             ),
           const Gap(16),
           Expanded(
@@ -142,6 +159,15 @@ class Transactions extends StatelessWidget {
             date: DateFormat('MMM dd, yyyy').format(transaction.date),
             amountColor: isIncome ? context.secondaryColor : context.errorColor,
             isIncome: isIncome,
+            onLongPress: () {
+              showTransactionDetailsModal(
+                context: context,
+                transaction: transaction,
+                icon: categoryIcon,
+                iconColor: categoryColor,
+                iconBackgroundColor: categoryColor.withValues(alpha: 0.1),
+              );
+            },
           ),
         );
       },

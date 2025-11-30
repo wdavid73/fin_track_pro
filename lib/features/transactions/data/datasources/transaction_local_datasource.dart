@@ -72,4 +72,31 @@ class TransactionLocalDataSource implements TransactionDataSource {
 
     return transactions;
   }
+
+  @override
+  Future<List<TransactionModel>> getPaginatedTransactions({
+    required int limit,
+    required int offset,
+  }) async {
+    final box = _hiveService.getBox(HiveService.transactionsBox);
+    final allTransactions = box.values.cast<TransactionModel>().toList();
+
+    // Sort by date descending (newest first)
+    allTransactions.sort((a, b) => b.date.compareTo(a.date));
+
+    // Apply pagination
+    final startIndex = offset;
+    final endIndex = offset + limit;
+
+    if (startIndex >= allTransactions.length) {
+      return [];
+    }
+
+    final paginatedTransactions = allTransactions.sublist(
+      startIndex,
+      endIndex > allTransactions.length ? allTransactions.length : endIndex,
+    );
+
+    return paginatedTransactions;
+  }
 }

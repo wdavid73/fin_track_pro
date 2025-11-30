@@ -4,6 +4,7 @@ import 'package:fin_track_pro/features/home/presentation/widget/balance_summary.
 import 'package:fin_track_pro/features/home/presentation/widget/budget_overview.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/transactions.dart';
 import 'package:fin_track_pro/features/transactions/presentation/pages/add_transaction_page.dart';
+import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart';
 import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,18 +15,26 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<HomeBloc>()..add(const LoadHomeData()),
+    // Use singleton TransactionBloc from get_it
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => getIt<HomeBloc>()..add(const LoadHomeData()),
+        ),
+        BlocProvider.value(value: getIt<TransactionBloc>()),
+      ],
       child: Scaffold(
         appBar: _appBar(context),
         body: SafeArea(child: _body()),
-        floatingActionButton: FloatingActionButton(
-          tooltip: 'Add Transaction',
-          onPressed: () {
-            showAddTransactionModal(context);
-          },
-          backgroundColor: context.primaryColor,
-          child: const Icon(Icons.add, color: Colors.white),
+        floatingActionButton: Builder(
+          builder: (context) => FloatingActionButton(
+            tooltip: 'Add Transaction',
+            onPressed: () {
+              showAddTransactionModal(context);
+            },
+            backgroundColor: Theme.of(context).primaryColor,
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
         ),
       ),
     );

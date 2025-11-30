@@ -11,4 +11,8 @@ abstract class TransactionRepository {
     DateTime end,
   );
   Future<List<Transaction>> getTransactionsByType(String type);
+  Future<List<Transaction>> getPaginatedTransactions({
+    required int limit,
+    required int offset,
+  });
 }

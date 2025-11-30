@@ -5,6 +5,7 @@ import 'package:fin_track_pro/features/categories/presentation/categories_page.d
 import 'package:fin_track_pro/features/home/presentation/home_page.dart';
 import 'package:fin_track_pro/features/settings/presentation/settings_page.dart';
 import 'package:fin_track_pro/features/splash/presentation/splash_page.dart';
+import 'package:fin_track_pro/features/transactions/presentation/pages/all_transactions_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -41,6 +42,12 @@ class AppRoutes {
               GoRoute(
                 path: RouteConstants.home,
                 builder: (context, state) => const HomePage(),
+                routes: [
+                  GoRoute(
+                    path: 'transactions',
+                    builder: (context, state) => const AllTransactionsPage(),
+                  ),
+                ],
               ),
             ],
           ),

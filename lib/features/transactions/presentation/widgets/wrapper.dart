@@ -11,8 +11,9 @@ class WrapperBlocProviderTransaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final transactionBloc = getIt.get<TransactionBloc>();
-    final addTransactionCubit = getIt.get<AddTransactionCubit>();
+    // Use singleton TransactionBloc from get_it
+    final transactionBloc = getIt<TransactionBloc>();
+    final addTransactionCubit = getIt<AddTransactionCubit>();
 
     return MultiBlocProvider(
       providers: [

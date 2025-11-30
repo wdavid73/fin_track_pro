@@ -170,11 +170,11 @@ class ThemeConstants {
     ),
   );
 
-  static final baseCardThemeDark = CardThemeData(
+  static final baseCardThemeDark = const CardThemeData(
     elevation: 0,
     color: ColorTheme.onSurfaceColor,
     surfaceTintColor: ColorTheme.onSurfaceColor,
-    shape: const RoundedRectangleBorder(
+    shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(24)),
       side: BorderSide(width: 1, color: Colors.white12),
     ),

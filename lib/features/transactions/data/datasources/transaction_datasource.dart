@@ -13,4 +13,8 @@ abstract class TransactionDataSource {
     DateTime end,
   );
   Future<List<TransactionModel>> getTransactionsByType(String type);
+  Future<List<TransactionModel>> getPaginatedTransactions({
+    required int limit,
+    required int offset,
+  });
 }

@@ -54,7 +54,7 @@ class MoneyInputFormatter extends TextInputFormatter {
     }
 
     // Extract only numeric characters from old and new values
-    final oldNumbers = oldValue.text.replaceAll(RegExp(r'[^\d]'), '');
+    // final oldNumbers = oldValue.text.replaceAll(RegExp(r'[^\d]'), '');
     final newNumbers = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
 
     // Return empty if no numbers remain after filtering

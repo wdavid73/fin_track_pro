@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import '../../../domain/entities/transaction.dart';
+part of 'transaction_bloc.dart';
 
 abstract class TransactionEvent extends Equatable {
   const TransactionEvent();
@@ -37,4 +36,17 @@ class DeleteTransactionEvent extends TransactionEvent {
 
   @override
   List<Object?> get props => [id];
+}
+
+class LoadPaginatedTransactions extends TransactionEvent {
+  final int limit;
+
+  const LoadPaginatedTransactions({this.limit = 15});
+
+  @override
+  List<Object?> get props => [limit];
+}
+
+class LoadMoreTransactions extends TransactionEvent {
+  const LoadMoreTransactions();
 }

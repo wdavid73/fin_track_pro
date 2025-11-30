@@ -29,7 +29,7 @@ class TransactionTypeToggle extends StatelessWidget {
             child: _ToggleOption(
               label: 'Expense',
               isSelected: selectedType == 'expense',
-              selectedColor: context.errorColor.withOpacity(0.1),
+              selectedColor: context.errorColor.withValues(alpha: 0.1),
               selectedTextColor: context.errorColor,
               onTap: () => onTypeChanged('expense'),
             ),
@@ -39,7 +39,7 @@ class TransactionTypeToggle extends StatelessWidget {
             child: _ToggleOption(
               label: 'Income',
               isSelected: selectedType == 'income',
-              selectedColor: context.primaryColor.withOpacity(0.1),
+              selectedColor: context.primaryColor.withValues(alpha: 0.1),
               selectedTextColor: context.primaryColor,
               onTap: () => onTypeChanged('income'),
             ),

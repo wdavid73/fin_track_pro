@@ -12,6 +12,7 @@ class TransactionCard extends StatelessWidget {
   final double amount;
   final Color amountColor;
   final bool isIncome;
+  final VoidCallback? onLongPress;
 
   const TransactionCard({
     super.key,
@@ -23,6 +24,7 @@ class TransactionCard extends StatelessWidget {
     required this.amount,
     required this.amountColor,
     required this.isIncome,
+    this.onLongPress,
   });
 
   @override
@@ -30,7 +32,6 @@ class TransactionCard extends StatelessWidget {
     final formatter = NumberFormat.currency(symbol: '\$');
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
@@ -42,53 +43,64 @@ class TransactionCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          // Icono
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: iconBackgroundColor,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(icon, color: iconColor, size: 28),
-          ),
-          const SizedBox(width: 16),
-
-          // Título y fecha
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          onLongPress: onLongPress,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
               children: [
-                Text(
-                  title,
-                  style: context.textTheme.titleMedium?.copyWith(
-                    color: context.colorScheme.onSurface,
+                // Icono
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: iconBackgroundColor,
+                    borderRadius: BorderRadius.circular(14),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  child: Icon(icon, color: iconColor, size: 28),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(width: 16),
+
+                // Título y fecha
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: context.textTheme.titleMedium?.copyWith(
+                          color: context.colorScheme.onSurface,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        date,
+                        style: context.textTheme.bodyMedium?.copyWith(
+                          color: context.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Monto
                 Text(
-                  date,
-                  style: context.textTheme.bodyMedium?.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
+                  '${isIncome ? '+' : '-'}${formatter.format(amount)}',
+                  style: context.textTheme.titleMedium?.copyWith(
+                    color: amountColor,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
             ),
           ),
-
-          // Monto
-          Text(
-            '${isIncome ? '+' : '-'}${formatter.format(amount)}',
-            style: context.textTheme.titleMedium?.copyWith(
-              color: amountColor,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

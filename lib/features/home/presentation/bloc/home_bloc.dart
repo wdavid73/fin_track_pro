@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
+import 'package:fin_track_pro/features/transactions/presentation/bloc/transaction_bloc/transaction_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
@@ -20,15 +23,31 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetTotalBalance _getTotalBalance;
   final GetCategories _getCategories;
   final GetBudgetData _getBudgetData;
+  final TransactionBloc _transactionBloc;
+  StreamSubscription? _transactionSubscription;
 
   HomeBloc(
     this._getRecentTransactions,
     this._getTotalBalance,
     this._getCategories,
     this._getBudgetData,
+    this._transactionBloc,
   ) : super(const HomeInitial()) {
     on<LoadHomeData>(_onLoadHomeData);
     on<RefreshHomeData>(_onRefreshHomeData);
+
+    // Listen to TransactionBloc changes
+    _transactionSubscription = _transactionBloc.stream.listen((state) {
+      if (state is TransactionOperationSuccess) {
+        add(const RefreshHomeData());
+      }
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _transactionSubscription?.cancel();
+    return super.close();
   }
 
   Future<void> _onLoadHomeData(

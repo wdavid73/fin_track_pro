@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/add_transaction_cubit/add_transaction_cubit.dart';
 import '../bloc/add_transaction_cubit/add_transaction_state.dart';
 import '../bloc/transaction_bloc/transaction_bloc.dart';
-import '../bloc/transaction_bloc/transaction_event.dart';
 import '../widgets/amount_input_widget.dart';
 import '../widgets/category_selector.dart';
 import '../widgets/date_selector.dart';
@@ -213,7 +212,7 @@ void showAddTransactionModal(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    builder: (context) =>
+    builder: (modalContext) =>
         const WrapperBlocProviderTransaction(child: AddTransactionPage()),
   );
 }
