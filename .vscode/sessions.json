@@ -66,6 +66,51 @@
         "commands": [
           "flutter build appbundle --flavor prod -t lib/flavors/main_prod.dart"
         ]
+      },
+      {
+        "name": "Run Tests",
+        "autoExecuteCommands": false,
+        "icon": "debug-alt",
+        "color": "terminal.ansiBlue",
+        "commands": [
+          "flutter test"
+        ]
+      },
+      {
+        "name": "Run Tests with Coverage",
+        "autoExecuteCommands": false,
+        "icon": "debug-alt",
+        "color": "terminal.ansiMagenta",
+        "commands": [
+          "flutter test --coverage"
+        ]
+      },
+      {
+        "name": "Generate Coverage Report",
+        "autoExecuteCommands": false,
+        "icon": "debug-alt",
+        "color": "terminal.ansiCyan",
+        "commands": [
+          "genhtml coverage/lcov.info -o coverage/html"
+        ]
+      },
+      {
+        "name": "Open Coverage Report",
+        "autoExecuteCommands": false,
+        "icon": "debug-alt",
+        "color": "terminal.ansiYellow",
+        "commands": [
+          "open coverage/html/index.html"
+        ]
+      },
+      {
+        "name": "Run integration tests",
+        "autoExecuteCommands": false,
+        "icon": "debug-alt",
+        "color": "terminal.ansiRed",
+        "commands": [
+          "flutter test test/integration"
+        ]
       }
     ]
   }

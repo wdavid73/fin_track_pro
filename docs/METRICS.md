@@ -63,25 +63,42 @@ lib/
 ```
 test/
 └── features/
-    └── transactions/
-        ├── domain/usecases/
-        │   ├── create_transaction_test.dart  ✅
-        │   ├── update_transaction_test.dart  ✅
-        │   ├── delete_transaction_test.dart  ✅
-        │   └── get_transactions_test.dart    ✅
-        ├── data/repositories/
-        │   └── transaction_repository_test.dart ✅
-        └── presentation/bloc/
-            └── transaction_bloc_test.dart    ✅
+    ├── transactions/
+    │   ├── domain/usecases/
+    │   │   ├── create_transaction_test.dart  ✅
+    │   │   ├── update_transaction_test.dart  ✅
+    │   │   ├── delete_transaction_test.dart  ✅
+    │   │   └── get_transactions_test.dart    ✅
+    │   ├── data/repositories/
+    │   │   └── transaction_repository_test.dart ✅
+    │   ├── presentation/bloc/
+    │   │   └── transaction_bloc_test.dart    ✅
+    │   └── presentation/pages/
+    │       └── all_transactions_page_test.dart ✅
+    ├── analytics/
+    │   ├── domain/usecases/
+    │   │   └── get_analytics_data_test.dart  ✅
+    │   ├── presentation/bloc/
+    │   │   └── analytics_bloc_test.dart      ✅
+    │   └── presentation/widgets/
+    │       └── analytics_page_test.dart      ✅
+    ├── home/
+    │   ├── presentation/bloc/
+    │   │   └── home_bloc_test.dart           ✅
+    │   └── presentation/pages/
+    │       └── home_page_test.dart           ✅
+    └── categories/
+        └── data/repositories/
+            └── category_repository_impl_test.dart ✅
 ```
 
 **Test Statistics:**
-- Total test files: **6**
-- Tests for transactions feature: **6** ✅
+- Total test files: **13**
+- Tests for transactions feature: **7** ✅
 - Tests for budgets feature: **0** 🔴
-- Tests for categories feature: **0** 🔴
-- Tests for home feature: **0** 🔴
-- Tests for analytics feature: **0** 🔴
+- Tests for categories feature: **1** 🟡
+- Tests for home feature: **2** 🟡
+- Tests for analytics feature: **3** ✅
 
 ---
 
