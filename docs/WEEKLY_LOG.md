@@ -26,114 +26,217 @@
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Weekends Completed | 0 | 131 |
-| Hours Invested | 0 | 1,040 |
-| Current Phase | Phase 0 | Phase 4 |
-| Test Coverage | 0% | >80% |
-| Features Complete | 0 | All |
+| Weekends Completed | ~3 | 131 |
+| Hours Invested | ~24-32h | 1,040 |
+| Current Phase | Phase 0 (~60%) | Phase 4 |
+| Test Coverage | ~15-20% | >80% |
+| Features Complete | 3/6 core | All |
 | Articles Published | 0 | 8+ |
 | Videos Created | 0 | 6+ |
+
+**Last Updated:** 2025-12-06
 
 ---
 
 ## Phase 0: MVP Foundation (Weekends 1-14)
 
-### Weekend 1 - Project Setup
+### Weekend 1 - Project Setup & Foundation
 
-**Date:** [YYYY-MM-DD]  
-**Planned Hours:** 8h  
-**Actual Hours:** _h  
+**Date:** 2025-11-23 to 2025-11-24
+**Planned Hours:** 8h
+**Actual Hours:** ~12-16h (intense setup period)
 **Phase:** 0 (MVP)
 
 #### 🎯 Goals
-- [ ] Create GitHub repository
-- [ ] Initialize Flutter project with FVM
-- [ ] Setup project structure (feature-first)
-- [ ] Configure analysis_options.yaml
-- [ ] Setup basic CI/CD (GitHub Actions)
+- [x] Create GitHub repository
+- [x] Initialize Flutter project
+- [x] Setup project structure (feature-first)
+- [x] Configure analysis_options.yaml
+- [x] Setup basic CI/CD (GitHub Actions)
 
 #### ✅ Completed
-- 
+- ✅ Project initialized with commitizen configuration
+- ✅ Feature-first folder structure implemented
+- ✅ Dependency injection setup (get_it + injectable)
+- ✅ Hive local database configured
+- ✅ Flutter flavors (dev, staging, prod)
+- ✅ GitHub Actions CI for PR testing
+- ✅ Material Design 3 theme configuration
+- ✅ Initial libraries added (flutter_bloc, go_router, dio, etc.)
+- ✅ Transaction domain layer (entities, use cases, repositories)
+- ✅ Transaction data layer (models, datasources)
+- ✅ Basic testing setup with 6 test files
+
+**Commits:** ~10 commits
+- 🎉 Init project with commitizen
+- 🎨 Add initial libraries
+- ⚡️ Implement get_it + injectable
+- 🎨 Add flavors dev, staging, prod
+- ✨ Hive setup successfully
+- ✨ Add usecase, repositories, datasource and testing
+- 👷 Add CI to launch test when create PR to develop
+- 💄 App base theme configuration
 
 #### 📝 Notes & Learnings
-- 
+- **Hive vs Drift:** Decided to use Hive instead of planned Drift for simpler setup and better DX in MVP phase
+- **Injectable:** Massive time saver for dependency injection, auto-generates code
+- **Flavors:** Setting up early makes environment management much easier
+- **Clean Architecture:** Feature-first structure with domain/data/presentation layers working well
+- **Commitizen:** Enforces consistent commit messages with gitmoji
 
 #### 🚧 Challenges & Blockers
-- 
+- Initial setup took longer than expected (~12-16h vs 8h planned)
+- Injectable configuration required learning curve
+- Hive type adapters needed code generation understanding
+- Flavors setup for iOS more complex than Android
 
 #### 📊 Metrics
-- Test Coverage: _%
-- Commits: _
-- Files Changed: _
+- Test Coverage: ~15% (6 test files for transactions)
+- Commits: 10
+- Files Changed: ~70+ files created
+- Dart Files: ~60
+- Lines of Code: ~3,000
 
 #### ⏭️ Next Weekend
-- 
+- Start building UI for transactions
+- Implement home page design
+- Add budget overview feature
+- Create category management
 
 ---
 
-### Weekend 2 - Core Architecture
+### Weekend 2 - UI Development & Home Page
 
-**Date:** [YYYY-MM-DD]  
-**Planned Hours:** 8h  
-**Actual Hours:** _h  
+**Date:** 2025-11-29 to 2025-11-30
+**Planned Hours:** 8h
+**Actual Hours:** ~8-12h
 **Phase:** 0 (MVP)
 
 #### 🎯 Goals
-- [ ] Setup dependency injection (GetIt/Injectable)
-- [ ] Implement core network layer
-- [ ] Configure Drift database
-- [ ] Setup navigation (Auto Route)
-- [ ] Create basic app theme (Material Design 3)
+- [x] Build home page design
+- [x] Create transaction UI components
+- [x] Add budget overview chart
+- [x] Implement shimmer loading effects
+- [ ] Complete transaction CRUD UI (partially done)
 
 #### ✅ Completed
-- 
+- ✅ Home page design with Material Design 3
+- ✅ Balance summary widget with shimmer
+- ✅ Transaction card component
+- ✅ Budget overview chart using fl_chart
+- ✅ Budget data loading from Hive
+- ✅ Transaction shimmer loading states
+- ✅ Budget overview shimmer
+- ✅ Add transaction page created
+- ✅ All transactions page (pagination ready)
+- ✅ Remove transaction functionality
+- ✅ Category selector widget
+- ✅ Amount input widget
+- ✅ Date selector widget
+- ✅ Transaction type toggle (income/expense)
+
+**Commits:** ~5 commits
+- 🚧 Working in home page
+- 🎨 Home page design
+- ✨ Load budget overview chart from hive and add shimmer
+- ✨ Page to add transaction
+- ✨ Add remove transaction and page all transaction
 
 #### 📝 Notes & Learnings
-- 
+- **fl_chart:** Great library for charts, but requires understanding of data structure
+- **Shimmer:** Adds professional polish to loading states
+- **Budget Data:** Successfully integrated budget tracking with Hive
+- **Pagination:** Prepared infrastructure for large transaction lists
+- **Material Design 3:** Consistent theming makes UI development faster
+- **Widget Composition:** Reusable widgets (CategorySelector, AmountInput) speed up development
 
 #### 🚧 Challenges & Blockers
-- 
+- Budget chart data structure required multiple iterations
+- Hive async operations needed careful state management
+- Transaction edit UI not completed (create works, edit pending)
+- Category management UI still basic
 
 #### 📊 Metrics
-- Test Coverage: _%
-- Commits: _
-- Files Changed: _
+- Test Coverage: ~15-20% (no new tests added - RISK!)
+- Commits: 5
+- Files Changed: ~40+
+- New Widgets: ~10 presentation widgets
+- Lines of Code: ~6,022 total
 
 #### ⏭️ Next Weekend
-- 
+- Complete transaction edit functionality
+- Add transaction filters and search
+- Implement category CRUD UI
+- Write widget tests for new components
+- Add analytics charts (expense by category)
 
 ---
 
-### Weekend 3 - Transaction Feature (Part 1)
+### Weekend 3 - Transaction Edit & Analytics (NEXT)
 
-**Date:** [YYYY-MM-DD]  
-**Planned Hours:** 8h  
-**Actual Hours:** _h  
+**Date:** 2025-12-07 to 2025-12-08 (UPCOMING)
+**Planned Hours:** 8h
+**Actual Hours:** _h
 **Phase:** 0 (MVP)
 
 #### 🎯 Goals
-- [ ] Create Transaction entity (domain layer)
-- [ ] Implement Transaction repository interface
-- [ ] Create local data source (Drift)
-- [ ] Implement repository implementation
-- [ ] Add use cases (CreateTransaction, GetTransactions)
+- [ ] Implement transaction edit UI
+- [ ] Add transaction filters (by category, date range)
+- [ ] Create basic analytics charts (expense by category)
+- [ ] Write 5+ widget tests for existing UI components
+- [ ] Improve category management UI
+
+#### 🎒 Preparation Needed
+- [ ] Review fl_chart documentation for pie charts
+- [ ] Study bloc_test for widget testing patterns
+- [ ] Plan analytics data queries
+- [ ] Design filter UI mockups
+
+#### 📋 Detailed Tasks
+
+**Saturday (4 hours):**
+1. Transaction Edit UI (2h)
+   - Add edit mode to AddTransactionPage
+   - Pre-populate form with existing transaction data
+   - Update transaction on save
+   - Handle loading/error states
+
+2. Transaction Filters (2h)
+   - Category filter dropdown
+   - Date range picker
+   - Filter by type (income/expense)
+   - Apply filters to transaction list
+
+**Sunday (4 hours):**
+3. Analytics Charts (2.5h)
+   - Expense by category pie chart
+   - Monthly spending bar chart
+   - Data aggregation queries in repository
+   - Analytics page layout
+
+4. Widget Tests (1.5h)
+   - Test BalanceSummary widget
+   - Test TransactionCard widget
+   - Test AmountInput widget
+   - Test CategorySelector widget
+   - Test TransactionTypeToggle widget
 
 #### ✅ Completed
-- 
+- [Will be filled after weekend]
 
 #### 📝 Notes & Learnings
-- 
+- [Will be filled after weekend]
 
 #### 🚧 Challenges & Blockers
-- 
+- [Will be filled after weekend]
 
 #### 📊 Metrics
-- Test Coverage: _%
+- Test Coverage: _% (Target: 25-30%)
 - Commits: _
 - Files Changed: _
 
 #### ⏭️ Next Weekend
-- 
+- [Will be planned after this weekend]
 
 ---
 

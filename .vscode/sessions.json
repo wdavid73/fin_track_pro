@@ -1,0 +1,72 @@
+{
+  "$schema": "https://cdn.statically.io/gh/nguyenngoclongdev/cdn/main/schema/v11/terminal-keeper.json",
+  "theme": "tribe",
+  "active": "default",
+  "activateOnStartup": true,
+  "keepExistingTerminals": false,
+  "sessions": {
+    "default": [
+      {
+        "name": "Terminal General",
+        "autoExecuteCommands": false,
+        "icon": "terminal",
+        "color": "terminal.ansiWhite",
+        "commands": []
+      },
+      {
+        "name": "Run Flavor Dev",
+        "autoExecuteCommands": false,
+        "icon": "debug-alt",
+        "color": "terminal.ansiCyan",
+        "commands": [
+          "flutter run --flavor dev -t lib/flavors/main_dev.dart"
+        ]
+      },
+      {
+        "name": "Run Flavor Staging",
+        "autoExecuteCommands": false,
+        "icon": "debug-alt",
+        "color": "terminal.ansiYellow",
+        "commands": [
+          "flutter run --flavor staging -t lib/flavors/main_staging.dart"
+        ]
+      },
+      {
+        "name": "Run Flavor Prod",
+        "autoExecuteCommands": false,
+        "icon": "rocket",
+        "color": "terminal.ansiRed",
+        "commands": [
+          "flutter run --flavor prod -t lib/flavors/main_prod.dart"
+        ]
+      },
+      {
+        "name": "Run Build Runner",
+        "autoExecuteCommands": false,
+        "icon": "tools",
+        "color": "terminal.ansiMagenta",
+        "commands": [
+          "flutter pub run build_runner watch --delete-conflicting-outputs"
+        ]
+      },
+      {
+        "name": "Build APK Prod",
+        "autoExecuteCommands": false,
+        "icon": "package",
+        "color": "terminal.ansiGreen",
+        "commands": [
+          "flutter build apk --flavor prod -t lib/flavors/main_prod.dart"
+        ]
+      },
+      {
+        "name": "Build App Bundle Prod",
+        "autoExecuteCommands": false,
+        "icon": "archive",
+        "color": "terminal.ansiBlue",
+        "commands": [
+          "flutter build appbundle --flavor prod -t lib/flavors/main_prod.dart"
+        ]
+      }
+    ]
+  }
+}
