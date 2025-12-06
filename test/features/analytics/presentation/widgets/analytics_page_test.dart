@@ -50,7 +50,7 @@ void main() {
     );
   }
 
-  final tAnalyticsData = AnalyticsData(
+  const tAnalyticsData = AnalyticsData(
     totalIncome: 1000,
     totalExpenses: 500,
     categorySpending: [],
@@ -73,7 +73,10 @@ void main() {
 
     testWidgets('renders loaded state correctly', (tester) async {
       when(() => mockAnalyticsBloc.state).thenReturn(
-        AnalyticsLoaded(data: tAnalyticsData, period: AnalyticsPeriod.month),
+        const AnalyticsLoaded(
+          data: tAnalyticsData,
+          period: AnalyticsPeriod.month,
+        ),
       );
 
       await tester.pumpWidget(createWidgetUnderTest());
@@ -108,7 +111,10 @@ void main() {
       tester,
     ) async {
       when(() => mockAnalyticsBloc.state).thenReturn(
-        AnalyticsLoaded(data: tAnalyticsData, period: AnalyticsPeriod.month),
+        const AnalyticsLoaded(
+          data: tAnalyticsData,
+          period: AnalyticsPeriod.month,
+        ),
       );
 
       await tester.pumpWidget(createWidgetUnderTest());

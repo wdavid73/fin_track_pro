@@ -54,4 +54,6 @@ node_modules/
 .env.prod
 .env
 
+coverage.sh
+
 lib/app/injection_container.config.dart

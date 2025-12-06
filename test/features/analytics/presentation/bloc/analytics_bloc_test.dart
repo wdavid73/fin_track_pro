@@ -32,7 +32,7 @@ void main() {
     // Default stream behavior for TransactionBloc
     whenListen(
       mockTransactionBloc,
-      Stream<TransactionState>.empty(),
+      const Stream<TransactionState>.empty(),
       initialState: const TransactionInitial(),
     );
 
@@ -43,7 +43,7 @@ void main() {
     bloc.close();
   });
 
-  final tAnalyticsData = AnalyticsData(
+  const tAnalyticsData = AnalyticsData(
     totalIncome: 1000,
     totalExpenses: 500,
     categorySpending: [],
@@ -67,7 +67,10 @@ void main() {
         act: (bloc) => bloc.add(const LoadAnalyticsData()),
         expect: () => [
           const AnalyticsLoading(period: AnalyticsPeriod.month),
-          AnalyticsLoaded(data: tAnalyticsData, period: AnalyticsPeriod.month),
+          const AnalyticsLoaded(
+            data: tAnalyticsData,
+            period: AnalyticsPeriod.month,
+          ),
         ],
         verify: (_) {
           verify(() => mockGetAnalyticsData(AnalyticsPeriod.month)).called(1);
@@ -105,7 +108,10 @@ void main() {
         act: (bloc) => bloc.add(const ChangePeriod(AnalyticsPeriod.year)),
         expect: () => [
           const AnalyticsLoading(period: AnalyticsPeriod.year),
-          AnalyticsLoaded(data: tAnalyticsData, period: AnalyticsPeriod.year),
+          const AnalyticsLoaded(
+            data: tAnalyticsData,
+            period: AnalyticsPeriod.year,
+          ),
         ],
         verify: (_) {
           verify(() => mockGetAnalyticsData(AnalyticsPeriod.year)).called(1);
@@ -123,7 +129,7 @@ void main() {
           return bloc;
         },
         // Seed with different data so the new state is not equal to the old state
-        seed: () => AnalyticsLoaded(
+        seed: () => const AnalyticsLoaded(
           data: AnalyticsData(
             totalIncome: 0,
             totalExpenses: 0,
@@ -134,7 +140,10 @@ void main() {
         ),
         act: (bloc) => bloc.add(const RefreshAnalyticsData()),
         expect: () => [
-          AnalyticsLoaded(data: tAnalyticsData, period: AnalyticsPeriod.week),
+          const AnalyticsLoaded(
+            data: tAnalyticsData,
+            period: AnalyticsPeriod.week,
+          ),
         ],
         verify: (_) {
           verify(() => mockGetAnalyticsData(AnalyticsPeriod.week)).called(1);
@@ -160,7 +169,10 @@ void main() {
         },
         expect: () => [
           // AnalyticsLoading is not emitted during refresh triggered by listener
-          AnalyticsLoaded(data: tAnalyticsData, period: AnalyticsPeriod.month),
+          const AnalyticsLoaded(
+            data: tAnalyticsData,
+            period: AnalyticsPeriod.month,
+          ),
         ],
         verify: (_) {
           verify(() => mockGetAnalyticsData(AnalyticsPeriod.month)).called(1);

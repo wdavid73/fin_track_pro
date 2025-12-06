@@ -7,7 +7,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
 ![Phase](https://img.shields.io/badge/Phase-0%20MVP%20(60%25)-blue)
-![Test Coverage](https://img.shields.io/badge/Coverage-~20%25-orange)
+![Test Coverage](https://img.shields.io/badge/Coverage-70.5%25-green)
 ![Commits](https://img.shields.io/badge/Commits-15-brightgreen)
 
 **A comprehensive personal finance management application built with Flutter**
@@ -38,7 +38,7 @@
 |--------|---------|--------|
 | Phase | Phase 0 (60%) | Phase 4 Complete |
 | Weekends | ~3 | 131 total |
-| Test Coverage | ~20% | >80% |
+| Test Coverage | 70.5% | >80% |
 | LOC | 6,022 | - |
 | Features | 3/6 core | All complete |
 
@@ -156,16 +156,17 @@ flutter run
 ### Running Tests
 
 ```bash
-# Unit tests
-flutter test
+# Run all tests
+fvm flutter test
 
-# Integration tests
-flutter test integration_test/
+# Run tests with coverage (recommended)
+./coverage.sh
 
-# Coverage report
-flutter test --coverage
-genhtml coverage/lcov.info -o coverage/html
+# View coverage report
+open coverage/html/index.html
 ```
+
+📖 **For detailed testing documentation, see [TESTING.md](TESTING.md)**
 
 ## 📂 Project Structure
 
@@ -205,7 +206,12 @@ See [ROADMAP.md](docs/ROADMAP.md) for detailed timeline.
 
 ## 📊 Project Metrics
 
-- **Test Coverage:** ~20% (Target: >80%)
+- **Test Coverage:** 70.5% (Target: >80%) 📈
+  - Models: 100% ✅
+  - Datasources: 100% ✅
+  - Use Cases: 100% ✅
+  - BLoCs: 100% ✅
+  - Core Widgets: 100% ✅
 - **Code Quality:** Following Clean Architecture principles ✅
 - **Commits:** 15 with conventional commits (gitmoji)
 - **Performance:** <2s cold start time (TBD)

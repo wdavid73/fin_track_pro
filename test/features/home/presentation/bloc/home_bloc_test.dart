@@ -37,7 +37,7 @@ void main() {
 
     whenListen(
       mockTransactionBloc,
-      Stream<TransactionState>.empty(),
+      const Stream<TransactionState>.empty(),
       initialState: const TransactionInitial(),
     );
 

@@ -44,7 +44,7 @@ void main() {
   });
 
   Widget createWidgetUnderTest() {
-    return MaterialApp(home: const AllTransactionsPage());
+    return const MaterialApp(home: AllTransactionsPage());
   }
 
   final tTransactions = [
