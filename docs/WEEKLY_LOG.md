@@ -26,11 +26,11 @@
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Weekends Completed | ~3 | 131 |
-| Hours Invested | ~24-32h | 1,040 |
-| Current Phase | Phase 0 (~60%) | Phase 4 |
-| Test Coverage | ~15-20% | >80% |
-| Features Complete | 3/6 core | All |
+| Weekends Completed | 3 | 131 |
+| Hours Invested | ~34-42h | 1,040 |
+| Current Phase | Phase 0 (~75%) | Phase 4 |
+| Test Coverage | ~20% | >80% |
+| Features Complete | 4/6 core | All |
 | Articles Published | 0 | 8+ |
 | Videos Created | 0 | 6+ |
 
@@ -172,71 +172,71 @@
 
 ---
 
-### Weekend 3 - Transaction Edit & Analytics (NEXT)
-
-**Date:** 2025-12-07 to 2025-12-08 (UPCOMING)
-**Planned Hours:** 8h
-**Actual Hours:** _h
-**Phase:** 0 (MVP)
-
-#### 🎯 Goals
-- [ ] Implement transaction edit UI
-- [ ] Add transaction filters (by category, date range)
-- [ ] Create basic analytics charts (expense by category)
-- [ ] Write 5+ widget tests for existing UI components
-- [ ] Improve category management UI
-
-#### 🎒 Preparation Needed
-- [ ] Review fl_chart documentation for pie charts
-- [ ] Study bloc_test for widget testing patterns
-- [ ] Plan analytics data queries
-- [ ] Design filter UI mockups
-
-#### 📋 Detailed Tasks
-
-**Saturday (4 hours):**
-1. Transaction Edit UI (2h)
-   - Add edit mode to AddTransactionPage
-   - Pre-populate form with existing transaction data
-   - Update transaction on save
-   - Handle loading/error states
-
-2. Transaction Filters (2h)
-   - Category filter dropdown
-   - Date range picker
-   - Filter by type (income/expense)
-   - Apply filters to transaction list
-
-**Sunday (4 hours):**
-3. Analytics Charts (2.5h)
-   - Expense by category pie chart
-   - Monthly spending bar chart
-   - Data aggregation queries in repository
-   - Analytics page layout
-
-4. Widget Tests (1.5h)
-   - Test BalanceSummary widget
-   - Test TransactionCard widget
-   - Test AmountInput widget
-   - Test CategorySelector widget
-   - Test TransactionTypeToggle widget
-
-#### ✅ Completed
-- [Will be filled after weekend]
-
-#### 📝 Notes & Learnings
-- [Will be filled after weekend]
-
-#### 🚧 Challenges & Blockers
-- [Will be filled after weekend]
-
-#### 📊 Metrics
-- Test Coverage: _% (Target: 25-30%)
-- Commits: _
-- Files Changed: _
-
-#### ⏭️ Next Weekend
-- [Will be planned after this weekend]
+### Weekend 3 - Analytics & Documentation
+ 
+ **Date:** 2025-12-06 to 2025-12-07
+ **Planned Hours:** 8h
+ **Actual Hours:** ~10h
+ **Phase:** 0 (MVP)
+ 
+ #### 🎯 Goals
+ - [x] Implement Analytics Page
+ - [x] Create Analytics Domain Layer (Entities, UseCases)
+ - [x] Create Analytics Presentation Layer (BLoC, Widgets)
+ - [x] Create reusable chart widgets (Donut, Bar)
+ - [x] Create documentation (ADR, METRICS, CURRENT_STATUS)
+ 
+ #### 🎒 Preparation Needed
+ - [x] Review fl_chart documentation for pie charts
+ - [x] Study bloc_test for widget testing patterns
+ - [x] Plan analytics data queries
+ - [x] Design filter UI mockups
+ 
+ #### 📋 Detailed Tasks
+ 
+ **Saturday (6 hours):**
+ 1. Analytics Implementation (4h)
+    - Created `AnalyticsPeriod` enum and `AnalyticsData` entity
+    - Implemented `GetAnalyticsData` use case with calculations
+    - Created `AnalyticsBloc` with events and states
+    - Built 5 custom widgets: `TimePeriodSelector`, `AnalyticsSummaryCards`, `SpendingByCategoryChart`, `IncomeVsExpenseChart`, `TopSpendingCategories`
+    - Integrated everything into `AnalyticsPage`
+ 
+ 2. Documentation (2h)
+    - Created `ADR.md` for architectural decisions
+    - Created `METRICS.md` for project tracking
+    - Created `CURRENT_STATUS.md` for quick reference
+    - Updated `WEEKLY_LOG.md`
+ 
+ #### ✅ Completed
+ - ✅ Full Analytics feature implemented
+ - ✅ 5 new reusable widgets created
+ - ✅ Currency formatting extension with locale support
+ - ✅ Comprehensive documentation suite created
+ - ✅ `fl_chart` integration for complex charts
+ 
+ #### 📝 Notes & Learnings
+ - **fl_chart:** Powerful but verbose. Creating wrapper widgets was a good decision.
+ - **Extensions:** `CurrencyFormatter` extension makes price formatting consistent and cleaner.
+ - **Documentation:** Creating structured docs (ADR, Metrics) helps visualize progress and debt.
+ - **BLoC:** Reusing `TransactionBloc` updates to trigger `AnalyticsBloc` refresh works great.
+ 
+ #### 🚧 Challenges & Blockers
+ - Handling `NaN` in percentage calculations when income is 0.
+ - Deprecated `withOpacity` in Flutter 3.27 required migration to `withValues`.
+ - Chart data preparation logic belongs in Domain layer to keep UI clean.
+ 
+ #### 📊 Metrics
+ - Test Coverage: ~20% (Need to add tests for Analytics)
+ - Commits: ~15
+ - Files Changed: ~20+
+ - New Widgets: 5
+ 
+ #### ⏭️ Next Weekend
+ - Implement Transaction Edit UI
+ - Add Transaction Filters
+ - Write Widget Tests for Analytics
+ - Improve Category Management
 
 ---
 

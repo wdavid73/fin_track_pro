@@ -19,6 +19,8 @@ import '../core/database/seeders/category_seeder.dart' as _i12;
 import '../core/database/seeders/database_seeder.dart' as _i118;
 import '../core/database/seeders/transaction_seeder.dart' as _i264;
 import '../core/utils/logger_service.dart' as _i910;
+import '../features/analytics/domain/usecases/get_analytics_data.dart' as _i86;
+import '../features/analytics/presentation/bloc/analytics_bloc.dart' as _i260;
 import '../features/budgets/data/datasources/budget_datasource.dart' as _i196;
 import '../features/budgets/data/datasources/budget_local_datasource.dart'
     as _i285;
@@ -47,6 +49,8 @@ import '../features/transactions/domain/usecases/create_transaction.dart'
 import '../features/transactions/domain/usecases/delete_transaction.dart'
     as _i424;
 import '../features/transactions/domain/usecases/get_budget_data.dart' as _i230;
+import '../features/transactions/domain/usecases/get_paginated_transactions.dart'
+    as _i735;
 import '../features/transactions/domain/usecases/get_recent_transactions.dart'
     as _i909;
 import '../features/transactions/domain/usecases/get_total_balance.dart'
@@ -118,12 +122,15 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i974.UpdateTransaction(gh<_i443.TransactionRepository>()));
     gh.factory<_i424.DeleteTransaction>(
         () => _i424.DeleteTransaction(gh<_i443.TransactionRepository>()));
+    gh.factory<_i735.GetPaginatedTransactions>(() =>
+        _i735.GetPaginatedTransactions(gh<_i443.TransactionRepository>()));
     gh.factory<_i1020.SaveBudget>(
         () => _i1020.SaveBudget(gh<_i43.BudgetRepository>()));
     gh.factory<_i299.GetBudgets>(
         () => _i299.GetBudgets(gh<_i43.BudgetRepository>()));
-    gh.factory<_i905.TransactionBloc>(() => _i905.TransactionBloc(
+    gh.singleton<_i905.TransactionBloc>(() => _i905.TransactionBloc(
           gh<_i913.GetTransactions>(),
+          gh<_i913.GetPaginatedTransactions>(),
           gh<_i913.CreateTransaction>(),
           gh<_i913.UpdateTransaction>(),
           gh<_i913.DeleteTransaction>(),
@@ -141,15 +148,24 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i197.GetCategories>(
         () => _i197.GetCategories(gh<_i745.CategoryRepository>()));
+    gh.factory<_i70.AddTransactionCubit>(() => _i70.AddTransactionCubit(
+          gh<_i197.GetCategories>(),
+          gh<_i333.CreateTransaction>(),
+        ));
     gh.factory<_i824.HomeBloc>(() => _i824.HomeBloc(
           gh<_i909.GetRecentTransactions>(),
           gh<_i605.GetTotalBalance>(),
           gh<_i197.GetCategories>(),
           gh<_i230.GetBudgetData>(),
+          gh<_i905.TransactionBloc>(),
         ));
-    gh.factory<_i70.AddTransactionCubit>(() => _i70.AddTransactionCubit(
-          gh<_i197.GetCategories>(),
-          gh<_i333.CreateTransaction>(),
+    gh.factory<_i86.GetAnalyticsData>(() => _i86.GetAnalyticsData(
+          gh<_i443.TransactionRepository>(),
+          gh<_i745.CategoryRepository>(),
+        ));
+    gh.factory<_i260.AnalyticsBloc>(() => _i260.AnalyticsBloc(
+          gh<_i86.GetAnalyticsData>(),
+          gh<_i905.TransactionBloc>(),
         ));
     return this;
   }

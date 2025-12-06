@@ -12,10 +12,10 @@
 
 | Metric | Current | Target | Progress |
 |--------|---------|--------|----------|
-| **Phase Completion** | Phase 0 (~60%) | Phase 0 Complete | 🟡 In Progress |
-| **Weekends Invested** | ~3-4 | 14 (Phase 0) | ⏳ 25-30% |
-| **Total Hours** | ~24-32h | 112h (Phase 0) | ⏳ 25-30% |
-| **Overall Timeline** | ~2 weeks | 32.5 months | ⏳ 0.2% |
+| **Phase Completion** | Phase 0 (~75%) | Phase 0 Complete | 🟢 On Track |
+| **Weekends Invested** | 3 | 14 (Phase 0) | ⏳ 21% |
+| **Total Hours** | ~34-42h | 112h (Phase 0) | ⏳ 30% |
+| **Overall Timeline** | ~3 weeks | 3.5 months | ⏳ 20% |
 
 ---
 
@@ -24,23 +24,23 @@
 ### Lines of Code
 | Type | Count | Notes |
 |------|-------|-------|
-| **Dart Files** | 104 | Excluding generated files |
-| **Total Lines** | ~6,022 | Including comments & whitespace |
+| **Dart Files** | ~125 | Excluding generated files |
+| **Total Lines** | ~7,500 | Including comments & whitespace |
 | **Features** | 6 | transactions, categories, budgets, home, analytics, settings |
-| **Generated Files** | 3 | Hive adapters (*.g.dart) |
+| **Generated Files** | ~10 | Hive adapters, Injectable config (*.g.dart) |
 
 ### File Distribution
 ```
 lib/
-├── features/          ~65 files  (Core business logic)
+├── features/          ~85 files  (Core business logic)
 │   ├── transactions/  ~25 files  (Primary feature)
 │   ├── budgets/       ~10 files  (New feature)
 │   ├── categories/    ~10 files
 │   ├── home/          ~12 files  (Dashboard)
-│   ├── analytics/     ~3 files   (Basic)
+│   ├── analytics/     ~15 files  (Charts & Logic)
 │   └── settings/      ~3 files   (Basic)
 ├── app/               ~8 files   (DI, routing, config)
-├── core/              ~15 files  (Shared utilities)
+├── core/              ~20 files  (Shared utilities & extensions)
 └── main.dart          1 file
 ```
 
@@ -51,7 +51,7 @@ lib/
 ### Test Coverage
 | Category | Current | Target | Status |
 |----------|---------|--------|--------|
-| **Overall Coverage** | ~15-20%* | >80% | 🔴 Below Target |
+| **Overall Coverage** | ~20%* | >80% | 🔴 Below Target |
 | **Unit Tests** | 6 test files | 60% coverage | 🟡 Basic |
 | **Widget Tests** | 0 | 30% coverage | 🔴 Missing |
 | **Integration Tests** | 0 | 10% coverage | 🔴 Missing |
@@ -81,6 +81,7 @@ test/
 - Tests for budgets feature: **0** 🔴
 - Tests for categories feature: **0** 🔴
 - Tests for home feature: **0** 🔴
+- Tests for analytics feature: **0** 🔴
 
 ---
 
@@ -103,7 +104,7 @@ test/
 | **Categories** | ✅ | ✅ | 🟡 Basic | 🔴 0 tests | 🟡 60% Complete |
 | **Budgets** | ✅ | ✅ | 🟡 Basic | 🔴 0 tests | 🟡 50% Complete |
 | **Home** | 🟡 Partial | 🟡 Uses others | ✅ | 🔴 0 tests | 🟡 60% Complete |
-| **Analytics** | 🔴 Missing | 🔴 Missing | 🟡 Placeholder | 🔴 0 tests | 🔴 20% Complete |
+| **Analytics** | ✅ | ✅ | ✅ | 🔴 0 tests | 🟢 90% Complete |
 | **Settings** | 🔴 Missing | 🔴 Missing | 🟡 Placeholder | 🔴 0 tests | 🔴 20% Complete |
 
 ---
@@ -142,19 +143,19 @@ test/
 ### Commit Statistics
 | Metric | Value |
 |--------|-------|
-| **Total Commits** | 15 |
-| **Active Days** | 5 (Nov 23-30, 2025) |
-| **Average Commits/Day** | ~3 |
+| **Total Commits** | ~30 |
+| **Active Days** | 7 (Nov 23-Dec 6, 2025) |
+| **Average Commits/Day** | ~4 |
 | **Conventional Commits** | ✅ Yes (using gitmoji) |
 
 ### Recent Activity
 ```
-✨ Feature commits:     8 (53%)
-🎨 Architecture:        3 (20%)
-💄 UI/Styling:          1 (7%)
-👷 CI/CD:               1 (7%)
-🚧 WIP:                 1 (7%)
-🎉 Initial:             1 (7%)
+✨ Feature commits:     15 (50%)
+🎨 Architecture:        5 (16%)
+💄 UI/Styling:          5 (16%)
+📝 Documentation:       3 (10%)
+👷 CI/CD:               1 (3%)
+🎉 Initial:             1 (3%)
 ```
 
 ### Commit Quality
@@ -210,12 +211,13 @@ test/
 - [ ] Pull-to-refresh
 - [ ] Income/expense summary cards
 
-#### 🔴 Analytics (20% Complete)
-- [x] Analytics page placeholder
-- [ ] Expense by category chart
-- [ ] Monthly spending chart
-- [ ] Period comparisons
-- [ ] Analytics repository
+#### 🟢 Analytics (90% Complete)
+- [x] Analytics page UI
+- [x] Expense by category chart
+- [x] Income vs Expense chart
+- [x] Period selection (Week/Month/Year)
+- [x] Analytics repository & use cases
+- [ ] Widget tests
 
 #### 🔴 Settings (20% Complete)
 - [x] Settings page placeholder
@@ -245,7 +247,7 @@ test/
 
 ### Completed Weekends Analysis
 
-Based on git history, active development occurred over **2 weeks** (Nov 23-30):
+Based on git history, active development occurred over **3 weeks** (Nov 23-Dec 6):
 
 **Weekend 1 (Nov 23-24):**
 - Estimated hours: ~12-16h (intense setup period)
@@ -259,24 +261,29 @@ Based on git history, active development occurred over **2 weeks** (Nov 23-30):
 - Commits: ~5
 - Features: Core UI implemented
 
-**Total invested:** ~20-28 hours (2.5-3.5 weekends equivalent)
+**Weekend 3 (Dec 6-7):**
+- Estimated hours: ~10h
+- Tasks: Analytics page, Charts, Documentation
+- Commits: ~15
+- Features: Analytics complete, Docs updated
+
+**Total invested:** ~34-42 hours (3.5 weekends equivalent)
 
 ### Velocity Insights
-- **Average commits per weekend:** ~7-8 commits
-- **Lines of code per weekend:** ~2,500-3,000 LOC
-- **Features per weekend:** 1-2 major features
+- **Average commits per weekend:** ~10 commits
+- **Lines of code per weekend:** ~2,500 LOC
+- **Features per weekend:** 1 major feature
 - **Estimate accuracy:** Good pace, slightly ahead of plan
 
 ### Phase 0 Projection
-- **Completed:** ~60% of Phase 0 features
-- **Remaining weekends:** ~5-6 weekends to complete MVP
-- **Blockers:** Testing (Phase 1), Analytics & Settings (incomplete)
+- **Completed:** ~75% of Phase 0 features
+- **Remaining weekends:** ~4-5 weekends to complete MVP
+- **Blockers:** Testing (Phase 1), Settings (incomplete)
 
 **Recommendation:** Focus next weekends on:
 1. Complete transaction edit UI
-2. Implement basic analytics charts
-3. Add settings functionality
-4. Write more tests (get to 40%+ coverage)
+2. Add settings functionality
+3. Write more tests (get to 40%+ coverage)
 
 ---
 
@@ -287,12 +294,14 @@ Based on git history, active development occurred over **2 weeks** (Nov 23-30):
 | **Articles** | 0 | 1 | 🔴 Pending |
 | **Videos** | 0 | 1 (3-min demo) | 🔴 Pending |
 | **Screenshots** | 0 | Portfolio shots | 🔴 Pending |
-| **Documentation** | 8 MD files | Complete docs | 🟡 Good |
+| **Documentation** | 12 MD files | Complete docs | 🟢 Excellent |
 
 ### Documentation Files
 - ✅ PROJECT_CONTEXT.md (comprehensive)
-- ✅ WEEKLY_LOG.md (template ready)
-- ✅ METRICS.md (this file - created!)
+- ✅ WEEKLY_LOG.md (updated)
+- ✅ METRICS.md (updated)
+- ✅ CURRENT_STATUS.md (updated)
+- ✅ ADR.md (new)
 - ✅ README.md (good but needs updates)
 - ✅ INJECTABLE_GUIDE.md
 - ✅ GETIT_SETUP.md
@@ -310,15 +319,13 @@ Based on git history, active development occurred over **2 weeks** (Nov 23-30):
 |------|----------|------------|
 | **Storage Tech Mismatch** | 🟡 Medium | Drift vs Hive - document decision |
 | **Low Test Coverage** | 🔴 High | Prioritize testing in remaining weekends |
-| **Analytics Not Started** | 🟡 Medium | Simplify scope or move to Phase 1 |
 | **No Demo Video Yet** | 🟡 Medium | Plan for video recording |
 
 ### Recommendations
 
 1. **Document Hive Decision:** Update PROJECT_CONTEXT.md to reflect Hive choice over Drift
 2. **Testing Sprint:** Dedicate 1 weekend to increase coverage to 40%+
-3. **Scope Management:** Consider simplifying Analytics for MVP
-4. **Demo Preparation:** Start planning 3-minute demo video
+3. **Demo Preparation:** Start planning 3-minute demo video
 
 ---
 
@@ -331,12 +338,11 @@ Based on git history, active development occurred over **2 weeks** (Nov 23-30):
 - [ ] Update README with current screenshots
 
 ### Short-term (2-3 Weekends)
-- [ ] Complete analytics with basic charts
 - [ ] Implement settings (theme, currency)
 - [ ] Increase test coverage to 40%
 - [ ] Category management UI
 
-### Phase 0 Completion (5-6 Weekends)
+### Phase 0 Completion (4-5 Weekends)
 - [ ] All MVP features complete
 - [ ] Test coverage >40% (stretch: 60%)
 - [ ] Record 3-minute demo video
@@ -351,7 +357,7 @@ Based on git history, active development occurred over **2 weeks** (Nov 23-30):
 | Metric | Status | Notes |
 |--------|--------|-------|
 | **Linting** | ✅ Pass | flutter_lints 6.0.0 |
-| **No Warnings** | 🟡 Check | Need to verify |
+| **No Warnings** | ✅ Pass | Verified with `flutter analyze` |
 | **No TODOs** | 🟡 Unknown | Need to scan |
 | **Comments** | 🟡 Moderate | Could improve |
 | **Dead Code** | ✅ Clean | Well maintained |
@@ -376,8 +382,8 @@ Based on git history, active development occurred over **2 weeks** (Nov 23-30):
 - ✅ Dependency injection with injectable
 - ✅ GitHub Actions basics
 - ✅ Flutter flavors
+- ✅ fl_chart (implemented in Analytics)
 - 🟡 Advanced testing (in progress)
-- 🔴 fl_chart (upcoming)
 
 ### Community Engagement
 - GitHub: Repository created ✅
@@ -395,6 +401,7 @@ Based on git history, active development occurred over **2 weeks** (Nov 23-30):
 - ✅ Hive local database integrated
 - ✅ CI/CD pipeline (basic) operational
 - ✅ Transaction feature 85% complete
+- ✅ Analytics feature 90% complete
 - ✅ Professional documentation created
 - ✅ Consistent commit history with gitmoji
 - ✅ Multiple features working together
@@ -418,7 +425,7 @@ Based on git history, active development occurred over **2 weeks** (Nov 23-30):
 
 ---
 
-**Document Version:** 1.0
+**Document Version:** 1.1
 **Created:** 2025-12-06
 **Status:** 🟢 Active Tracking
 

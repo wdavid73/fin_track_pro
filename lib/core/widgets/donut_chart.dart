@@ -1,4 +1,7 @@
 import 'package:fin_track_pro/core/extensions/context_extensions.dart';
+import 'package:fin_track_pro/core/extensions/currency_extensions.dart'
+    show CurrencyFormatter;
+import 'package:fin_track_pro/core/extensions/locale_extensions.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +60,7 @@ class DonutChart extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '\$${totalSpent.toStringAsFixed(0)}',
+                  totalSpent.toCurrencyInt(locale: context.locale.languageCode),
                   style: context.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: context.colorScheme.onSurface,
