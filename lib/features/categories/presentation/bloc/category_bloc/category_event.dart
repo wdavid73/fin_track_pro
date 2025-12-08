@@ -9,6 +9,8 @@ sealed class CategoryEvent extends Equatable {
 
 final class LoadCategoriesEvent extends CategoryEvent {}
 
+final class LoadCategoryStatsEvent extends CategoryEvent {}
+
 final class CreateCategoryEvent extends CategoryEvent {
   final Category category;
 

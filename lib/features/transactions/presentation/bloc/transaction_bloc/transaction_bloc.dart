@@ -23,7 +23,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     this._createTransaction,
     this._updateTransaction,
     this._deleteTransaction,
-  ) : super(const TransactionInitial()) {
+  ) : super(const TransactionState()) {
     on<LoadTransactions>(_onLoadTransactions);
     on<LoadPaginatedTransactions>(_onLoadPaginatedTransactions);
     on<LoadMoreTransactions>(_onLoadMoreTransactions);
@@ -36,12 +36,18 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     LoadTransactions event,
     Emitter<TransactionState> emit,
   ) async {
-    emit(const TransactionLoading());
+    emit(state.copyWith(status: TransactionStatus.loading));
     try {
       final transactions = await _getTransactions();
-      emit(TransactionLoaded(transactions));
+      emit(state.copyWith(
+        status: TransactionStatus.success,
+        transactions: transactions,
+      ));
     } catch (e) {
-      emit(TransactionError('Failed to load transactions: ${e.toString()}'));
+      emit(state.copyWith(
+        status: TransactionStatus.error,
+        errorMessage: 'Failed to load transactions: ${e.toString()}',
+      ));
     }
   }
 
@@ -49,15 +55,19 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     CreateTransactionEvent event,
     Emitter<TransactionState> emit,
   ) async {
-    emit(const TransactionLoading());
+    emit(state.copyWith(status: TransactionStatus.loading));
     try {
       await _createTransaction(event.transaction);
-      emit(
-        const TransactionOperationSuccess('Transaction created successfully'),
-      );
+      emit(state.copyWith(
+        status: TransactionStatus.success,
+        successMessage: 'Transaction created successfully',
+      ));
       add(const LoadPaginatedTransactions());
     } catch (e) {
-      emit(TransactionError('Failed to create transaction: ${e.toString()}'));
+      emit(state.copyWith(
+        status: TransactionStatus.error,
+        errorMessage: 'Failed to create transaction: ${e.toString()}',
+      ));
     }
   }
 
@@ -65,15 +75,19 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     UpdateTransactionEvent event,
     Emitter<TransactionState> emit,
   ) async {
-    emit(const TransactionLoading());
+    emit(state.copyWith(status: TransactionStatus.loading));
     try {
       await _updateTransaction(event.transaction);
-      emit(
-        const TransactionOperationSuccess('Transaction updated successfully'),
-      );
+      emit(state.copyWith(
+        status: TransactionStatus.success,
+        successMessage: 'Transaction updated successfully',
+      ));
       add(const LoadPaginatedTransactions());
     } catch (e) {
-      emit(TransactionError('Failed to update transaction: ${e.toString()}'));
+      emit(state.copyWith(
+        status: TransactionStatus.error,
+        errorMessage: 'Failed to update transaction: ${e.toString()}',
+      ));
     }
   }
 
@@ -81,15 +95,19 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     DeleteTransactionEvent event,
     Emitter<TransactionState> emit,
   ) async {
-    emit(const TransactionLoading());
+    emit(state.copyWith(status: TransactionStatus.loading));
     try {
       await _deleteTransaction(event.id);
-      emit(
-        const TransactionOperationSuccess('Transaction deleted successfully'),
-      );
+      emit(state.copyWith(
+        status: TransactionStatus.success,
+        successMessage: 'Transaction deleted successfully',
+      ));
       add(const LoadPaginatedTransactions());
     } catch (e) {
-      emit(TransactionError('Failed to delete transaction: ${e.toString()}'));
+      emit(state.copyWith(
+        status: TransactionStatus.error,
+        errorMessage: 'Failed to delete transaction: ${e.toString()}',
+      ));
     }
   }
 
@@ -97,21 +115,23 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     LoadPaginatedTransactions event,
     Emitter<TransactionState> emit,
   ) async {
-    emit(const TransactionLoading());
+    emit(state.copyWith(status: TransactionStatus.loading));
     try {
       final transactions = await _getPaginatedTransactions(
         limit: event.limit,
         offset: 0,
       );
-      emit(
-        TransactionPaginatedLoaded(
-          transactions: transactions,
-          hasMore: transactions.length >= event.limit,
-          currentOffset: transactions.length,
-        ),
-      );
+      emit(state.copyWith(
+        status: TransactionStatus.success,
+        transactions: transactions,
+        hasMore: transactions.length >= event.limit,
+        currentOffset: transactions.length,
+      ));
     } catch (e) {
-      emit(TransactionError('Failed to load transactions: ${e.toString()}'));
+      emit(state.copyWith(
+        status: TransactionStatus.error,
+        errorMessage: 'Failed to load transactions: ${e.toString()}',
+      ));
     }
   }
 
@@ -119,24 +139,21 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     LoadMoreTransactions event,
     Emitter<TransactionState> emit,
   ) async {
-    final currentState = state;
-    if (currentState is! TransactionPaginatedLoaded || !currentState.hasMore) {
+    if (!state.hasMore) {
       return;
     }
 
     try {
       final newTransactions = await _getPaginatedTransactions(
         limit: 15,
-        offset: currentState.currentOffset,
+        offset: state.currentOffset,
       );
 
-      emit(
-        currentState.copyWith(
-          transactions: [...currentState.transactions, ...newTransactions],
-          hasMore: newTransactions.length >= 15,
-          currentOffset: currentState.currentOffset + newTransactions.length,
-        ),
-      );
+      emit(state.copyWith(
+        transactions: [...state.transactions, ...newTransactions],
+        hasMore: newTransactions.length >= 15,
+        currentOffset: state.currentOffset + newTransactions.length,
+      ));
     } catch (e) {
       // Keep current state on error, just don't load more
     }

@@ -62,7 +62,7 @@ class _TransactionsListState extends State<_TransactionsList> {
 
     if (maxScroll - currentScroll <= delta) {
       final state = context.read<TransactionBloc>().state;
-      if (state is TransactionPaginatedLoaded && state.hasMore) {
+      if (state.hasMore && state.status == TransactionStatus.success) {
         setState(() => _isLoadingMore = true);
         context.read<TransactionBloc>().add(const LoadMoreTransactions());
       }
@@ -73,24 +73,23 @@ class _TransactionsListState extends State<_TransactionsList> {
   Widget build(BuildContext context) {
     return BlocConsumer<TransactionBloc, TransactionState>(
       listener: (context, state) {
-        if (state is TransactionPaginatedLoaded) {
+        if (state.status == TransactionStatus.success) {
           setState(() => _isLoadingMore = false);
         }
       },
       builder: (context, state) {
-        if (state is TransactionLoading ||
-            state is TransactionOperationSuccess) {
+        if (state.status == TransactionStatus.loading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (state is TransactionError) {
+        if (state.status == TransactionStatus.error) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.error_outline, size: 48, color: context.errorColor),
                 const Gap(16),
-                Text(state.message),
+                Text(state.errorMessage ?? 'An error occurred'),
                 const Gap(16),
                 ElevatedButton(
                   onPressed: () {
@@ -105,7 +104,7 @@ class _TransactionsListState extends State<_TransactionsList> {
           );
         }
 
-        if (state is TransactionPaginatedLoaded) {
+        if (state.status == TransactionStatus.success) {
           if (state.transactions.isEmpty) {
             return Center(
               child: Column(

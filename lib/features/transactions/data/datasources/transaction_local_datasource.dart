@@ -99,4 +99,19 @@ class TransactionLocalDataSource implements TransactionDataSource {
 
     return paginatedTransactions;
   }
+
+  @override
+  Future<List<TransactionModel>> getTransactionsByCategoryId(
+    String categoryId,
+  ) async {
+    final box = _hiveService.getBox(HiveService.transactionsBox);
+    final transactions = box.values
+        .cast<TransactionModel>()
+        .where((t) => t.categoryId == categoryId)
+        .toList();
+
+    transactions.sort((a, b) => b.date.compareTo(a.date));
+
+    return transactions;
+  }
 }

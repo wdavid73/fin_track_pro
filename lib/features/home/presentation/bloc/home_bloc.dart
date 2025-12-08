@@ -38,7 +38,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     // Listen to TransactionBloc changes
     _transactionSubscription = _transactionBloc.stream.listen((state) {
-      if (state is TransactionOperationSuccess) {
+      if (state.status == TransactionStatus.success &&
+          state.successMessage != null) {
         add(const RefreshHomeData());
       }
     });

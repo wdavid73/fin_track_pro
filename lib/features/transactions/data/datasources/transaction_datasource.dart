@@ -17,4 +17,5 @@ abstract class TransactionDataSource {
     required int limit,
     required int offset,
   });
+  Future<List<TransactionModel>> getTransactionsByCategoryId(String categoryId);
 }

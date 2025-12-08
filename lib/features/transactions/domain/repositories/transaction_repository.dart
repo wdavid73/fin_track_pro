@@ -15,4 +15,5 @@ abstract class TransactionRepository {
     required int limit,
     required int offset,
   });
+  Future<List<Transaction>> getTransactionsByCategoryId(String categoryId);
 }

@@ -1,70 +1,54 @@
 part of 'transaction_bloc.dart';
 
-abstract class TransactionState extends Equatable {
-  const TransactionState();
-
-  @override
-  List<Object?> get props => [];
+enum TransactionStatus {
+  initial,
+  loading,
+  success,
+  error,
 }
 
-class TransactionInitial extends TransactionState {
-  const TransactionInitial();
-}
-
-class TransactionLoading extends TransactionState {
-  const TransactionLoading();
-}
-
-class TransactionLoaded extends TransactionState {
-  final List<Transaction> transactions;
-
-  const TransactionLoaded(this.transactions);
-
-  @override
-  List<Object?> get props => [transactions];
-}
-
-class TransactionError extends TransactionState {
-  final String message;
-
-  const TransactionError(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
-
-class TransactionOperationSuccess extends TransactionState {
-  final String message;
-
-  const TransactionOperationSuccess(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
-
-class TransactionPaginatedLoaded extends TransactionState {
+class TransactionState extends Equatable {
+  final TransactionStatus status;
   final List<Transaction> transactions;
   final bool hasMore;
   final int currentOffset;
+  final String? errorMessage;
+  final String? successMessage;
 
-  const TransactionPaginatedLoaded({
-    required this.transactions,
-    required this.hasMore,
-    required this.currentOffset,
+  const TransactionState({
+    this.status = TransactionStatus.initial,
+    this.transactions = const [],
+    this.hasMore = false,
+    this.currentOffset = 0,
+    this.errorMessage,
+    this.successMessage,
   });
 
-  @override
-  List<Object?> get props => [transactions, hasMore, currentOffset];
-
-  TransactionPaginatedLoaded copyWith({
+  TransactionState copyWith({
+    TransactionStatus? status,
     List<Transaction>? transactions,
     bool? hasMore,
     int? currentOffset,
+    String? errorMessage,
+    String? successMessage,
   }) {
-    return TransactionPaginatedLoaded(
+    return TransactionState(
+      status: status ?? this.status,
       transactions: transactions ?? this.transactions,
       hasMore: hasMore ?? this.hasMore,
       currentOffset: currentOffset ?? this.currentOffset,
+      errorMessage: errorMessage ?? this.errorMessage,
+      successMessage: successMessage ?? this.successMessage,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        status,
+        transactions,
+        hasMore,
+        currentOffset,
+        errorMessage,
+        successMessage,
+      ];
 }

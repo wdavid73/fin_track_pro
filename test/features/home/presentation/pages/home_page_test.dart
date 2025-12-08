@@ -93,7 +93,7 @@ void main() {
       when(() => mockHomeBloc.state).thenReturn(const HomeLoading());
       when(
         () => mockTransactionBloc.state,
-      ).thenReturn(const TransactionInitial());
+      ).thenReturn(const TransactionState());
 
       await tester.pumpWidget(createWidgetUnderTest());
 
@@ -122,7 +122,7 @@ void main() {
       );
       when(
         () => mockTransactionBloc.state,
-      ).thenReturn(const TransactionInitial());
+      ).thenReturn(const TransactionState());
 
       await tester.pumpWidget(createWidgetUnderTest());
 
@@ -137,7 +137,7 @@ void main() {
       when(() => mockHomeBloc.state).thenReturn(const HomeError(errorMessage));
       when(
         () => mockTransactionBloc.state,
-      ).thenReturn(const TransactionInitial());
+      ).thenReturn(const TransactionState());
 
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pump(); // Allow error widget to build
@@ -151,7 +151,7 @@ void main() {
       when(() => mockHomeBloc.state).thenReturn(const HomeError(errorMessage));
       when(
         () => mockTransactionBloc.state,
-      ).thenReturn(const TransactionInitial());
+      ).thenReturn(const TransactionState());
 
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pump();
@@ -165,7 +165,7 @@ void main() {
       when(() => mockHomeBloc.state).thenReturn(const HomeLoading());
       when(
         () => mockTransactionBloc.state,
-      ).thenReturn(const TransactionInitial());
+      ).thenReturn(const TransactionState());
 
       await tester.pumpWidget(createWidgetUnderTest());
 

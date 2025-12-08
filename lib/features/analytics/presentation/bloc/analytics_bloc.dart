@@ -20,14 +20,15 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
   StreamSubscription? _transactionSubscription;
 
   AnalyticsBloc(this._getAnalyticsData, this._transactionBloc)
-    : super(const AnalyticsInitial()) {
+    : super(const AnalyticsState()) {
     on<LoadAnalyticsData>(_onLoadAnalyticsData);
     on<ChangePeriod>(_onChangePeriod);
     on<RefreshAnalyticsData>(_onRefreshAnalyticsData);
 
     // Listen to TransactionBloc changes to refresh analytics
-    _transactionSubscription = _transactionBloc.stream.listen((state) {
-      if (state is TransactionOperationSuccess) {
+    _transactionSubscription = _transactionBloc.stream.listen((transactionState) {
+      if (transactionState.status == TransactionStatus.success &&
+          transactionState.successMessage != null) {
         add(const RefreshAnalyticsData());
       }
     });
@@ -43,7 +44,10 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     LoadAnalyticsData event,
     Emitter<AnalyticsState> emit,
   ) async {
-    emit(const AnalyticsLoading(period: AnalyticsPeriod.month));
+    emit(state.copyWith(
+      status: AnalyticsStatus.loading,
+      period: AnalyticsPeriod.month,
+    ));
     await _loadData(AnalyticsPeriod.month, emit);
   }
 
@@ -51,7 +55,10 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     ChangePeriod event,
     Emitter<AnalyticsState> emit,
   ) async {
-    emit(AnalyticsLoading(period: event.period));
+    emit(state.copyWith(
+      status: AnalyticsStatus.loading,
+      period: event.period,
+    ));
     await _loadData(event.period, emit);
   }
 
@@ -59,12 +66,7 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     RefreshAnalyticsData event,
     Emitter<AnalyticsState> emit,
   ) async {
-    // Get current period from state
-    final currentPeriod = state is AnalyticsLoaded
-        ? (state as AnalyticsLoaded).period
-        : AnalyticsPeriod.month;
-
-    await _loadData(currentPeriod, emit);
+    await _loadData(state.period, emit);
   }
 
   Future<void> _loadData(
@@ -79,14 +81,17 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
 
       final analyticsData = await _getAnalyticsData(period);
 
-      emit(AnalyticsLoaded(period: period, data: analyticsData));
+      emit(state.copyWith(
+        status: AnalyticsStatus.success,
+        period: period,
+        data: analyticsData,
+      ));
     } catch (e) {
-      emit(
-        AnalyticsError(
-          message: 'Failed to load analytics data: $e',
-          period: period,
-        ),
-      );
+      emit(state.copyWith(
+        status: AnalyticsStatus.error,
+        period: period,
+        errorMessage: 'Failed to load analytics data: $e',
+      ));
     }
   }
 }

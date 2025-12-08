@@ -33,7 +33,7 @@ void main() {
     whenListen(
       mockTransactionBloc,
       const Stream<TransactionState>.empty(),
-      initialState: const TransactionInitial(),
+      initialState: const TransactionState(),
     );
 
     bloc = AnalyticsBloc(mockGetAnalyticsData, mockTransactionBloc);
@@ -51,13 +51,15 @@ void main() {
   );
 
   group('AnalyticsBloc', () {
-    test('initial state should be AnalyticsInitial', () {
-      expect(bloc.state, const AnalyticsInitial());
+    test('initial state should have initial status', () {
+      expect(bloc.state.status, AnalyticsStatus.initial);
+      expect(bloc.state.period, AnalyticsPeriod.month);
+      expect(bloc.state.data, null);
     });
 
     group('LoadAnalyticsData', () {
       blocTest<AnalyticsBloc, AnalyticsState>(
-        'emits [Loading, Loaded] when LoadAnalyticsData succeeds',
+        'emits [Loading, Success] when LoadAnalyticsData succeeds',
         build: () {
           when(
             () => mockGetAnalyticsData(any()),
@@ -66,10 +68,14 @@ void main() {
         },
         act: (bloc) => bloc.add(const LoadAnalyticsData()),
         expect: () => [
-          const AnalyticsLoading(period: AnalyticsPeriod.month),
-          const AnalyticsLoaded(
-            data: tAnalyticsData,
+          const AnalyticsState(
+            status: AnalyticsStatus.loading,
             period: AnalyticsPeriod.month,
+          ),
+          const AnalyticsState(
+            status: AnalyticsStatus.success,
+            period: AnalyticsPeriod.month,
+            data: tAnalyticsData,
           ),
         ],
         verify: (_) {
@@ -87,10 +93,14 @@ void main() {
         },
         act: (bloc) => bloc.add(const LoadAnalyticsData()),
         expect: () => [
-          const AnalyticsLoading(period: AnalyticsPeriod.month),
-          const AnalyticsError(
-            message: 'Failed to load analytics data: Exception: Data error',
+          const AnalyticsState(
+            status: AnalyticsStatus.loading,
             period: AnalyticsPeriod.month,
+          ),
+          const AnalyticsState(
+            status: AnalyticsStatus.error,
+            period: AnalyticsPeriod.month,
+            errorMessage: 'Failed to load analytics data: Exception: Data error',
           ),
         ],
       );
@@ -98,7 +108,7 @@ void main() {
 
     group('ChangePeriod', () {
       blocTest<AnalyticsBloc, AnalyticsState>(
-        'emits [Loading, Loaded] with new period when ChangePeriod is added',
+        'emits [Loading, Success] with new period when ChangePeriod is added',
         build: () {
           when(
             () => mockGetAnalyticsData(any()),
@@ -107,10 +117,14 @@ void main() {
         },
         act: (bloc) => bloc.add(const ChangePeriod(AnalyticsPeriod.year)),
         expect: () => [
-          const AnalyticsLoading(period: AnalyticsPeriod.year),
-          const AnalyticsLoaded(
-            data: tAnalyticsData,
+          const AnalyticsState(
+            status: AnalyticsStatus.loading,
             period: AnalyticsPeriod.year,
+          ),
+          const AnalyticsState(
+            status: AnalyticsStatus.success,
+            period: AnalyticsPeriod.year,
+            data: tAnalyticsData,
           ),
         ],
         verify: (_) {
@@ -121,28 +135,29 @@ void main() {
 
     group('RefreshAnalyticsData', () {
       blocTest<AnalyticsBloc, AnalyticsState>(
-        'emits [Loaded] with new data when RefreshAnalyticsData is added',
+        'emits [Success] with new data when RefreshAnalyticsData is added',
         build: () {
           when(
             () => mockGetAnalyticsData(any()),
           ).thenAnswer((_) async => tAnalyticsData);
           return bloc;
         },
-        // Seed with different data so the new state is not equal to the old state
-        seed: () => const AnalyticsLoaded(
+        seed: () => const AnalyticsState(
+          status: AnalyticsStatus.success,
+          period: AnalyticsPeriod.week,
           data: AnalyticsData(
             totalIncome: 0,
             totalExpenses: 0,
             categorySpending: [],
             comparisons: [],
           ),
-          period: AnalyticsPeriod.week,
         ),
         act: (bloc) => bloc.add(const RefreshAnalyticsData()),
         expect: () => [
-          const AnalyticsLoaded(
-            data: tAnalyticsData,
+          const AnalyticsState(
+            status: AnalyticsStatus.success,
             period: AnalyticsPeriod.week,
+            data: tAnalyticsData,
           ),
         ],
         verify: (_) {
@@ -153,7 +168,7 @@ void main() {
 
     group('TransactionBloc Listener', () {
       blocTest<AnalyticsBloc, AnalyticsState>(
-        'reloads data when TransactionOperationSuccess is emitted',
+        'reloads data when Transaction operation succeeds',
         build: () {
           when(
             () => mockGetAnalyticsData(any()),
@@ -161,17 +176,22 @@ void main() {
 
           whenListen(
             mockTransactionBloc,
-            Stream.fromIterable([const TransactionOperationSuccess('Success')]),
-            initialState: const TransactionInitial(),
+            Stream.fromIterable([
+              const TransactionState(
+                status: TransactionStatus.success,
+                successMessage: 'Transaction created successfully',
+              ),
+            ]),
+            initialState: const TransactionState(),
           );
 
           return AnalyticsBloc(mockGetAnalyticsData, mockTransactionBloc);
         },
         expect: () => [
-          // AnalyticsLoading is not emitted during refresh triggered by listener
-          const AnalyticsLoaded(
-            data: tAnalyticsData,
+          const AnalyticsState(
+            status: AnalyticsStatus.success,
             period: AnalyticsPeriod.month,
+            data: tAnalyticsData,
           ),
         ],
         verify: (_) {

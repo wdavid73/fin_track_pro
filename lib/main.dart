@@ -3,6 +3,7 @@ import 'package:fin_track_pro/core/config/env_config.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
 import 'package:fin_track_pro/core/database/hive_service.dart';
 import 'package:fin_track_pro/core/database/seeders/database_seeder.dart';
+import 'package:fin_track_pro/core/widgets/app_snack_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'app/app.dart';
@@ -33,5 +34,8 @@ Future<void> mainCommon(Flavor flavor, String envFile) async {
         : null,
   );
 
-  runApp(const MyApp());
+  final messengerKey = GlobalKey<ScaffoldMessengerState>();
+  AppSnackbar().init(messengerKey);
+
+  runApp(MyApp(messengerKey: messengerKey));
 }

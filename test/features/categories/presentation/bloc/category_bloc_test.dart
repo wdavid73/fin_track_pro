@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
+import 'package:fin_track_pro/features/categories/domain/entities/category_stats.dart';
 import 'package:fin_track_pro/features/categories/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -9,6 +10,7 @@ import '../../mocks/category_mocks.dart';
 void main() {
   late CategoryBloc bloc;
   late MockGetCategoriesUseCase mockGetCategories;
+  late MockGetCategoryStatsUseCase mockGetCategoryStats;
   late MockCreateCategoryUseCase mockCreateCategory;
   late MockUpdateCategoryUseCase mockUpdateCategory;
   late MockDeleteCategoryUseCase mockDeleteCategory;
@@ -16,6 +18,7 @@ void main() {
 
   setUp(() {
     mockGetCategories = MockGetCategoriesUseCase();
+    mockGetCategoryStats = MockGetCategoryStatsUseCase();
     mockCreateCategory = MockCreateCategoryUseCase();
     mockUpdateCategory = MockUpdateCategoryUseCase();
     mockDeleteCategory = MockDeleteCategoryUseCase();
@@ -23,6 +26,7 @@ void main() {
 
     bloc = CategoryBloc(
       getCategories: mockGetCategories,
+      getCategoryStats: mockGetCategoryStats,
       createCategory: mockCreateCategory,
       updateCategory: mockUpdateCategory,
       deleteCategory: mockDeleteCategory,
@@ -35,8 +39,10 @@ void main() {
   });
 
   group('CategoryBloc', () {
-    test('initial state should be CategoryInitial', () {
-      expect(bloc.state, const CategoryInitial());
+    test('initial state should have initial status', () {
+      expect(bloc.state.status, CategoryStatus.initial);
+      expect(bloc.state.categories, const []);
+      expect(bloc.state.categoryStats, const []);
     });
 
     group('LoadCategories', () {
@@ -44,28 +50,37 @@ void main() {
         Category(id: '', name: '', icon: '', color: 0, type: 'expense'),
       ];
       blocTest(
-        'should emit [Loading, Loaded] when data is gotten successfully',
+        'should emit [Loading, Success] when data is gotten successfully',
         build: () {
           when(() => mockGetCategories()).thenAnswer((_) async => tCategories);
           return bloc;
         },
         act: (bloc) => bloc.add(LoadCategoriesEvent()),
-        expect: () => [CategoryLoading(), const CategoryLoaded(tCategories)],
+        expect: () => [
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.success,
+            categories: tCategories,
+          ),
+        ],
         verify: (_) {
           verify(() => mockGetCategories()).called(1);
         },
       );
 
       blocTest(
-        'should emit [Loading, Error] when data is gotten successfully',
+        'should emit [Loading, Error] when getting data fails',
         build: () {
           when(() => mockGetCategories()).thenThrow(Exception('Error'));
           return bloc;
         },
         act: (bloc) => bloc.add(LoadCategoriesEvent()),
         expect: () => [
-          CategoryLoading(),
-          const CategoryError('Exception: Error'),
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.error,
+            errorMessage: 'Exception: Error',
+          ),
         ],
         verify: (_) {
           verify(() => mockGetCategories()).called(1);
@@ -94,8 +109,11 @@ void main() {
         },
         act: (bloc) => bloc.add(CreateCategoryEvent(tCategory)),
         expect: () => [
-          CategoryLoading(),
-          const CategoryOperationSuccess('Category created successfully'),
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.success,
+            successMessage: 'Category created successfully',
+          ),
         ],
         verify: (_) {
           verify(() => mockCreateCategory(tCategory)).called(1);
@@ -111,8 +129,11 @@ void main() {
         },
         act: (bloc) => bloc.add(CreateCategoryEvent(tCategory)),
         expect: () => [
-          CategoryLoading(),
-          const CategoryError('Exception: Failed to create'),
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.error,
+            errorMessage: 'Exception: Failed to create',
+          ),
         ],
         verify: (_) {
           verify(() => mockCreateCategory(tCategory)).called(1);
@@ -141,8 +162,11 @@ void main() {
         },
         act: (bloc) => bloc.add(UpdateCategoryEvent(tCategory)),
         expect: () => [
-          CategoryLoading(),
-          const CategoryOperationSuccess('Category updated successfully'),
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.success,
+            successMessage: 'Category updated successfully',
+          ),
         ],
         verify: (_) {
           verify(() => mockUpdateCategory(tCategory)).called(1);
@@ -158,8 +182,11 @@ void main() {
         },
         act: (bloc) => bloc.add(UpdateCategoryEvent(tCategory)),
         expect: () => [
-          CategoryLoading(),
-          const CategoryError('Exception: Failed to update'),
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.error,
+            errorMessage: 'Exception: Failed to update',
+          ),
         ],
         verify: (_) {
           verify(() => mockUpdateCategory(tCategory)).called(1);
@@ -182,8 +209,11 @@ void main() {
         },
         act: (bloc) => bloc.add(const DeleteCategoryEvent(tCategoryId)),
         expect: () => [
-          CategoryLoading(),
-          const CategoryOperationSuccess('Category deleted successfully'),
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.success,
+            successMessage: 'Category deleted successfully',
+          ),
         ],
         verify: (_) {
           verify(() => mockDeleteCategory(tCategoryId)).called(1);
@@ -199,8 +229,11 @@ void main() {
         },
         act: (bloc) => bloc.add(const DeleteCategoryEvent(tCategoryId)),
         expect: () => [
-          CategoryLoading(),
-          const CategoryError('Exception: Failed to delete'),
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.error,
+            errorMessage: 'Exception: Failed to delete',
+          ),
         ],
         verify: (_) {
           verify(() => mockDeleteCategory(tCategoryId)).called(1);
@@ -225,7 +258,7 @@ void main() {
       });
 
       blocTest(
-        'should emit [Loading, Loaded] when search is successful',
+        'should emit [Loading, Success] when search is successful',
         build: () {
           when(() => mockSearchCategories(any()))
               .thenAnswer((_) async => tCategories);
@@ -233,8 +266,11 @@ void main() {
         },
         act: (bloc) => bloc.add(const SearchCategoriesEvent(tQuery)),
         expect: () => [
-          CategoryLoading(),
-          const CategoryLoaded(tCategories),
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.success,
+            categories: tCategories,
+          ),
         ],
         verify: (_) {
           verify(() => mockSearchCategories(tQuery)).called(1);
@@ -250,11 +286,179 @@ void main() {
         },
         act: (bloc) => bloc.add(const SearchCategoriesEvent(tQuery)),
         expect: () => [
-          CategoryLoading(),
-          const CategoryError('Exception: Search failed'),
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.error,
+            errorMessage: 'Exception: Search failed',
+          ),
         ],
         verify: (_) {
           verify(() => mockSearchCategories(tQuery)).called(1);
+        },
+      );
+    });
+
+    group('LoadCategoryStatsEvent', () {
+      const tCategory = Category(
+        id: 'cat1',
+        name: 'Groceries',
+        icon: 'shopping_bag',
+        color: 0xFF4CAF50,
+        type: 'expense',
+      );
+
+      final tCategoryStats = [
+        const CategoryStats(
+          category: tCategory,
+          transactionCount: 5,
+          totalAmount: 250.75,
+        ),
+      ];
+
+      blocTest(
+        'should emit [Loading, Success] when stats are loaded successfully',
+        build: () {
+          when(() => mockGetCategoryStats())
+              .thenAnswer((_) async => tCategoryStats);
+          return bloc;
+        },
+        act: (bloc) => bloc.add(LoadCategoryStatsEvent()),
+        expect: () => [
+          const CategoryState(status: CategoryStatus.loading),
+          CategoryState(
+            status: CategoryStatus.success,
+            categoryStats: tCategoryStats,
+          ),
+        ],
+        verify: (_) {
+          verify(() => mockGetCategoryStats()).called(1);
+        },
+      );
+
+      blocTest(
+        'should emit [Loading, Success] with empty list when no categories exist',
+        build: () {
+          when(() => mockGetCategoryStats()).thenAnswer((_) async => []);
+          return bloc;
+        },
+        act: (bloc) => bloc.add(LoadCategoryStatsEvent()),
+        expect: () => [
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.success,
+            categoryStats: [],
+          ),
+        ],
+        verify: (_) {
+          verify(() => mockGetCategoryStats()).called(1);
+        },
+      );
+
+      blocTest(
+        'should emit [Loading, Error] when loading stats fails',
+        build: () {
+          when(() => mockGetCategoryStats())
+              .thenThrow(Exception('Failed to load stats'));
+          return bloc;
+        },
+        act: (bloc) => bloc.add(LoadCategoryStatsEvent()),
+        expect: () => [
+          const CategoryState(status: CategoryStatus.loading),
+          const CategoryState(
+            status: CategoryStatus.error,
+            errorMessage: 'Exception: Failed to load stats',
+          ),
+        ],
+        verify: (_) {
+          verify(() => mockGetCategoryStats()).called(1);
+        },
+      );
+
+      blocTest(
+        'should emit [Loading, Success] with multiple category stats',
+        build: () {
+          final tMultipleStats = [
+            const CategoryStats(
+              category: Category(
+                id: 'cat1',
+                name: 'Groceries',
+                icon: 'shopping_bag',
+                color: 0xFF4CAF50,
+                type: 'expense',
+              ),
+              transactionCount: 5,
+              totalAmount: 250.75,
+            ),
+            const CategoryStats(
+              category: Category(
+                id: 'cat2',
+                name: 'Transport',
+                icon: 'directions_car',
+                color: 0xFF2196F3,
+                type: 'expense',
+              ),
+              transactionCount: 3,
+              totalAmount: 150.00,
+            ),
+          ];
+          when(() => mockGetCategoryStats())
+              .thenAnswer((_) async => tMultipleStats);
+          return bloc;
+        },
+        act: (bloc) => bloc.add(LoadCategoryStatsEvent()),
+        expect: () => [
+          const CategoryState(status: CategoryStatus.loading),
+          isA<CategoryState>()
+              .having((state) => state.status, 'status', CategoryStatus.success)
+              .having((state) => state.categoryStats.length, 'length', 2)
+              .having(
+                (state) => state.categoryStats[0].transactionCount,
+                'first count',
+                5,
+              )
+              .having(
+                (state) => state.categoryStats[1].transactionCount,
+                'second count',
+                3,
+              ),
+        ],
+        verify: (_) {
+          verify(() => mockGetCategoryStats()).called(1);
+        },
+      );
+
+      blocTest(
+        'should emit [Loading, Success] with zero stats for categories without transactions',
+        build: () {
+          final tStatsWithZero = [
+            const CategoryStats(
+              category: tCategory,
+              transactionCount: 0,
+              totalAmount: 0.0,
+            ),
+          ];
+          when(() => mockGetCategoryStats())
+              .thenAnswer((_) async => tStatsWithZero);
+          return bloc;
+        },
+        act: (bloc) => bloc.add(LoadCategoryStatsEvent()),
+        expect: () => [
+          const CategoryState(status: CategoryStatus.loading),
+          isA<CategoryState>()
+              .having((state) => state.status, 'status', CategoryStatus.success)
+              .having(
+                (state) => state.categoryStats[0].transactionCount,
+                'count',
+                0,
+              )
+              .having(
+                (state) => state.categoryStats[0].totalAmount,
+                'amount',
+                0.0,
+              ),
+        ],
+        verify: (_) {
+          verify(() => mockGetCategoryStats()).called(1);
         },
       );
     });

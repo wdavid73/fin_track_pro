@@ -55,13 +55,16 @@ void main() {
   ];
 
   group('TransactionBloc', () {
-    test('initial state should be TransactionInitial', () {
-      expect(bloc.state, const TransactionInitial());
+    test('initial state should have initial status', () {
+      expect(bloc.state.status, TransactionStatus.initial);
+      expect(bloc.state.transactions, const []);
+      expect(bloc.state.hasMore, false);
+      expect(bloc.state.currentOffset, 0);
     });
 
     group('LoadTransactions', () {
       blocTest<TransactionBloc, TransactionState>(
-        'emits [Loading, Loaded] when LoadTransactions succeeds',
+        'emits [Loading, Success] when LoadTransactions succeeds',
         build: () {
           when(
             () => mockGetTransactions(),
@@ -70,8 +73,11 @@ void main() {
         },
         act: (bloc) => bloc.add(const LoadTransactions()),
         expect: () => [
-          const TransactionLoading(),
-          TransactionLoaded(tTransactions),
+          const TransactionState(status: TransactionStatus.loading),
+          TransactionState(
+            status: TransactionStatus.success,
+            transactions: tTransactions,
+          ),
         ],
         verify: (_) {
           verify(() => mockGetTransactions()).called(1);
@@ -88,9 +94,11 @@ void main() {
         },
         act: (bloc) => bloc.add(const LoadTransactions()),
         expect: () => [
-          const TransactionLoading(),
-          const TransactionError(
-            'Failed to load transactions: Exception: Database error',
+          const TransactionState(status: TransactionStatus.loading),
+          const TransactionState(
+            status: TransactionStatus.error,
+            errorMessage:
+                'Failed to load transactions: Exception: Database error',
           ),
         ],
         verify: (_) {
@@ -99,13 +107,19 @@ void main() {
       );
 
       blocTest<TransactionBloc, TransactionState>(
-        'emits [Loading, Loaded] with empty list when no transactions',
+        'emits [Loading, Success] with empty list when no transactions',
         build: () {
           when(() => mockGetTransactions()).thenAnswer((_) async => []);
           return bloc;
         },
         act: (bloc) => bloc.add(const LoadTransactions()),
-        expect: () => [const TransactionLoading(), const TransactionLoaded([])],
+        expect: () => [
+          const TransactionState(status: TransactionStatus.loading),
+          const TransactionState(
+            status: TransactionStatus.success,
+            transactions: [],
+          ),
+        ],
       );
     });
 
@@ -124,9 +138,11 @@ void main() {
       });
 
       blocTest<TransactionBloc, TransactionState>(
-        'emits [Loading, Success, Loading, PaginatedLoaded] when CreateTransaction succeeds',
+        'emits [Loading, Success, Loading, Success] when CreateTransaction succeeds',
         build: () {
+          // Mock UseCase
           when(() => mockCreateTransaction(any())).thenAnswer((_) async => {});
+          // Mock UseCase
           when(
             () => mockGetPaginatedTransactions(limit: 15, offset: 0),
           ).thenAnswer((_) async => [...tTransactions, tTransaction]);
@@ -134,13 +150,22 @@ void main() {
         },
         act: (bloc) => bloc.add(CreateTransactionEvent(tTransaction)),
         expect: () => [
-          const TransactionLoading(),
-          const TransactionOperationSuccess('Transaction created successfully'),
-          const TransactionLoading(),
-          TransactionPaginatedLoaded(
+          const TransactionState(status: TransactionStatus.loading),
+          const TransactionState(
+            status: TransactionStatus.success,
+            successMessage: 'Transaction created successfully',
+          ),
+          const TransactionState(
+            status: TransactionStatus.loading,
+            successMessage: 'Transaction created successfully',
+          ),
+          TransactionState(
+            status: TransactionStatus.success,
             transactions: [...tTransactions, tTransaction],
             hasMore: false,
             currentOffset: 3,
+            successMessage: 'Transaction created successfully',
+            errorMessage: null,
           ),
         ],
         verify: (_) {
@@ -161,9 +186,11 @@ void main() {
         },
         act: (bloc) => bloc.add(CreateTransactionEvent(tTransaction)),
         expect: () => [
-          const TransactionLoading(),
-          const TransactionError(
-            'Failed to create transaction: Exception: Failed to create',
+          const TransactionState(status: TransactionStatus.loading),
+          const TransactionState(
+            status: TransactionStatus.error,
+            errorMessage:
+                'Failed to create transaction: Exception: Failed to create',
           ),
         ],
       );
@@ -184,7 +211,7 @@ void main() {
       });
 
       blocTest<TransactionBloc, TransactionState>(
-        'emits [Loading, Success, Loading, PaginatedLoaded] when UpdateTransaction succeeds',
+        'emits [Loading, Success, Loading, Success] when UpdateTransaction succeeds',
         build: () {
           when(() => mockUpdateTransaction(any())).thenAnswer((_) async => {});
           when(
@@ -194,13 +221,21 @@ void main() {
         },
         act: (bloc) => bloc.add(UpdateTransactionEvent(tUpdatedTransaction)),
         expect: () => [
-          const TransactionLoading(),
-          const TransactionOperationSuccess('Transaction updated successfully'),
-          const TransactionLoading(),
-          TransactionPaginatedLoaded(
+          const TransactionState(status: TransactionStatus.loading),
+          const TransactionState(
+            status: TransactionStatus.success,
+            successMessage: 'Transaction updated successfully',
+          ),
+          const TransactionState(
+            status: TransactionStatus.loading,
+            successMessage: 'Transaction updated successfully',
+          ),
+          TransactionState(
+            status: TransactionStatus.success,
             transactions: [tUpdatedTransaction, tTransactions[1]],
             hasMore: false,
             currentOffset: 2,
+            successMessage: 'Transaction updated successfully',
           ),
         ],
         verify: (_) {
@@ -221,9 +256,11 @@ void main() {
         },
         act: (bloc) => bloc.add(UpdateTransactionEvent(tUpdatedTransaction)),
         expect: () => [
-          const TransactionLoading(),
-          const TransactionError(
-            'Failed to update transaction: Exception: Failed to update',
+          const TransactionState(status: TransactionStatus.loading),
+          const TransactionState(
+            status: TransactionStatus.error,
+            errorMessage:
+                'Failed to update transaction: Exception: Failed to update',
           ),
         ],
       );
@@ -233,7 +270,7 @@ void main() {
       const tId = '1';
 
       blocTest<TransactionBloc, TransactionState>(
-        'emits [Loading, Success, Loading, PaginatedLoaded] when DeleteTransaction succeeds',
+        'emits [Loading, Success, Loading, Success] when DeleteTransaction succeeds',
         build: () {
           when(() => mockDeleteTransaction(any())).thenAnswer((_) async => {});
           when(
@@ -243,13 +280,21 @@ void main() {
         },
         act: (bloc) => bloc.add(const DeleteTransactionEvent(tId)),
         expect: () => [
-          const TransactionLoading(),
-          const TransactionOperationSuccess('Transaction deleted successfully'),
-          const TransactionLoading(),
-          TransactionPaginatedLoaded(
+          const TransactionState(status: TransactionStatus.loading),
+          const TransactionState(
+            status: TransactionStatus.success,
+            successMessage: 'Transaction deleted successfully',
+          ),
+          const TransactionState(
+            status: TransactionStatus.loading,
+            successMessage: 'Transaction deleted successfully',
+          ),
+          TransactionState(
+            status: TransactionStatus.success,
             transactions: [tTransactions[1]],
             hasMore: false,
             currentOffset: 1,
+            successMessage: 'Transaction deleted successfully',
           ),
         ],
         verify: (_) {
@@ -270,9 +315,11 @@ void main() {
         },
         act: (bloc) => bloc.add(const DeleteTransactionEvent(tId)),
         expect: () => [
-          const TransactionLoading(),
-          const TransactionError(
-            'Failed to delete transaction: Exception: Failed to delete',
+          const TransactionState(status: TransactionStatus.loading),
+          const TransactionState(
+            status: TransactionStatus.error,
+            errorMessage:
+                'Failed to delete transaction: Exception: Failed to delete',
           ),
         ],
       );
@@ -280,7 +327,7 @@ void main() {
 
     group('LoadPaginatedTransactions', () {
       blocTest<TransactionBloc, TransactionState>(
-        'emits [Loading, PaginatedLoaded] when LoadPaginatedTransactions succeeds',
+        'emits [Loading, Success] when LoadPaginatedTransactions succeeds',
         build: () {
           when(
             () => mockGetPaginatedTransactions(limit: 15, offset: 0),
@@ -289,8 +336,9 @@ void main() {
         },
         act: (bloc) => bloc.add(const LoadPaginatedTransactions()),
         expect: () => [
-          const TransactionLoading(),
-          TransactionPaginatedLoaded(
+          const TransactionState(status: TransactionStatus.loading),
+          TransactionState(
+            status: TransactionStatus.success,
             transactions: tTransactions,
             hasMore: false, // 2 transactions < 15 limit
             currentOffset: 2,
@@ -304,7 +352,7 @@ void main() {
       );
 
       blocTest<TransactionBloc, TransactionState>(
-        'emits [Loading, PaginatedLoaded] with hasMore=true when result equals limit',
+        'emits [Loading, Success] with hasMore=true when result equals limit',
         build: () {
           final fullPage = List.generate(
             15,
@@ -324,8 +372,9 @@ void main() {
         },
         act: (bloc) => bloc.add(const LoadPaginatedTransactions()),
         expect: () => [
-          const TransactionLoading(),
-          isA<TransactionPaginatedLoaded>()
+          const TransactionState(status: TransactionStatus.loading),
+          isA<TransactionState>()
+              .having((s) => s.status, 'status', TransactionStatus.success)
               .having((s) => s.transactions.length, 'transactions length', 15)
               .having((s) => s.hasMore, 'hasMore', true)
               .having((s) => s.currentOffset, 'currentOffset', 15),
@@ -345,9 +394,11 @@ void main() {
         },
         act: (bloc) => bloc.add(const LoadPaginatedTransactions()),
         expect: () => [
-          const TransactionLoading(),
-          const TransactionError(
-            'Failed to load transactions: Exception: Database error',
+          const TransactionState(status: TransactionStatus.loading),
+          const TransactionState(
+            status: TransactionStatus.error,
+            errorMessage:
+                'Failed to load transactions: Exception: Database error',
           ),
         ],
       );
@@ -379,21 +430,23 @@ void main() {
       );
 
       blocTest<TransactionBloc, TransactionState>(
-        'emits updated PaginatedLoaded with appended transactions',
+        'emits updated state with appended transactions',
         build: () {
           when(
             () => mockGetPaginatedTransactions(limit: 15, offset: 15),
           ).thenAnswer((_) async => moreTransactions);
           return bloc;
         },
-        seed: () => TransactionPaginatedLoaded(
+        seed: () => TransactionState(
+          status: TransactionStatus.success,
           transactions: initialTransactions,
           hasMore: true,
           currentOffset: 15,
         ),
         act: (bloc) => bloc.add(const LoadMoreTransactions()),
         expect: () => [
-          isA<TransactionPaginatedLoaded>()
+          isA<TransactionState>()
+              .having((s) => s.status, 'status', TransactionStatus.success)
               .having((s) => s.transactions.length, 'transactions length', 25)
               .having((s) => s.hasMore, 'hasMore', false) // 10 < 15 limit
               .having((s) => s.currentOffset, 'currentOffset', 25),
@@ -408,7 +461,8 @@ void main() {
       blocTest<TransactionBloc, TransactionState>(
         'does not emit when hasMore is false',
         build: () => bloc,
-        seed: () => TransactionPaginatedLoaded(
+        seed: () => TransactionState(
+          status: TransactionStatus.success,
           transactions: initialTransactions,
           hasMore: false,
           currentOffset: 15,
@@ -426,9 +480,12 @@ void main() {
       );
 
       blocTest<TransactionBloc, TransactionState>(
-        'does not emit when state is not TransactionPaginatedLoaded',
+        'does not emit when hasMore is false in initial state',
         build: () => bloc,
-        seed: () => const TransactionInitial(),
+        seed: () => const TransactionState(
+          status: TransactionStatus.initial,
+          hasMore: false,
+        ),
         act: (bloc) => bloc.add(const LoadMoreTransactions()),
         expect: () => [],
         verify: (_) {
@@ -452,7 +509,8 @@ void main() {
           ).thenThrow(Exception('Network error'));
           return bloc;
         },
-        seed: () => TransactionPaginatedLoaded(
+        seed: () => TransactionState(
+          status: TransactionStatus.success,
           transactions: initialTransactions,
           hasMore: true,
           currentOffset: 15,

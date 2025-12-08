@@ -395,5 +395,109 @@ void main() {
         expect(result.last.id, '1'); // Oldest
       });
     });
+
+    group('getTransactionsByCategoryId', () {
+      test('should return only transactions for specified category', () async {
+        // arrange
+        final tTransactions = [
+          TransactionModel(
+            id: '1',
+            amount: 100.0,
+            categoryId: 'cat1',
+            type: 'expense',
+            date: DateTime(2024, 1, 1),
+            createdAt: DateTime(2024, 1, 1),
+          ),
+          TransactionModel(
+            id: '2',
+            amount: 200.0,
+            categoryId: 'cat2',
+            type: 'expense',
+            date: DateTime(2024, 1, 2),
+            createdAt: DateTime(2024, 1, 1),
+          ),
+          TransactionModel(
+            id: '3',
+            amount: 300.0,
+            categoryId: 'cat1',
+            type: 'expense',
+            date: DateTime(2024, 1, 3),
+            createdAt: DateTime(2024, 1, 1),
+          ),
+        ];
+        when(() => mockBox.values).thenReturn(tTransactions);
+
+        // act
+        final result = await datasource.getTransactionsByCategoryId('cat1');
+
+        // assert
+        expect(result.length, 2);
+        expect(result.every((t) => t.categoryId == 'cat1'), true);
+        expect(result.any((t) => t.id == '1'), true);
+        expect(result.any((t) => t.id == '3'), true);
+      });
+
+      test('should return empty list when no transactions for category',
+          () async {
+        // arrange
+        final tTransactions = [
+          TransactionModel(
+            id: '1',
+            amount: 100.0,
+            categoryId: 'cat1',
+            type: 'expense',
+            date: DateTime(2024, 1, 1),
+            createdAt: DateTime(2024, 1, 1),
+          ),
+        ];
+        when(() => mockBox.values).thenReturn(tTransactions);
+
+        // act
+        final result = await datasource.getTransactionsByCategoryId('cat2');
+
+        // assert
+        expect(result, isEmpty);
+      });
+
+      test('should return sorted transactions by date descending', () async {
+        // arrange
+        final tTransactions = [
+          TransactionModel(
+            id: '1',
+            amount: 100.0,
+            categoryId: 'cat1',
+            type: 'expense',
+            date: DateTime(2024, 1, 1),
+            createdAt: DateTime(2024, 1, 1),
+          ),
+          TransactionModel(
+            id: '2',
+            amount: 200.0,
+            categoryId: 'cat1',
+            type: 'expense',
+            date: DateTime(2024, 1, 10),
+            createdAt: DateTime(2024, 1, 1),
+          ),
+          TransactionModel(
+            id: '3',
+            amount: 300.0,
+            categoryId: 'cat1',
+            type: 'expense',
+            date: DateTime(2024, 1, 5),
+            createdAt: DateTime(2024, 1, 1),
+          ),
+        ];
+        when(() => mockBox.values).thenReturn(tTransactions);
+
+        // act
+        final result = await datasource.getTransactionsByCategoryId('cat1');
+
+        // assert
+        expect(result.length, 3);
+        expect(result.first.id, '2'); // Most recent (Jan 10)
+        expect(result[1].id, '3'); // Middle (Jan 5)
+        expect(result.last.id, '1'); // Oldest (Jan 1)
+      });
+    });
   });
 }

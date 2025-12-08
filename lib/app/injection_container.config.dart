@@ -42,6 +42,8 @@ import '../features/categories/domain/usecases/delete_category_use_case.dart'
     as _i189;
 import '../features/categories/domain/usecases/get_categories_use_case.dart'
     as _i374;
+import '../features/categories/domain/usecases/get_category_stats_use_case.dart'
+    as _i30;
 import '../features/categories/domain/usecases/search_categories_use_case.dart'
     as _i867;
 import '../features/categories/domain/usecases/update_category_use_case.dart'
@@ -179,6 +181,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i443.TransactionRepository>(),
           gh<_i745.CategoryRepository>(),
         ));
+    gh.factory<_i30.GetCategoryStatsUseCase>(() => _i30.GetCategoryStatsUseCase(
+          gh<_i745.CategoryRepository>(),
+          gh<_i443.TransactionRepository>(),
+        ));
     gh.factory<_i70.AddTransactionCubit>(() => _i70.AddTransactionCubit(
           gh<_i374.GetCategoriesUseCase>(),
           gh<_i333.CreateTransaction>(),
@@ -189,6 +195,7 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i274.CategoryBloc>(() => _i274.CategoryBloc(
           getCategories: gh<_i931.GetCategoriesUseCase>(),
+          getCategoryStats: gh<_i931.GetCategoryStatsUseCase>(),
           createCategory: gh<_i931.CreateCategoryUseCase>(),
           updateCategory: gh<_i931.UpdateCategoryUseCase>(),
           deleteCategory: gh<_i931.DeleteCategoryUseCase>(),

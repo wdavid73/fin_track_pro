@@ -6,6 +6,7 @@ class LightTheme {
   static CardThemeData cardTheme = ThemeConstants.baseCardTheme;
   static BottomSheetThemeData bottomSheetTheme =
       ThemeConstants.baseBottomSheetTheme;
+  static SnackBarThemeData snackBarTheme = ThemeConstants.baseSnackBarTheme;
 
   static ThemeData getLightTheme(BuildContext context) {
     return ThemeData(
@@ -16,7 +17,7 @@ class LightTheme {
       bottomSheetTheme: bottomSheetTheme,
       elevatedButtonTheme: ThemeConstants.baseElevatedButtonTheme,
       textButtonTheme: ThemeConstants.baseTextButtonTheme,
-      snackBarTheme: ThemeConstants.baseSnackBarTheme,
+      snackBarTheme: snackBarTheme,
     );
   }
 }

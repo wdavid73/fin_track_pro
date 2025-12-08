@@ -1,41 +1,49 @@
 part of 'category_bloc.dart';
 
-sealed class CategoryState extends Equatable {
-  const CategoryState();
-
-  @override
-  List<Object> get props => [];
+enum CategoryStatus {
+  initial,
+  loading,
+  success,
+  error,
 }
 
-final class CategoryInitial extends CategoryState {
-  const CategoryInitial();
-}
-
-final class CategoryLoading extends CategoryState {}
-
-final class CategoryLoaded extends CategoryState {
+class CategoryState extends Equatable {
+  final CategoryStatus status;
   final List<Category> categories;
+  final List<CategoryStats> categoryStats;
+  final String? errorMessage;
+  final String? successMessage;
 
-  const CategoryLoaded(this.categories);
+  const CategoryState({
+    this.status = CategoryStatus.initial,
+    this.categories = const [],
+    this.categoryStats = const [],
+    this.errorMessage,
+    this.successMessage,
+  });
+
+  CategoryState copyWith({
+    CategoryStatus? status,
+    List<Category>? categories,
+    List<CategoryStats>? categoryStats,
+    String? errorMessage,
+    String? successMessage,
+  }) {
+    return CategoryState(
+      status: status ?? this.status,
+      categories: categories ?? this.categories,
+      categoryStats: categoryStats ?? this.categoryStats,
+      errorMessage: errorMessage ?? this.errorMessage,
+      successMessage: successMessage ?? this.successMessage,
+    );
+  }
 
   @override
-  List<Object> get props => [categories];
-}
-
-final class CategoryError extends CategoryState {
-  final String message;
-
-  const CategoryError(this.message);
-
-  @override
-  List<Object> get props => [message];
-}
-
-final class CategoryOperationSuccess extends CategoryState {
-  final String message;
-
-  const CategoryOperationSuccess(this.message);
-
-  @override
-  List<Object> get props => [message];
+  List<Object?> get props => [
+        status,
+        categories,
+        categoryStats,
+        errorMessage,
+        successMessage,
+      ];
 }

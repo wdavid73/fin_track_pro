@@ -59,9 +59,18 @@ void main() {
 
   group('AnalyticsPage', () {
     testWidgets('renders loading state correctly', (tester) async {
-      when(
-        () => mockAnalyticsBloc.state,
-      ).thenReturn(const AnalyticsLoading(period: AnalyticsPeriod.month));
+      when(() => mockAnalyticsBloc.state).thenReturn(
+        const AnalyticsState(
+          period: AnalyticsPeriod.month,
+          status: AnalyticsStatus.success,
+          data: AnalyticsData(
+            totalIncome: 100,
+            totalExpenses: 100,
+            categorySpending: [],
+            comparisons: [],
+          ),
+        ),
+      );
 
       await tester.pumpWidget(createWidgetUnderTest());
 
@@ -73,9 +82,10 @@ void main() {
 
     testWidgets('renders loaded state correctly', (tester) async {
       when(() => mockAnalyticsBloc.state).thenReturn(
-        const AnalyticsLoaded(
+        const AnalyticsState(
           data: tAnalyticsData,
           period: AnalyticsPeriod.month,
+          status: AnalyticsStatus.success,
         ),
       );
 
@@ -94,9 +104,10 @@ void main() {
     testWidgets('renders error state correctly', (tester) async {
       const errorMessage = 'Something went wrong';
       when(() => mockAnalyticsBloc.state).thenReturn(
-        const AnalyticsError(
-          message: errorMessage,
+        const AnalyticsState(
+          errorMessage: errorMessage,
           period: AnalyticsPeriod.month,
+          status: AnalyticsStatus.error,
         ),
       );
 
@@ -111,9 +122,10 @@ void main() {
       tester,
     ) async {
       when(() => mockAnalyticsBloc.state).thenReturn(
-        const AnalyticsLoaded(
+        const AnalyticsState(
           data: tAnalyticsData,
           period: AnalyticsPeriod.month,
+          status: AnalyticsStatus.success,
         ),
       );
 

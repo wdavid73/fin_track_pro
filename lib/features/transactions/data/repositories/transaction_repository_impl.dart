@@ -68,4 +68,14 @@ class TransactionRepositoryImpl implements TransactionRepository {
     );
     return models.map((model) => model.toEntity()).toList();
   }
+
+  @override
+  Future<List<Transaction>> getTransactionsByCategoryId(
+    String categoryId,
+  ) async {
+    final models = await _localDataSource.getTransactionsByCategoryId(
+      categoryId,
+    );
+    return models.map((model) => model.toEntity()).toList();
+  }
 }

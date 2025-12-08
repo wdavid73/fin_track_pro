@@ -215,5 +215,57 @@ void main() {
         ).called(1);
       });
     });
+
+    group('getTransactionsByCategoryId', () {
+      const tCategoryId = 'cat1';
+      final tCategoryTransactions = [tTransactionModels.first];
+
+      test('should return transactions for specified category', () async {
+        // arrange
+        when(
+          () => mockLocalDataSource.getTransactionsByCategoryId(any()),
+        ).thenAnswer((_) async => tCategoryTransactions);
+
+        // act
+        final result = await repository.getTransactionsByCategoryId(tCategoryId);
+
+        // assert
+        expect(result.length, 1);
+        expect(result.first.categoryId, tCategoryId);
+        verify(
+          () => mockLocalDataSource.getTransactionsByCategoryId(tCategoryId),
+        ).called(1);
+      });
+
+      test('should return empty list when no transactions for category',
+          () async {
+        // arrange
+        when(
+          () => mockLocalDataSource.getTransactionsByCategoryId(any()),
+        ).thenAnswer((_) async => []);
+
+        // act
+        final result = await repository.getTransactionsByCategoryId(tCategoryId);
+
+        // assert
+        expect(result, isEmpty);
+        verify(
+          () => mockLocalDataSource.getTransactionsByCategoryId(tCategoryId),
+        ).called(1);
+      });
+
+      test('should throw exception when data source fails', () async {
+        // arrange
+        when(
+          () => mockLocalDataSource.getTransactionsByCategoryId(any()),
+        ).thenThrow(Exception('Database error'));
+
+        // act & assert
+        expect(
+          () => repository.getTransactionsByCategoryId(tCategoryId),
+          throwsException,
+        );
+      });
+    });
   });
 }

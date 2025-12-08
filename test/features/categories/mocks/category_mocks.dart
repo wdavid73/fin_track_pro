@@ -19,3 +19,6 @@ class MockDeleteCategoryUseCase extends Mock implements DeleteCategoryUseCase {}
 
 class MockSearchCategoriesUseCase extends Mock
     implements SearchCategoriesUseCase {}
+
+class MockGetCategoryStatsUseCase extends Mock
+    implements GetCategoryStatsUseCase {}

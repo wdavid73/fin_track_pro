@@ -38,7 +38,7 @@ void main() {
     whenListen(
       mockTransactionBloc,
       const Stream<TransactionState>.empty(),
-      initialState: const TransactionInitial(),
+      initialState: const TransactionState(),
     );
 
     bloc = HomeBloc(
@@ -166,7 +166,7 @@ void main() {
 
     group('TransactionBloc Listener', () {
       blocTest<HomeBloc, HomeState>(
-        'reloads data when TransactionOperationSuccess is emitted',
+        'reloads data when Transaction operation succeeds',
         build: () {
           when(
             () => mockGetRecentTransactions(limit: any(named: 'limit')),
@@ -177,8 +177,13 @@ void main() {
 
           whenListen(
             mockTransactionBloc,
-            Stream.fromIterable([const TransactionOperationSuccess('Success')]),
-            initialState: const TransactionInitial(),
+            Stream.fromIterable([
+              const TransactionState(
+                status: TransactionStatus.success,
+                successMessage: 'Transaction created successfully',
+              ),
+            ]),
+            initialState: const TransactionState(),
           );
 
           return HomeBloc(

@@ -7,7 +7,8 @@ import 'package:go_router/go_router.dart';
 GoRouter? _router;
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GlobalKey<ScaffoldMessengerState> messengerKey;
+  const MyApp({super.key, required this.messengerKey});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.getDarkTheme(context),
       themeMode: ThemeMode.system,
       routerConfig: _router,
+      scaffoldMessengerKey: messengerKey,
     );
   }
 }

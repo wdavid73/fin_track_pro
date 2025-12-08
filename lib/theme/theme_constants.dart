@@ -190,8 +190,18 @@ class ThemeConstants {
 
   static final baseSnackBarTheme = const SnackBarThemeData(
     backgroundColor: ColorTheme.onSurfaceColor,
-    contentTextStyle: TextStyle(color: ColorTheme.surfaceColor),
     behavior: SnackBarBehavior.floating,
+    insetPadding: EdgeInsets.all(10),
+    actionBackgroundColor: Colors.transparent,
+    disabledActionBackgroundColor: Colors.transparent,
+    disabledActionTextColor: Colors.white,
+    contentTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
+      ),
+    ),
   );
 
   static final baseTooltipTheme = const TooltipThemeData();
@@ -225,6 +235,17 @@ class ThemeConstants {
 
   static final baseSnackBarThemeDark = baseSnackBarTheme.copyWith(
     backgroundColor: ColorTheme.surfaceColor,
+    insetPadding: const EdgeInsets.all(10),
+    actionBackgroundColor: Colors.transparent,
+    disabledActionBackgroundColor: Colors.transparent,
+    disabledActionTextColor: Colors.white,
+    contentTextStyle: baseTextTheme.bodyLarge,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
+      ),
+    ),
   );
 
   static final baseTooltipThemeDark = baseTooltipTheme.copyWith();

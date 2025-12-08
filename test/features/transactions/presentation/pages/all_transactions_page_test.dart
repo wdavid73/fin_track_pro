@@ -72,7 +72,7 @@ void main() {
     testWidgets('renders loading state correctly', (tester) async {
       when(
         () => mockTransactionBloc.state,
-      ).thenReturn(const TransactionLoading());
+      ).thenReturn(const TransactionState(status: TransactionStatus.loading));
 
       await tester.pumpWidget(createWidgetUnderTest());
 
@@ -83,7 +83,8 @@ void main() {
       tester,
     ) async {
       when(() => mockTransactionBloc.state).thenReturn(
-        TransactionPaginatedLoaded(
+        TransactionState(
+          status: TransactionStatus.success,
           transactions: tTransactions,
           hasMore: false,
           currentOffset: 0,
@@ -99,7 +100,8 @@ void main() {
 
     testWidgets('renders empty state correctly', (tester) async {
       when(() => mockTransactionBloc.state).thenReturn(
-        const TransactionPaginatedLoaded(
+        const TransactionState(
+          status: TransactionStatus.success,
           transactions: [],
           hasMore: false,
           currentOffset: 0,
@@ -116,7 +118,12 @@ void main() {
       const errorMessage = 'Failed to load transactions';
       when(
         () => mockTransactionBloc.state,
-      ).thenReturn(const TransactionError(errorMessage));
+      ).thenReturn(
+        const TransactionState(
+          status: TransactionStatus.error,
+          errorMessage: errorMessage,
+        ),
+      );
 
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pump(); // Allow error widget to build
@@ -129,7 +136,12 @@ void main() {
       const errorMessage = 'Failed to load transactions';
       when(
         () => mockTransactionBloc.state,
-      ).thenReturn(const TransactionError(errorMessage));
+      ).thenReturn(
+        const TransactionState(
+          status: TransactionStatus.error,
+          errorMessage: errorMessage,
+        ),
+      );
 
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pump();

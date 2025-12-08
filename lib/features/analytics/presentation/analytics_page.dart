@@ -35,14 +35,14 @@ class AnalyticsPage extends StatelessWidget {
   Widget _body() {
     return BlocBuilder<AnalyticsBloc, AnalyticsState>(
       builder: (context, state) {
-        if (state is AnalyticsError) {
+        if (state.status == AnalyticsStatus.error) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.error_outline, size: 48, color: context.errorColor),
                 const Gap(16),
-                Text(state.message),
+                Text('${state.errorMessage}'),
                 const Gap(16),
                 ElevatedButton(
                   onPressed: () {
@@ -57,7 +57,7 @@ class AnalyticsPage extends StatelessWidget {
           );
         }
 
-        if (state is AnalyticsLoading) {
+        if (state.status == AnalyticsStatus.loading) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: SingleChildScrollView(
@@ -82,7 +82,7 @@ class AnalyticsPage extends StatelessWidget {
           );
         }
 
-        if (state is AnalyticsLoaded) {
+        if (state.status == AnalyticsStatus.success && state.data != null) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: SingleChildScrollView(
@@ -97,22 +97,22 @@ class AnalyticsPage extends StatelessWidget {
                   ),
                   const Gap(20),
                   AnalyticsSummaryCards(
-                    totalIncome: state.data.totalIncome,
-                    totalExpenses: state.data.totalExpenses,
-                    netSavings: state.data.netSavings,
+                    totalIncome: state.data!.totalIncome,
+                    totalExpenses: state.data!.totalExpenses,
+                    netSavings: state.data!.netSavings,
                   ),
                   const Gap(20),
                   SpendingByCategoryChart(
-                    categorySpending: state.data.categorySpending,
+                    categorySpending: state.data!.categorySpending,
                   ),
                   const Gap(20),
                   IncomeVsExpenseChart(
-                    comparisons: state.data.comparisons,
+                    comparisons: state.data!.comparisons,
                     periodLabel: _getPeriodLabel(state),
                   ),
                   const Gap(20),
                   TopSpendingCategories(
-                    categories: state.data.topSpendingCategories,
+                    categories: state.data!.topSpendingCategories,
                   ),
                 ],
               ),
@@ -125,18 +125,18 @@ class AnalyticsPage extends StatelessWidget {
     );
   }
 
-  String _getPeriodLabel(AnalyticsLoaded state) {
-    if (state.data.comparisons.isEmpty) {
+  String _getPeriodLabel(AnalyticsState state) {
+    if (state.data!.comparisons.isEmpty) {
       return 'This ${state.period.label} · 0%';
     }
 
     // Avoid division by zero
-    if (state.data.totalIncome == 0) {
+    if (state.data!.totalIncome == 0) {
       return 'This ${state.period.label} · 0%';
     }
 
     final percentage =
-        ((state.data.totalExpenses / state.data.totalIncome) * 100)
+        ((state.data!.totalExpenses / state.data!.totalIncome) * 100)
             .toStringAsFixed(0);
     return 'This ${state.period.label} · -$percentage%';
   }

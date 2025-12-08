@@ -1,7 +1,7 @@
 import 'package:fin_track_pro/config/router/routes.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
 import 'package:fin_track_pro/features/analytics/presentation/analytics_page.dart';
-import 'package:fin_track_pro/features/categories/presentation/categories_page.dart';
+import 'package:fin_track_pro/features/categories/presentation/pages/categories_page.dart';
 import 'package:fin_track_pro/features/home/presentation/home_page.dart';
 import 'package:fin_track_pro/features/settings/presentation/settings_page.dart';
 import 'package:fin_track_pro/features/splash/presentation/splash_page.dart';
