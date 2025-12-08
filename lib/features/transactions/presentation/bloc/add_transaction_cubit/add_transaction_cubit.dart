@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';
-import '../../../../categories/domain/usecases/get_categories.dart';
+import '../../../../categories/domain/usecases/get_categories_use_case.dart';
 import '../../../domain/entities/transaction.dart';
 import '../../../domain/usecases/create_transaction.dart';
 import 'add_transaction_state.dart';
@@ -15,7 +15,7 @@ import 'add_transaction_state.dart';
 /// - Transaction creation
 @injectable
 class AddTransactionCubit extends Cubit<AddTransactionState> {
-  final GetCategories _getCategories;
+  final GetCategoriesUseCase _getCategories;
   final CreateTransaction _createTransaction;
 
   AddTransactionCubit(this._getCategories, this._createTransaction)

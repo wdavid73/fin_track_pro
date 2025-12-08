@@ -137,4 +137,35 @@ class CategoryLocalDataSource implements CategoryDataSource {
       await box.put(defaultCategories[i].id, defaultCategories[i]);
     }
   }
+
+  @override
+  Future<void> createCategory(CategoryModel category) {
+    final box = _hiveService.getBox(HiveService.categoriesBox);
+    return box.put(category.id, category);
+  }
+
+  @override
+  Future<List<CategoryModel>> searchCategories(String query) async {
+    try {
+      final box = _hiveService.getBox(HiveService.categoriesBox);
+      final categories = box.values.cast<CategoryModel>().toList();
+      return categories
+          .where((cat) => cat.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to search categories');
+    }
+  }
+
+  @override
+  Future<void> deleteCategory(String id) {
+    final box = _hiveService.getBox(HiveService.categoriesBox);
+    return box.delete(id);
+  }
+
+  @override
+  Future<void> updateCategory(CategoryModel category) {
+    final box = _hiveService.getBox(HiveService.categoriesBox);
+    return box.put(category.id, category);
+  }
 }

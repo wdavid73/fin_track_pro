@@ -54,21 +54,24 @@ void main() {
 
   group('CategoryLocalDataSource', () {
     group('getCategories', () {
-      test('should return list of categories from box when box is not empty',
-          () async {
-        // arrange
-        when(() => mockBox.isEmpty).thenReturn(false);
-        when(() => mockBox.values).thenReturn([tCategoryModel]);
+      test(
+        'should return list of categories from box when box is not empty',
+        () async {
+          // arrange
+          when(() => mockBox.isEmpty).thenReturn(false);
+          when(() => mockBox.values).thenReturn([tCategoryModel]);
 
-        // act
-        final result = await datasource.getCategories();
+          // act
+          final result = await datasource.getCategories();
 
-        // assert
-        verify(() => mockHiveService.getBox(HiveService.categoriesBox))
-            .called(1);
-        verify(() => mockBox.isEmpty).called(1);
-        expect(result, equals([tCategoryModel]));
-      });
+          // assert
+          verify(
+            () => mockHiveService.getBox(HiveService.categoriesBox),
+          ).called(1);
+          verify(() => mockBox.isEmpty).called(1);
+          expect(result, equals([tCategoryModel]));
+        },
+      );
 
       test('should seed default categories when box is empty', () async {
         // arrange
@@ -90,17 +93,17 @@ void main() {
     group('getCategoriesByType', () {
       test('should return only expense categories', () async {
         // arrange
-        when(() => mockBox.values).thenReturn([
-          tCategoryModel,
-          tCategoryModel2,
-        ]);
+        when(
+          () => mockBox.values,
+        ).thenReturn([tCategoryModel, tCategoryModel2]);
 
         // act
         final result = await datasource.getCategoriesByType('expense');
 
         // assert
-        verify(() => mockHiveService.getBox(HiveService.categoriesBox))
-            .called(1);
+        verify(
+          () => mockHiveService.getBox(HiveService.categoriesBox),
+        ).called(1);
         expect(result, equals([tCategoryModel]));
         expect(result.length, 1);
         expect(result.first.type, 'expense');
@@ -108,10 +111,9 @@ void main() {
 
       test('should return only income categories', () async {
         // arrange
-        when(() => mockBox.values).thenReturn([
-          tCategoryModel,
-          tCategoryModel2,
-        ]);
+        when(
+          () => mockBox.values,
+        ).thenReturn([tCategoryModel, tCategoryModel2]);
 
         // act
         final result = await datasource.getCategoriesByType('income');
@@ -143,8 +145,9 @@ void main() {
         final result = await datasource.getCategoryById('1');
 
         // assert
-        verify(() => mockHiveService.getBox(HiveService.categoriesBox))
-            .called(1);
+        verify(
+          () => mockHiveService.getBox(HiveService.categoriesBox),
+        ).called(1);
         expect(result, equals(tCategoryModel));
       });
 
@@ -159,20 +162,41 @@ void main() {
         expect(() => call('1'), throwsA(isA<Exception>()));
       });
 
-      test('should return correct category when multiple categories exist',
-          () async {
+      test(
+        'should return correct category when multiple categories exist',
+        () async {
+          // arrange
+          when(
+            () => mockBox.values,
+          ).thenReturn([tCategoryModel, tCategoryModel2]);
+
+          // act
+          final result = await datasource.getCategoryById('2');
+
+          // assert
+          expect(result, equals(tCategoryModel2));
+          expect(result?.id, '2');
+        },
+      );
+    });
+
+    group('createCategory', () {
+      const tCategory = CategoryModel(
+        id: '1',
+        name: 'Food',
+        icon: '🍔',
+        color: 123,
+        type: 'expense',
+      );
+      test('should add category to Hive box', () async {
         // arrange
-        when(() => mockBox.values).thenReturn([
-          tCategoryModel,
-          tCategoryModel2,
-        ]);
+        when(() => mockBox.put(any(), any())).thenAnswer((_) async => {});
 
         // act
-        final result = await datasource.getCategoryById('2');
+        await datasource.createCategory(tCategory);
 
         // assert
-        expect(result, equals(tCategoryModel2));
-        expect(result?.id, '2');
+        verify(() => mockBox.put(tCategory.id, tCategory)).called(1);
       });
     });
   });

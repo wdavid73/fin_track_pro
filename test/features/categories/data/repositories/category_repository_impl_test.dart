@@ -10,11 +10,6 @@ void main() {
   late CategoryRepositoryImpl repository;
   late MockCategoryLocalDataSource mockLocalDataSource;
 
-  setUp(() {
-    mockLocalDataSource = MockCategoryLocalDataSource();
-    repository = CategoryRepositoryImpl(mockLocalDataSource);
-  });
-
   const tCategoryModel = CategoryModel(
     id: '1',
     name: 'Food',
@@ -30,6 +25,15 @@ void main() {
     color: 123,
     type: 'expense',
   );
+
+  setUpAll(() {
+    registerFallbackValue(tCategoryModel);
+  });
+
+  setUp(() {
+    mockLocalDataSource = MockCategoryLocalDataSource();
+    repository = CategoryRepositoryImpl(mockLocalDataSource);
+  });
 
   group('CategoryRepositoryImpl', () {
     group('getCategories', () {
@@ -114,6 +118,32 @@ void main() {
         // assert
         verify(() => mockLocalDataSource.getCategoryById(tId)).called(1);
         expect(result, isNull);
+      });
+    });
+
+    group('createCategory', () {
+      const tCategoryModel = CategoryModel(
+        id: '1',
+        name: 'Food',
+        icon: 'food_icon',
+        color: 123,
+        type: 'expense',
+      );
+
+      test('should call datasource to create category', () async {
+        // arrange
+        when(
+          () => mockLocalDataSource.createCategory(any()),
+        ).thenAnswer((_) async => {});
+
+        // act
+
+        await repository.createCategory(tCategory);
+
+        // assert
+        verify(
+          () => mockLocalDataSource.createCategory(tCategoryModel),
+        ).called(1);
       });
     });
   });

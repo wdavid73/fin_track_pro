@@ -2,13 +2,13 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/transaction.dart';
 import 'package:fin_track_pro/features/transactions/domain/usecases/create_transaction.dart';
-import 'package:fin_track_pro/features/categories/domain/usecases/get_categories.dart';
+import 'package:fin_track_pro/features/categories/domain/usecases/get_categories_use_case.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/add_transaction_cubit/add_transaction_cubit.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/add_transaction_cubit/add_transaction_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGetCategories extends Mock implements GetCategories {}
+class MockGetCategories extends Mock implements GetCategoriesUseCase {}
 
 class MockCreateTransaction extends Mock implements CreateTransaction {}
 
@@ -58,22 +58,25 @@ void main() {
     group('loadCategories', () {
       blocTest<AddTransactionCubit, AddTransactionState>(
         'should emit categories when loadCategories succeeds',
-        build: () => AddTransactionCubit(mockGetCategories, mockCreateTransaction),
+        build: () =>
+            AddTransactionCubit(mockGetCategories, mockCreateTransaction),
         wait: const Duration(milliseconds: 100),
         expect: () => [
-          predicate<AddTransactionState>((state) =>
-              state.categories == tCategories &&
-              state.isLoadingCategories == false &&
-              state.errorMessage == null),
+          predicate<AddTransactionState>(
+            (state) =>
+                state.categories == tCategories &&
+                state.isLoadingCategories == false &&
+                state.errorMessage == null,
+          ),
         ],
       );
-
     });
 
     group('updateTransactionType', () {
       blocTest<AddTransactionCubit, AddTransactionState>(
         'should update transaction type and clear category',
-        build: () => AddTransactionCubit(mockGetCategories, mockCreateTransaction),
+        build: () =>
+            AddTransactionCubit(mockGetCategories, mockCreateTransaction),
         seed: () => AddTransactionState(
           selectedDate: tDate,
           selectedCategoryId: 'cat1',
@@ -82,9 +85,11 @@ void main() {
         ),
         act: (cubit) => cubit.updateTransactionType('income'),
         expect: () => [
-          predicate<AddTransactionState>((state) =>
-              state.transactionType == 'income' &&
-              state.selectedCategoryId == null),
+          predicate<AddTransactionState>(
+            (state) =>
+                state.transactionType == 'income' &&
+                state.selectedCategoryId == null,
+          ),
         ],
       );
     });
@@ -92,7 +97,8 @@ void main() {
     group('updateAmount', () {
       blocTest<AddTransactionCubit, AddTransactionState>(
         'should update amount and validate form',
-        build: () => AddTransactionCubit(mockGetCategories, mockCreateTransaction),
+        build: () =>
+            AddTransactionCubit(mockGetCategories, mockCreateTransaction),
         seed: () => AddTransactionState(
           selectedDate: tDate,
           selectedCategoryId: 'cat1',
@@ -108,7 +114,8 @@ void main() {
 
       blocTest<AddTransactionCubit, AddTransactionState>(
         'should invalidate form when amount is zero',
-        build: () => AddTransactionCubit(mockGetCategories, mockCreateTransaction),
+        build: () =>
+            AddTransactionCubit(mockGetCategories, mockCreateTransaction),
         seed: () => AddTransactionState(
           selectedDate: tDate,
           selectedCategoryId: 'cat1',
@@ -126,7 +133,8 @@ void main() {
 
       blocTest<AddTransactionCubit, AddTransactionState>(
         'should invalidate form when amount is negative',
-        build: () => AddTransactionCubit(mockGetCategories, mockCreateTransaction),
+        build: () =>
+            AddTransactionCubit(mockGetCategories, mockCreateTransaction),
         seed: () => AddTransactionState(
           selectedDate: tDate,
           selectedCategoryId: 'cat1',
@@ -135,7 +143,9 @@ void main() {
         ),
         act: (cubit) => cubit.updateAmount(-10),
         expect: () => [
-          predicate<AddTransactionState>((state) => state.amount == -10 && !state.isFormValid),
+          predicate<AddTransactionState>(
+            (state) => state.amount == -10 && !state.isFormValid,
+          ),
         ],
       );
     });
@@ -143,7 +153,8 @@ void main() {
     group('updateCategory', () {
       blocTest<AddTransactionCubit, AddTransactionState>(
         'should update category and validate form',
-        build: () => AddTransactionCubit(mockGetCategories, mockCreateTransaction),
+        build: () =>
+            AddTransactionCubit(mockGetCategories, mockCreateTransaction),
         seed: () => AddTransactionState(
           selectedDate: tDate,
           amount: 100.0,
@@ -153,14 +164,16 @@ void main() {
         act: (cubit) => cubit.updateCategory('cat1'),
         expect: () => [
           predicate<AddTransactionState>(
-              (state) => state.selectedCategoryId == 'cat1'),
+            (state) => state.selectedCategoryId == 'cat1',
+          ),
           predicate<AddTransactionState>((state) => state.isFormValid == true),
         ],
       );
 
       blocTest<AddTransactionCubit, AddTransactionState>(
         'should clear category when null is passed',
-        build: () => AddTransactionCubit(mockGetCategories, mockCreateTransaction),
+        build: () =>
+            AddTransactionCubit(mockGetCategories, mockCreateTransaction),
         seed: () => AddTransactionState(
           selectedDate: tDate,
           selectedCategoryId: 'cat1',
@@ -170,7 +183,8 @@ void main() {
         act: (cubit) => cubit.updateCategory(null),
         expect: () => [
           predicate<AddTransactionState>(
-              (state) => state.selectedCategoryId == null && !state.isFormValid),
+            (state) => state.selectedCategoryId == null && !state.isFormValid,
+          ),
         ],
       );
     });
@@ -178,7 +192,8 @@ void main() {
     group('updateDescription', () {
       blocTest<AddTransactionCubit, AddTransactionState>(
         'should update description',
-        build: () => AddTransactionCubit(mockGetCategories, mockCreateTransaction),
+        build: () =>
+            AddTransactionCubit(mockGetCategories, mockCreateTransaction),
         seed: () => AddTransactionState(
           selectedDate: tDate,
           categories: tCategories,
@@ -187,7 +202,8 @@ void main() {
         act: (cubit) => cubit.updateDescription('Test description'),
         expect: () => [
           predicate<AddTransactionState>(
-              (state) => state.description == 'Test description'),
+            (state) => state.description == 'Test description',
+          ),
         ],
       );
     });
@@ -195,7 +211,8 @@ void main() {
     group('updateDate', () {
       blocTest<AddTransactionCubit, AddTransactionState>(
         'should update selected date',
-        build: () => AddTransactionCubit(mockGetCategories, mockCreateTransaction),
+        build: () =>
+            AddTransactionCubit(mockGetCategories, mockCreateTransaction),
         seed: () => AddTransactionState(
           selectedDate: tDate,
           categories: tCategories,
@@ -207,7 +224,8 @@ void main() {
         },
         expect: () => [
           predicate<AddTransactionState>(
-              (state) => state.selectedDate == DateTime(2024, 1, 15)),
+            (state) => state.selectedDate == DateTime(2024, 1, 15),
+          ),
         ],
       );
     });
@@ -230,9 +248,11 @@ void main() {
         act: (cubit) => cubit.saveTransaction(),
         expect: () => [
           predicate<AddTransactionState>(
-              (state) => state.isSubmitting && state.errorMessage == null),
-          predicate<AddTransactionState>((state) =>
-              !state.isSubmitting && state.submitSuccess),
+            (state) => state.isSubmitting && state.errorMessage == null,
+          ),
+          predicate<AddTransactionState>(
+            (state) => !state.isSubmitting && state.submitSuccess,
+          ),
         ],
         verify: (_) {
           verify(() => mockCreateTransaction(any())).called(1);
@@ -256,9 +276,9 @@ void main() {
         ),
         act: (cubit) => cubit.saveTransaction(),
         verify: (_) {
-          final captured = verify(() => mockCreateTransaction(captureAny()))
-              .captured
-              .single as Transaction;
+          final captured =
+              verify(() => mockCreateTransaction(captureAny())).captured.single
+                  as Transaction;
           expect(captured.note, 'Test note');
           expect(captured.amount, 100.0);
           expect(captured.categoryId, 'cat1');
@@ -282,19 +302,19 @@ void main() {
         ),
         act: (cubit) => cubit.saveTransaction(),
         verify: (_) {
-          final captured = verify(() => mockCreateTransaction(captureAny()))
-              .captured
-              .single as Transaction;
+          final captured =
+              verify(() => mockCreateTransaction(captureAny())).captured.single
+                  as Transaction;
           expect(captured.note, null);
         },
       );
-
     });
 
     group('resetForm', () {
       blocTest<AddTransactionCubit, AddTransactionState>(
         'should reset form to initial state but keep categories',
-        build: () => AddTransactionCubit(mockGetCategories, mockCreateTransaction),
+        build: () =>
+            AddTransactionCubit(mockGetCategories, mockCreateTransaction),
         seed: () => AddTransactionState(
           selectedDate: tDate,
           amount: 100.0,
@@ -306,13 +326,15 @@ void main() {
         ),
         act: (cubit) => cubit.resetForm(),
         expect: () => [
-          predicate<AddTransactionState>((state) =>
-              state.amount == null &&
-              state.selectedCategoryId == null &&
-              state.description == '' &&
-              state.transactionType == 'expense' &&
-              state.categories == tCategories &&
-              !state.isLoadingCategories),
+          predicate<AddTransactionState>(
+            (state) =>
+                state.amount == null &&
+                state.selectedCategoryId == null &&
+                state.description == '' &&
+                state.transactionType == 'expense' &&
+                state.categories == tCategories &&
+                !state.isLoadingCategories,
+          ),
         ],
       );
     });

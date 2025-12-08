@@ -1,15 +1,14 @@
-import 'package:injectable/injectable.dart';
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
 import 'package:fin_track_pro/features/categories/domain/repositories/category_repository.dart';
+import 'package:injectable/injectable.dart';
 
-/// Use case to get all categories
 @injectable
-class GetCategories {
+class UpdateCategoryUseCase {
   final CategoryRepository repository;
 
-  GetCategories(this.repository);
+  UpdateCategoryUseCase(this.repository);
 
-  Future<List<Category>> call() async {
-    return await repository.getCategories();
+  Future<void> call(Category category) async {
+    return await repository.updateCategory(category);
   }
 }

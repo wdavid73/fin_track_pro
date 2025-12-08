@@ -6,7 +6,7 @@ import 'package:fin_track_pro/features/transactions/presentation/bloc/transactio
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
-import 'package:fin_track_pro/features/categories/domain/usecases/get_categories.dart';
+import 'package:fin_track_pro/features/categories/domain/usecases/get_categories_use_case.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/budget_data.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/transaction.dart';
 import 'package:fin_track_pro/features/transactions/domain/usecases/get_budget_data.dart';
@@ -21,7 +21,7 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetRecentTransactions _getRecentTransactions;
   final GetTotalBalance _getTotalBalance;
-  final GetCategories _getCategories;
+  final GetCategoriesUseCase _getCategories;
   final GetBudgetData _getBudgetData;
   final TransactionBloc _transactionBloc;
   StreamSubscription? _transactionSubscription;

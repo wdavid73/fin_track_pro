@@ -36,7 +36,19 @@ import '../features/categories/data/repositories/category_repository_impl.dart'
     as _i346;
 import '../features/categories/domain/repositories/category_repository.dart'
     as _i745;
-import '../features/categories/domain/usecases/get_categories.dart' as _i197;
+import '../features/categories/domain/usecases/create_category_use_case.dart'
+    as _i946;
+import '../features/categories/domain/usecases/delete_category_use_case.dart'
+    as _i189;
+import '../features/categories/domain/usecases/get_categories_use_case.dart'
+    as _i374;
+import '../features/categories/domain/usecases/search_categories_use_case.dart'
+    as _i867;
+import '../features/categories/domain/usecases/update_category_use_case.dart'
+    as _i331;
+import '../features/categories/domain/usecases/usecases.dart' as _i931;
+import '../features/categories/presentation/bloc/category_bloc/category_bloc.dart'
+    as _i274;
 import '../features/home/presentation/bloc/home_bloc.dart' as _i824;
 import '../features/transactions/data/datasources/transaction_local_datasource.dart'
     as _i730;
@@ -146,16 +158,20 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i745.CategoryRepository>(),
           gh<_i299.GetBudgets>(),
         ));
-    gh.factory<_i197.GetCategories>(
-        () => _i197.GetCategories(gh<_i745.CategoryRepository>()));
-    gh.factory<_i70.AddTransactionCubit>(() => _i70.AddTransactionCubit(
-          gh<_i197.GetCategories>(),
-          gh<_i333.CreateTransaction>(),
-        ));
+    gh.factory<_i867.SearchCategoriesUseCase>(
+        () => _i867.SearchCategoriesUseCase(gh<_i745.CategoryRepository>()));
+    gh.factory<_i374.GetCategoriesUseCase>(
+        () => _i374.GetCategoriesUseCase(gh<_i745.CategoryRepository>()));
+    gh.factory<_i946.CreateCategoryUseCase>(
+        () => _i946.CreateCategoryUseCase(gh<_i745.CategoryRepository>()));
+    gh.factory<_i189.DeleteCategoryUseCase>(
+        () => _i189.DeleteCategoryUseCase(gh<_i745.CategoryRepository>()));
+    gh.factory<_i331.UpdateCategoryUseCase>(
+        () => _i331.UpdateCategoryUseCase(gh<_i745.CategoryRepository>()));
     gh.factory<_i824.HomeBloc>(() => _i824.HomeBloc(
           gh<_i909.GetRecentTransactions>(),
           gh<_i605.GetTotalBalance>(),
-          gh<_i197.GetCategories>(),
+          gh<_i374.GetCategoriesUseCase>(),
           gh<_i230.GetBudgetData>(),
           gh<_i905.TransactionBloc>(),
         ));
@@ -163,9 +179,20 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i443.TransactionRepository>(),
           gh<_i745.CategoryRepository>(),
         ));
+    gh.factory<_i70.AddTransactionCubit>(() => _i70.AddTransactionCubit(
+          gh<_i374.GetCategoriesUseCase>(),
+          gh<_i333.CreateTransaction>(),
+        ));
     gh.factory<_i260.AnalyticsBloc>(() => _i260.AnalyticsBloc(
           gh<_i86.GetAnalyticsData>(),
           gh<_i905.TransactionBloc>(),
+        ));
+    gh.factory<_i274.CategoryBloc>(() => _i274.CategoryBloc(
+          getCategories: gh<_i931.GetCategoriesUseCase>(),
+          createCategory: gh<_i931.CreateCategoryUseCase>(),
+          updateCategory: gh<_i931.UpdateCategoryUseCase>(),
+          deleteCategory: gh<_i931.DeleteCategoryUseCase>(),
+          searchCategories: gh<_i931.SearchCategoriesUseCase>(),
         ));
     return this;
   }
