@@ -14,6 +14,24 @@
         "commands": []
       },
       {
+        "name": "Run Pub Get",
+        "autoExecuteCommands": false,
+        "icon": "debug",
+        "color": "terminal.ansiCyan",
+        "commands": [
+          "flutter pub get"
+        ]
+      },
+      {
+        "name": "Run Pub Upgrade",
+        "autoExecuteCommands": false,
+        "icon": "debug",
+        "color": "terminal.ansiCyan",
+        "commands": [
+          "flutter pub upgrade"
+        ]
+      },
+      {
         "name": "Run Flavor Dev",
         "autoExecuteCommands": false,
         "icon": "debug-alt",

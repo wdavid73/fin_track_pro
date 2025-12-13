@@ -26,15 +26,15 @@
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Weekends Completed | 3 | 131 |
-| Hours Invested | ~34-42h | 1,040 |
-| Current Phase | Phase 0 (~75%) | Phase 4 |
-| Test Coverage | ~20% | >80% |
-| Features Complete | 4/6 core | All |
+| Weekends Completed | 3-4 | 131 |
+| Hours Invested | ~40-50h | 1,040 |
+| Current Phase | Phase 0 (~85%) | Phase 4 |
+| Test Coverage | ~35% | >80% |
+| Features Complete | 5/7 at 75%+ | All |
 | Articles Published | 0 | 8+ |
 | Videos Created | 0 | 6+ |
 
-**Last Updated:** 2025-12-06
+**Last Updated:** 2025-12-09
 
 ---
 
@@ -172,28 +172,30 @@
 
 ---
 
-### Weekend 3 - Analytics & Documentation
- 
- **Date:** 2025-12-06 to 2025-12-07
+### Weekend 3 - Analytics, Documentation & Categories
+
+ **Date:** 2025-12-06 to 2025-12-08
  **Planned Hours:** 8h
- **Actual Hours:** ~10h
+ **Actual Hours:** ~12h (extended to complete categories)
  **Phase:** 0 (MVP)
- 
+
  #### 🎯 Goals
  - [x] Implement Analytics Page
  - [x] Create Analytics Domain Layer (Entities, UseCases)
  - [x] Create Analytics Presentation Layer (BLoC, Widgets)
  - [x] Create reusable chart widgets (Donut, Bar)
  - [x] Create documentation (ADR, METRICS, CURRENT_STATUS)
- 
+ - [x] **BONUS:** Complete Categories feature with full tests
+ - [x] **BONUS:** Design Settings page UI
+
  #### 🎒 Preparation Needed
  - [x] Review fl_chart documentation for pie charts
  - [x] Study bloc_test for widget testing patterns
  - [x] Plan analytics data queries
  - [x] Design filter UI mockups
- 
+
  #### 📋 Detailed Tasks
- 
+
  **Saturday (6 hours):**
  1. Analytics Implementation (4h)
     - Created `AnalyticsPeriod` enum and `AnalyticsData` entity
@@ -201,42 +203,66 @@
     - Created `AnalyticsBloc` with events and states
     - Built 5 custom widgets: `TimePeriodSelector`, `AnalyticsSummaryCards`, `SpendingByCategoryChart`, `IncomeVsExpenseChart`, `TopSpendingCategories`
     - Integrated everything into `AnalyticsPage`
- 
+
  2. Documentation (2h)
     - Created `ADR.md` for architectural decisions
     - Created `METRICS.md` for project tracking
     - Created `CURRENT_STATUS.md` for quick reference
     - Updated `WEEKLY_LOG.md`
- 
+
+ **Sunday (6 hours):**
+ 3. Categories Feature (4h)
+    - Implemented 6 use cases: Create, Update, Delete, Get, Search, GetStats
+    - Created `CategoryStats` entity for analytics
+    - Built `CategoryBloc` with full state management
+    - Designed category management page UI
+    - Added comprehensive tests (10 test files)
+    - Icon helper utility for category icons
+
+ 4. Settings & Polish (2h)
+    - Designed Settings page UI (Material Design 3)
+    - Added navigation to settings
+    - Polished existing features
+
  #### ✅ Completed
- - ✅ Full Analytics feature implemented
- - ✅ 5 new reusable widgets created
+ - ✅ Full Analytics feature implemented (95% complete)
+ - ✅ 5 new reusable analytics widgets
  - ✅ Currency formatting extension with locale support
- - ✅ Comprehensive documentation suite created
+ - ✅ Comprehensive documentation suite (ADR, METRICS, CURRENT_STATUS)
  - ✅ `fl_chart` integration for complex charts
- 
+ - ✅ **Categories feature 90% complete** (10 tests!)
+ - ✅ **Settings UI designed** (60% complete)
+ - ✅ **Test count jumped from ~13 to 52 tests!**
+
  #### 📝 Notes & Learnings
  - **fl_chart:** Powerful but verbose. Creating wrapper widgets was a good decision.
  - **Extensions:** `CurrencyFormatter` extension makes price formatting consistent and cleaner.
  - **Documentation:** Creating structured docs (ADR, Metrics) helps visualize progress and debt.
  - **BLoC:** Reusing `TransactionBloc` updates to trigger `AnalyticsBloc` refresh works great.
- 
+ - **Testing Momentum:** Adding tests becomes easier with established patterns. 52 tests is huge!
+ - **Clean Architecture:** Domain-first approach made Categories implementation very fast.
+
  #### 🚧 Challenges & Blockers
  - Handling `NaN` in percentage calculations when income is 0.
  - Deprecated `withOpacity` in Flutter 3.27 required migration to `withValues`.
  - Chart data preparation logic belongs in Domain layer to keep UI clean.
- 
+ - Balancing feature implementation vs testing - chose to do both simultaneously.
+
  #### 📊 Metrics
- - Test Coverage: ~20% (Need to add tests for Analytics)
- - Commits: ~15
- - Files Changed: ~20+
- - New Widgets: 5
- 
+ - Test Coverage: ~35% (MAJOR improvement from 20%!)
+ - Test Files: 52 (from ~13!)
+ - Commits: ~5-7
+ - Files Changed: ~30+
+ - New Widgets: 10+ (Analytics + Categories)
+ - Lines of Code: 9,176 total
+
  #### ⏭️ Next Weekend
- - Implement Transaction Edit UI
- - Add Transaction Filters
- - Write Widget Tests for Analytics
- - Improve Category Management
+ - Implement Settings backend (domain, data, BLoC)
+ - Theme switching functionality
+ - Currency selection with persistence
+ - UI polish and animations
+ - Error handling improvements
+ - Optional: Transaction edit UI
 
 ---
 

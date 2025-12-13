@@ -3,5 +3,5 @@
   "window.confirmBeforeClose": "always",
   "[dart]": {
     "editor.inlayHints.enabled": "on"
-  },
+  }
 }
