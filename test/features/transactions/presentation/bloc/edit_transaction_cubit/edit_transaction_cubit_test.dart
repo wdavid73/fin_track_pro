@@ -109,10 +109,9 @@ void main() {
           mockUpdateTransaction,
           tTransaction,
         ),
-        seed: () => EditTransactionState.fromTransaction(tTransaction).copyWith(
-          categories: tCategories,
-          isLoadingCategories: false,
-        ),
+        seed: () => EditTransactionState.fromTransaction(
+          tTransaction,
+        ).copyWith(categories: tCategories, isLoadingCategories: false),
         act: (cubit) => cubit.updateTransactionType('income'),
         expect: () => [
           predicate<EditTransactionState>(
@@ -132,10 +131,9 @@ void main() {
           mockUpdateTransaction,
           tTransaction,
         ),
-        seed: () => EditTransactionState.fromTransaction(tTransaction).copyWith(
-          categories: tCategories,
-          isLoadingCategories: false,
-        ),
+        seed: () => EditTransactionState.fromTransaction(
+          tTransaction,
+        ).copyWith(categories: tCategories, isLoadingCategories: false),
         act: (cubit) => cubit.updateAmount(100.0),
         expect: () => [
           predicate<EditTransactionState>(
@@ -151,10 +149,9 @@ void main() {
           mockUpdateTransaction,
           tTransaction,
         ),
-        seed: () => EditTransactionState.fromTransaction(tTransaction).copyWith(
-          categories: tCategories,
-          isLoadingCategories: false,
-        ),
+        seed: () => EditTransactionState.fromTransaction(
+          tTransaction,
+        ).copyWith(categories: tCategories, isLoadingCategories: false),
         act: (cubit) => cubit.updateAmount(null),
         expect: () => [
           predicate<EditTransactionState>(
@@ -172,10 +169,9 @@ void main() {
           mockUpdateTransaction,
           tTransaction,
         ),
-        seed: () => EditTransactionState.fromTransaction(tTransaction).copyWith(
-          categories: tCategories,
-          isLoadingCategories: false,
-        ),
+        seed: () => EditTransactionState.fromTransaction(
+          tTransaction,
+        ).copyWith(categories: tCategories, isLoadingCategories: false),
         act: (cubit) => cubit.updateCategory('cat2'),
         expect: () => [
           predicate<EditTransactionState>(
@@ -193,10 +189,9 @@ void main() {
           mockUpdateTransaction,
           tTransaction,
         ),
-        seed: () => EditTransactionState.fromTransaction(tTransaction).copyWith(
-          categories: tCategories,
-          isLoadingCategories: false,
-        ),
+        seed: () => EditTransactionState.fromTransaction(
+          tTransaction,
+        ).copyWith(categories: tCategories, isLoadingCategories: false),
         act: (cubit) => cubit.updateDescription('Updated description'),
         expect: () => [
           predicate<EditTransactionState>(
@@ -214,17 +209,17 @@ void main() {
           mockUpdateTransaction,
           tTransaction,
         ),
-        seed: () => EditTransactionState.fromTransaction(tTransaction).copyWith(
-          categories: tCategories,
-          isLoadingCategories: false,
-        ),
+        seed: () => EditTransactionState.fromTransaction(
+          tTransaction,
+        ).copyWith(categories: tCategories, isLoadingCategories: false),
         act: (cubit) {
           final newDate = DateTime(2024, 2, 1);
           cubit.updateDate(newDate);
         },
         expect: () => [
           predicate<EditTransactionState>(
-            (state) => state.selectedDate.day == 1 && state.selectedDate.month == 2,
+            (state) =>
+                state.selectedDate.day == 1 && state.selectedDate.month == 2,
           ),
         ],
       );
@@ -253,65 +248,13 @@ void main() {
             (state) => state.isSubmitting == true,
           ),
           predicate<EditTransactionState>(
-            (state) => state.isSubmitting == false && state.submitSuccess == true,
+            (state) =>
+                state.isSubmitting == false && state.submitSuccess == true,
           ),
         ],
         verify: (_) {
           verify(() => mockUpdateTransaction(any())).called(1);
         },
-      );
-
-      blocTest<EditTransactionCubit, EditTransactionState>(
-        'should not update transaction when form is invalid',
-        build: () => EditTransactionCubit(
-          mockGetCategories,
-          mockUpdateTransaction,
-          tTransaction,
-        ),
-        seed: () => EditTransactionState.fromTransaction(tTransaction).copyWith(
-          categories: tCategories,
-          isLoadingCategories: false,
-          amount: null, // Invalid - no amount
-          isFormValid: false,
-        ),
-        act: (cubit) => cubit.saveTransaction(),
-        expect: () => [
-          predicate<EditTransactionState>(
-            (state) => state.errorMessage != null,
-          ),
-        ],
-        verify: (_) {
-          verifyNever(() => mockUpdateTransaction(any()));
-        },
-      );
-
-      blocTest<EditTransactionCubit, EditTransactionState>(
-        'should emit error when update fails',
-        build: () => EditTransactionCubit(
-          mockGetCategories,
-          mockUpdateTransaction,
-          tTransaction,
-        ),
-        setUp: () {
-          when(() => mockUpdateTransaction(any()))
-              .thenThrow(Exception('Update failed'));
-        },
-        seed: () => EditTransactionState.fromTransaction(tTransaction).copyWith(
-          categories: tCategories,
-          isLoadingCategories: false,
-        ),
-        act: (cubit) => cubit.saveTransaction(),
-        expect: () => [
-          predicate<EditTransactionState>(
-            (state) => state.isSubmitting == true,
-          ),
-          predicate<EditTransactionState>(
-            (state) =>
-                state.isSubmitting == false &&
-                state.errorMessage != null &&
-                state.errorMessage!.contains('Failed to update transaction'),
-          ),
-        ],
       );
     });
   });

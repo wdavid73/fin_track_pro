@@ -43,36 +43,33 @@ class _CategoryBodyState extends State<_CategoryBody> {
       builder: (context) => CategoryFormPage(category: category),
     ).then((_) {
       // Reload categories after form is closed
-      if (mounted) {
+      if (context.mounted) {
         context.read<CategoryBloc>().add(LoadCategoryStatsEvent());
       }
     });
   }
 
-  void _delete(Category category) {
-    context.read<CategoryBloc>().add(DeleteCategoryEvent(category.id));
-  }
-
   void _showDeleteConfirmation(BuildContext context, Category category) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (ctx) => AlertDialog(
         title: const Text('Delete Category'),
         content: Text(
           'Are you sure you want to delete "${category.name}"? This action cannot be undone.',
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(ctx),
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              _delete(category);
-              // Reload categories after deletion
+              Navigator.pop(ctx);
+              context.read<CategoryBloc>().add(
+                DeleteCategoryEvent(category.id),
+              );
               Future.delayed(const Duration(milliseconds: 500), () {
-                if (mounted) {
+                if (context.mounted) {
                   context.read<CategoryBloc>().add(LoadCategoryStatsEvent());
                 }
               });

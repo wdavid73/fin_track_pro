@@ -128,9 +128,9 @@ class CategorySeeder extends Seeder {
       ),
     ];
 
-    // Add all categories to the box
+    // Add all categories to the box using category ID as key
     for (final category in categories) {
-      await box.add(category);
+      await box.put(category.id, category);
     }
 
     logger.info(

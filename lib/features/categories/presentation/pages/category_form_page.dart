@@ -77,13 +77,16 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           actions: [
-            TextButton(
-              onPressed: _saveCategory,
-              child: Text(
-                isEditMode ? 'Update' : 'Save',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextButton(
+                onPressed: _saveCategory,
+                child: Text(
+                  isEditMode ? 'Update' : 'Save',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),

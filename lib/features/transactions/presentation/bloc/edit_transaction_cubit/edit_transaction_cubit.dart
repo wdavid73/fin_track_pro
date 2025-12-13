@@ -48,30 +48,44 @@ class EditTransactionCubit extends Cubit<EditTransactionState> {
 
   /// Updates the transaction type (expense/income)
   void updateTransactionType(String type) {
+    // When category is cleared, form becomes invalid (needs category selection)
     emit(
       state.copyWith(
         transactionType: type,
         clearCategoryId: true, // Reset category when type changes
+        isFormValid: false, // Form is invalid without a category
       ),
     );
-    _validateForm();
   }
 
   /// Updates the transaction amount
   void updateAmount(double? amount) {
-    emit(state.copyWith(amount: amount, clearAmount: amount == null));
-    _validateForm();
+    // Calculate validation inline to avoid double emit
+    final isValid = amount != null &&
+                    amount > 0 &&
+                    state.selectedCategoryId != null;
+
+    emit(state.copyWith(
+      amount: amount,
+      clearAmount: amount == null,
+      isFormValid: isValid,
+    ));
   }
 
   /// Updates the selected category
   void updateCategory(String? categoryId) {
+    // Calculate validation inline to avoid double emit
+    final isValid = state.amount != null &&
+                    state.amount! > 0 &&
+                    categoryId != null;
+
     emit(
       state.copyWith(
         selectedCategoryId: categoryId,
         clearCategoryId: categoryId == null,
+        isFormValid: isValid,
       ),
     );
-    _validateForm();
   }
 
   /// Updates the transaction description
@@ -82,16 +96,6 @@ class EditTransactionCubit extends Cubit<EditTransactionState> {
   /// Updates the selected date
   void updateDate(DateTime date) {
     emit(state.copyWith(selectedDate: date));
-  }
-
-  /// Validates the form and updates the isFormValid state
-  void _validateForm() {
-    final isValid =
-        state.amount != null &&
-        state.amount! > 0 &&
-        state.selectedCategoryId != null;
-
-    emit(state.copyWith(isFormValid: isValid));
   }
 
   /// Updates the existing transaction

@@ -166,7 +166,6 @@ class CategoryLocalDataSource implements CategoryDataSource {
   @override
   Future<void> updateCategory(CategoryModel category) {
     final box = _hiveService.getBox(HiveService.categoriesBox);
-    box.delete(category.id);
     return box.put(category.id, category);
   }
 }

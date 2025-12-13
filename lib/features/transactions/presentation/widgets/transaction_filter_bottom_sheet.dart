@@ -64,6 +64,27 @@ class _TransactionFilterBottomSheetState
 
   @override
   Widget build(BuildContext context) {
+    final icons = {
+      'shopping_bag': Icons.shopping_bag,
+      'restaurant': Icons.restaurant,
+      'directions_car': Icons.directions_car,
+      'receipt': Icons.receipt,
+      'favorite': Icons.favorite,
+      'movie': Icons.movie,
+      'work': Icons.work,
+      'home': Icons.home,
+      'school': Icons.school,
+      'sports_soccer': Icons.sports_soccer,
+      'flight': Icons.flight,
+      'hotel': Icons.hotel,
+      'local_hospital': Icons.local_hospital,
+      'fitness_center': Icons.fitness_center,
+      'shopping_cart': Icons.shopping_cart,
+      'phone': Icons.phone,
+      'computer': Icons.computer,
+      'pets': Icons.pets,
+    };
+
     return Container(
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
@@ -166,13 +187,10 @@ class _TransactionFilterBottomSheetState
                           value: category.id,
                           child: Row(
                             children: [
-                              /* Icon(
-                                  IconData(
-                                    category.icon,
-                                    fontFamily: 'MaterialIcons',
-                                  ),
-                                  size: 20,
-                                ), */
+                              Icon(
+                                icons[category.icon] ?? Icons.category,
+                                size: 20,
+                              ),
                               const Gap(8),
                               Text(category.name),
                             ],
