@@ -30,6 +30,8 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     on<CreateTransactionEvent>(_onCreateTransaction);
     on<UpdateTransactionEvent>(_onUpdateTransaction);
     on<DeleteTransactionEvent>(_onDeleteTransaction);
+    on<FilterTransactions>(_onFilterTransactions);
+    on<ClearFilters>(_onClearFilters);
   }
 
   Future<void> _onLoadTransactions(
@@ -149,13 +151,129 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         offset: state.currentOffset,
       );
 
+      // Apply filters if active
+      final filteredTransactions = _applyFilters(newTransactions);
+
       emit(state.copyWith(
-        transactions: [...state.transactions, ...newTransactions],
+        transactions: [...state.transactions, ...filteredTransactions],
         hasMore: newTransactions.length >= 15,
         currentOffset: state.currentOffset + newTransactions.length,
       ));
     } catch (e) {
       // Keep current state on error, just don't load more
     }
+  }
+
+  Future<void> _onFilterTransactions(
+    FilterTransactions event,
+    Emitter<TransactionState> emit,
+  ) async {
+    emit(state.copyWith(status: TransactionStatus.loading));
+
+    try {
+      // Determine if there are active filters
+      final hasFilters = event.type != null ||
+          event.categoryId != null ||
+          event.startDate != null ||
+          event.endDate != null ||
+          (event.searchQuery != null && event.searchQuery!.isNotEmpty);
+
+      // Update filter state
+      emit(state.copyWith(
+        typeFilter: event.type,
+        categoryFilter: event.categoryId,
+        startDateFilter: event.startDate,
+        endDateFilter: event.endDate,
+        searchQuery: event.searchQuery,
+        hasActiveFilters: hasFilters,
+        clearTypeFilter: event.type == null,
+        clearCategoryFilter: event.categoryId == null,
+        clearStartDateFilter: event.startDate == null,
+        clearEndDateFilter: event.endDate == null,
+        clearSearchQuery: event.searchQuery == null || event.searchQuery!.isEmpty,
+      ));
+
+      // Reload transactions with filters
+      final transactions = await _getTransactions();
+      final filteredTransactions = _applyFilters(transactions);
+
+      emit(state.copyWith(
+        status: TransactionStatus.success,
+        transactions: filteredTransactions,
+        hasMore: false, // Disable pagination when filtering
+        currentOffset: filteredTransactions.length,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: TransactionStatus.error,
+        errorMessage: 'Failed to filter transactions: ${e.toString()}',
+      ));
+    }
+  }
+
+  Future<void> _onClearFilters(
+    ClearFilters event,
+    Emitter<TransactionState> emit,
+  ) async {
+    emit(state.copyWith(
+      clearTypeFilter: true,
+      clearCategoryFilter: true,
+      clearStartDateFilter: true,
+      clearEndDateFilter: true,
+      clearSearchQuery: true,
+      hasActiveFilters: false,
+    ));
+
+    // Reload all transactions
+    add(const LoadPaginatedTransactions());
+  }
+
+  /// Apply filters to a list of transactions
+  List<Transaction> _applyFilters(List<Transaction> transactions) {
+    var filtered = transactions;
+
+    // Filter by type
+    if (state.typeFilter != null) {
+      filtered = filtered.where((t) => t.type == state.typeFilter).toList();
+    }
+
+    // Filter by category
+    if (state.categoryFilter != null) {
+      filtered = filtered.where((t) => t.categoryId == state.categoryFilter).toList();
+    }
+
+    // Filter by date range
+    if (state.startDateFilter != null) {
+      filtered = filtered.where((t) =>
+        t.date.isAfter(state.startDateFilter!) ||
+        t.date.isAtSameMomentAs(state.startDateFilter!)
+      ).toList();
+    }
+
+    if (state.endDateFilter != null) {
+      final endOfDay = DateTime(
+        state.endDateFilter!.year,
+        state.endDateFilter!.month,
+        state.endDateFilter!.day,
+        23,
+        59,
+        59,
+      );
+      filtered = filtered.where((t) =>
+        t.date.isBefore(endOfDay) ||
+        t.date.isAtSameMomentAs(endOfDay)
+      ).toList();
+    }
+
+    // Filter by search query
+    if (state.searchQuery != null && state.searchQuery!.isNotEmpty) {
+      final query = state.searchQuery!.toLowerCase();
+      filtered = filtered.where((t) {
+        final note = t.note?.toLowerCase() ?? '';
+        return note.contains(query);
+      }).toList();
+    }
+
+    return filtered;
   }
 }

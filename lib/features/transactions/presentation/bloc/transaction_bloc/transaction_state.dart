@@ -14,6 +14,12 @@ class TransactionState extends Equatable {
   final int currentOffset;
   final String? errorMessage;
   final String? successMessage;
+  final String? typeFilter;
+  final String? categoryFilter;
+  final DateTime? startDateFilter;
+  final DateTime? endDateFilter;
+  final String? searchQuery;
+  final bool hasActiveFilters;
 
   const TransactionState({
     this.status = TransactionStatus.initial,
@@ -22,6 +28,12 @@ class TransactionState extends Equatable {
     this.currentOffset = 0,
     this.errorMessage,
     this.successMessage,
+    this.typeFilter,
+    this.categoryFilter,
+    this.startDateFilter,
+    this.endDateFilter,
+    this.searchQuery,
+    this.hasActiveFilters = false,
   });
 
   TransactionState copyWith({
@@ -31,6 +43,17 @@ class TransactionState extends Equatable {
     int? currentOffset,
     String? errorMessage,
     String? successMessage,
+    String? typeFilter,
+    String? categoryFilter,
+    DateTime? startDateFilter,
+    DateTime? endDateFilter,
+    String? searchQuery,
+    bool? hasActiveFilters,
+    bool clearTypeFilter = false,
+    bool clearCategoryFilter = false,
+    bool clearStartDateFilter = false,
+    bool clearEndDateFilter = false,
+    bool clearSearchQuery = false,
   }) {
     return TransactionState(
       status: status ?? this.status,
@@ -39,6 +62,12 @@ class TransactionState extends Equatable {
       currentOffset: currentOffset ?? this.currentOffset,
       errorMessage: errorMessage ?? this.errorMessage,
       successMessage: successMessage ?? this.successMessage,
+      typeFilter: clearTypeFilter ? null : (typeFilter ?? this.typeFilter),
+      categoryFilter: clearCategoryFilter ? null : (categoryFilter ?? this.categoryFilter),
+      startDateFilter: clearStartDateFilter ? null : (startDateFilter ?? this.startDateFilter),
+      endDateFilter: clearEndDateFilter ? null : (endDateFilter ?? this.endDateFilter),
+      searchQuery: clearSearchQuery ? null : (searchQuery ?? this.searchQuery),
+      hasActiveFilters: hasActiveFilters ?? this.hasActiveFilters,
     );
   }
 
@@ -50,5 +79,11 @@ class TransactionState extends Equatable {
         currentOffset,
         errorMessage,
         successMessage,
+        typeFilter,
+        categoryFilter,
+        startDateFilter,
+        endDateFilter,
+        searchQuery,
+        hasActiveFilters,
       ];
 }

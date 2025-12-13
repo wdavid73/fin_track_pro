@@ -56,6 +56,7 @@ import '../features/transactions/data/datasources/transaction_local_datasource.d
     as _i730;
 import '../features/transactions/data/repositories/transaction_repository_impl.dart'
     as _i667;
+import '../features/transactions/domain/entities/transaction.dart' as _i593;
 import '../features/transactions/domain/repositories/transaction_repository.dart'
     as _i443;
 import '../features/transactions/domain/usecases/create_transaction.dart'
@@ -76,6 +77,8 @@ import '../features/transactions/domain/usecases/update_transaction.dart'
 import '../features/transactions/domain/usecases/usecases.dart' as _i913;
 import '../features/transactions/presentation/bloc/add_transaction_cubit/add_transaction_cubit.dart'
     as _i70;
+import '../features/transactions/presentation/bloc/edit_transaction_cubit/edit_transaction_cubit.dart'
+    as _i581;
 import '../features/transactions/presentation/bloc/transaction_bloc/transaction_bloc.dart'
     as _i905;
 import 'register_module.dart' as _i291;
@@ -192,6 +195,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i260.AnalyticsBloc>(() => _i260.AnalyticsBloc(
           gh<_i86.GetAnalyticsData>(),
           gh<_i905.TransactionBloc>(),
+        ));
+    gh.factoryParam<_i581.EditTransactionCubit, _i593.Transaction, dynamic>((
+      transaction,
+      _,
+    ) =>
+        _i581.EditTransactionCubit(
+          gh<_i374.GetCategoriesUseCase>(),
+          gh<_i974.UpdateTransaction>(),
+          transaction,
         ));
     gh.factory<_i274.CategoryBloc>(() => _i274.CategoryBloc(
           getCategories: gh<_i931.GetCategoriesUseCase>(),

@@ -2,10 +2,43 @@ import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/transaction.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart';
+import 'package:fin_track_pro/features/transactions/presentation/bloc/edit_transaction_cubit/edit_transaction_cubit.dart';
+import 'package:fin_track_pro/features/transactions/presentation/pages/edit_transaction_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+
+/// Helper function to show the Edit Transaction modal
+void showEditTransactionModal(BuildContext context, Transaction transaction) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (modalContext) {
+      // Get singleton TransactionBloc and create EditTransactionCubit
+      final transactionBloc = getIt<TransactionBloc>();
+      final editTransactionCubit = getIt.get<EditTransactionCubit>(
+        param1: transaction,
+      );
+
+      return Container(
+        decoration: BoxDecoration(
+          color: Theme.of(modalContext).colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: transactionBloc),
+            BlocProvider(create: (_) => editTransactionCubit),
+          ],
+          child: const EditTransactionPage(),
+        ),
+      );
+    },
+  );
+}
 
 class TransactionDetailsModal extends StatelessWidget {
   final Transaction transaction;
@@ -91,15 +124,20 @@ class TransactionDetailsModal extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: OutlinedButton(
-                  onPressed: () => context.pop(),
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    context.pop();
+                    // Show edit modal
+                    showEditTransactionModal(context, transaction);
+                  },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('Cancel'),
+                  icon: const Icon(Icons.edit_outlined),
+                  label: const Text('Edit'),
                 ),
               ),
               const Gap(16),

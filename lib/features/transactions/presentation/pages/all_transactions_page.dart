@@ -1,7 +1,9 @@
 import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/core/extensions/context_extensions.dart';
+import 'package:fin_track_pro/features/categories/domain/usecases/get_categories_use_case.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/transaction_card.dart';
 import 'package:fin_track_pro/features/transactions/presentation/widgets/transaction_details_modal.dart';
+import 'package:fin_track_pro/features/transactions/presentation/widgets/transaction_filter_bottom_sheet.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +25,46 @@ class AllTransactionsPage extends StatelessWidget {
             onPressed: () => context.pop(),
           ),
           title: Text('All Transactions', style: context.textTheme.titleLarge),
+          actions: [
+            BlocBuilder<TransactionBloc, TransactionState>(
+              builder: (context, state) {
+                return IconButton(
+                  icon: Badge(
+                    isLabelVisible: state.hasActiveFilters,
+                    child: const Icon(Icons.filter_list),
+                  ),
+                  onPressed: () async {
+                    final categories = await getIt<GetCategoriesUseCase>()();
+                    if (context.mounted) {
+                      showTransactionFilterBottomSheet(
+                        context: context,
+                        selectedType: state.typeFilter,
+                        selectedCategoryId: state.categoryFilter,
+                        startDate: state.startDateFilter,
+                        endDate: state.endDateFilter,
+                        searchQuery: state.searchQuery,
+                        categories: categories,
+                        onApplyFilters: (type, categoryId, startDate, endDate, searchQuery) {
+                          context.read<TransactionBloc>().add(
+                                FilterTransactions(
+                                  type: type,
+                                  categoryId: categoryId,
+                                  startDate: startDate,
+                                  endDate: endDate,
+                                  searchQuery: searchQuery,
+                                ),
+                              );
+                        },
+                        onClearFilters: () {
+                          context.read<TransactionBloc>().add(const ClearFilters());
+                        },
+                      );
+                    }
+                  },
+                );
+              },
+            ),
+          ],
         ),
         body: const _TransactionsList(),
       ),

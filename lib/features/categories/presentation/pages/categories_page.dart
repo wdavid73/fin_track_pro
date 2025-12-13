@@ -49,6 +49,10 @@ class _CategoryBodyState extends State<_CategoryBody> {
     });
   }
 
+  void _delete(Category category) {
+    context.read<CategoryBloc>().add(DeleteCategoryEvent(category.id));
+  }
+
   void _showDeleteConfirmation(BuildContext context, Category category) {
     showDialog(
       context: context,
@@ -65,9 +69,7 @@ class _CategoryBodyState extends State<_CategoryBody> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              context.read<CategoryBloc>().add(
-                DeleteCategoryEvent(category.id),
-              );
+              _delete(category);
               // Reload categories after deletion
               Future.delayed(const Duration(milliseconds: 500), () {
                 if (mounted) {
@@ -113,8 +115,8 @@ class _CategoryBodyState extends State<_CategoryBody> {
                     context.read<CategoryBloc>().add(LoadCategoryStatsEvent()),
                 child: ListView.separated(
                   itemCount: state.categoryStats.length,
-                  separatorBuilder: (context, index) => const Gap(12),
-                  itemBuilder: (context, index) {
+                  separatorBuilder: (ctx, index) => const Gap(12),
+                  itemBuilder: (ctx, index) {
                     final stats = state.categoryStats[index];
                     return _CategoryCard(
                       category: stats.category,

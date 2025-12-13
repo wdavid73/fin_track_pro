@@ -50,3 +50,26 @@ class LoadPaginatedTransactions extends TransactionEvent {
 class LoadMoreTransactions extends TransactionEvent {
   const LoadMoreTransactions();
 }
+
+class FilterTransactions extends TransactionEvent {
+  final String? type; // 'income', 'expense', or null for all
+  final String? categoryId;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final String? searchQuery;
+
+  const FilterTransactions({
+    this.type,
+    this.categoryId,
+    this.startDate,
+    this.endDate,
+    this.searchQuery,
+  });
+
+  @override
+  List<Object?> get props => [type, categoryId, startDate, endDate, searchQuery];
+}
+
+class ClearFilters extends TransactionEvent {
+  const ClearFilters();
+}

@@ -13,7 +13,7 @@
  
  ### What's Working
  - ✅ Clean Architecture foundation is solid across 7 features
- - ✅ Transactions: Full CRUD (Create, Read, Delete + 17 tests)
+ - ✅ Transanctions: Full CRUD (Create, Read, Delete + 17 tests)
  - ✅ Categories: Complete management system (10 tests)
  - ✅ Home page displays balance, transactions, budget chart
  - ✅ Analytics page with 5 custom widgets and charts
