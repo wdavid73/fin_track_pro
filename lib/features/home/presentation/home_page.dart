@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               showAddTransactionModal(context);
             },
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: context.colorScheme.primary,
             child: const Icon(Icons.add, color: Colors.white),
           ),
         ),

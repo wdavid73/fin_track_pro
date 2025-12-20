@@ -4,14 +4,30 @@ import 'package:flutter/material.dart';
 /// A utility class that centralizes all constant values and base theme data
 /// used across both light and dark themes in the application.
 ///
-/// This class ensures consistency in styling by providing a single source
-/// for [ColorScheme] definitions, base [ThemeData] components, and
-/// utility functions for resolving widget states.
+/// This class provides shared theme configurations for widgets that don't
+/// have dedicated custom theme files. Widget-specific themes are located in
+/// the `custom/` directory for better modularity.
+///
+/// **Modular Themes (defined in custom/ directory):**
+/// - AppBarTheme → custom/appbar_theme.dart
+/// - BottomSheetTheme → custom/bottom_sheet_theme.dart
+/// - CardTheme → custom/card_theme.dart
+/// - CheckboxTheme → custom/checkbox_theme.dart
+/// - ChipTheme → custom/chip_theme.dart
+/// - ElevatedButtonTheme → custom/elevated_button_theme.dart
+/// - InputDecorationTheme → custom/text_field_theme.dart
+/// - OutlinedButtonTheme → custom/outlined_button_theme.dart
+/// - SnackBarTheme → custom/snackbar_theme.dart
+/// - TextButtonTheme → custom/text_button_theme.dart
+/// - TextTheme → custom/text_theme.dart
 class ThemeConstants {
-  /// Color Schemes
-  ///
-  /// Light Theme
-  ///
+  ThemeConstants._(); // Private constructor to prevent instantiation
+
+  // ============================================================================
+  // COLOR SCHEMES
+  // ============================================================================
+
+  /// Light theme color scheme
   static const ColorScheme colorScheme = ColorScheme(
     brightness: Brightness.light,
     primary: ColorTheme.primaryColor,
@@ -27,6 +43,7 @@ class ThemeConstants {
     surfaceContainerHighest: Color(0xFFE0E0E0),
   );
 
+  /// Dark theme color scheme
   static const ColorScheme darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
     primary: ColorTheme.primaryColor,
@@ -42,216 +59,48 @@ class ThemeConstants {
     surfaceContainerHighest: Color(0xFF303134),
   );
 
-  /// Icon Theme
-  ///
-  static final baseIconTheme = const IconThemeData(
-    color: ColorTheme.onSurfaceColor,
-    size: 24,
-  );
+  // ============================================================================
+  // DIALOG THEME
+  // ============================================================================
 
-  /// Text Theme
-  ///
-  static final baseTextTheme = const TextTheme(
-    displayLarge: TextStyle(
-      fontSize: 32,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    displayMedium: TextStyle(
-      fontSize: 24,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    displaySmall: TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    headlineLarge: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    headlineMedium: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    headlineSmall: TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    titleLarge: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    titleMedium: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    titleSmall: TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    bodyLarge: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.normal,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    bodyMedium: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.normal,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    bodySmall: TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.normal,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    labelLarge: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    labelMedium: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-    labelSmall: TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.bold,
-      color: ColorTheme.onSurfaceColor,
-    ),
-  );
+  /// Light theme Dialog configuration
+  static const baseDialogTheme = DialogTheme();
 
-  static final baseInputDecorationTheme = const InputDecorationTheme(
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(4)),
-    ),
-  );
-
-  static final baseButtonTheme = const ButtonThemeData();
-
-  static final baseElevatedButtonTheme = ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: ColorTheme.primaryColor,
-      foregroundColor: Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(100)),
-      ),
-      elevation: 0,
-      disabledBackgroundColor: ColorTheme.borderColor,
-      disabledForegroundColor: ColorTheme.textSecondary,
-      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-    ),
-  );
-
-  static final baseTextButtonTheme = TextButtonThemeData(
-    style: TextButton.styleFrom(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      foregroundColor: ColorTheme.textSecondary,
-      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-    ),
-  );
-
-  static final baseCardTheme = const CardThemeData(
-    elevation: 0,
-    color: Colors.white,
-    surfaceTintColor: Colors.white,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(24)),
-      side: BorderSide(width: 1, color: ColorTheme.borderColor),
-    ),
-  );
-
-  static final baseCardThemeDark = const CardThemeData(
-    elevation: 0,
-    color: ColorTheme.onSurfaceColor,
-    surfaceTintColor: ColorTheme.onSurfaceColor,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(24)),
-      side: BorderSide(width: 1, color: Colors.white12),
-    ),
-  );
-
-  static final baseAppBarTheme = const AppBarTheme(centerTitle: false);
-
-  static final baseBottomSheetTheme = const BottomSheetThemeData(
-    showDragHandle: true,
-  );
-
-  static final baseDialogTheme = const DialogTheme();
-
-  static final baseSnackBarTheme = const SnackBarThemeData(
-    backgroundColor: ColorTheme.onSurfaceColor,
-    behavior: SnackBarBehavior.floating,
-    insetPadding: EdgeInsets.all(10),
-    actionBackgroundColor: Colors.transparent,
-    disabledActionBackgroundColor: Colors.transparent,
-    disabledActionTextColor: Colors.white,
-    contentTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
-      ),
-    ),
-  );
-
-  static final baseTooltipTheme = const TooltipThemeData();
-
-  static final baseTabBarTheme = const TabBarTheme();
-
-  static final baseBottomNavigationBarTheme =
-      const BottomNavigationBarThemeData();
-
-  /// Dark Theme
-  ///
-  static final baseAppBarThemeDark = baseAppBarTheme.copyWith(
-    backgroundColor: ColorTheme.onSurfaceColor,
-    iconTheme: const IconThemeData(color: ColorTheme.surfaceColor),
-    titleTextStyle: const TextStyle(
-      color: ColorTheme.surfaceColor,
-      fontSize: 20,
-      fontWeight: FontWeight.w500,
-    ),
-  );
-
-  static final baseBottomSheetThemeDark = baseBottomSheetTheme.copyWith(
-    backgroundColor: ColorTheme.onSurfaceColor,
-    dragHandleColor: ColorTheme.surfaceColor,
-    showDragHandle: true,
-  );
-
+  /// Dark theme Dialog configuration
   static final baseDialogThemeDark = baseDialogTheme.copyWith(
     backgroundColor: ColorTheme.surfaceColor,
   );
 
-  static final baseSnackBarThemeDark = baseSnackBarTheme.copyWith(
-    backgroundColor: ColorTheme.surfaceColor,
-    insetPadding: const EdgeInsets.all(10),
-    actionBackgroundColor: Colors.transparent,
-    disabledActionBackgroundColor: Colors.transparent,
-    disabledActionTextColor: Colors.white,
-    contentTextStyle: baseTextTheme.bodyLarge,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
-      ),
-    ),
-  );
+  // ============================================================================
+  // TOOLTIP THEME
+  // ============================================================================
 
+  /// Tooltip theme (shared for light and dark)
+  static const baseTooltipTheme = TooltipThemeData();
+
+  /// Dark theme Tooltip configuration
   static final baseTooltipThemeDark = baseTooltipTheme.copyWith();
 
+  // ============================================================================
+  // TAB BAR THEME
+  // ============================================================================
+
+  /// TabBar theme (shared for light and dark)
+  static const baseTabBarTheme = TabBarTheme();
+
+  /// Dark theme TabBar configuration
   static final baseTabBarThemeDark = baseTabBarTheme.copyWith();
 
-  static final baseBottomNavigationBarThemeDark = baseBottomNavigationBarTheme
-      .copyWith(backgroundColor: ColorTheme.surfaceColor);
+  // ============================================================================
+  // BOTTOM NAVIGATION BAR THEME
+  // ============================================================================
+
+  /// Light theme BottomNavigationBar configuration
+  static const baseBottomNavigationBarTheme = BottomNavigationBarThemeData();
+
+  /// Dark theme BottomNavigationBar configuration
+  static final baseBottomNavigationBarThemeDark =
+      baseBottomNavigationBarTheme.copyWith(
+    backgroundColor: ColorTheme.surfaceColor,
+  );
 }
