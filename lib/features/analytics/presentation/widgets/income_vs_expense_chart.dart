@@ -49,7 +49,7 @@ class IncomeVsExpenseChart extends StatelessWidget {
           const Skeleton(width: 180, height: 20).shimmer(isLoading: true)
         else
           Text(
-            'Income vs. Expense',
+            context.l10n.incomeVsExpense,
             style: context.textTheme.titleLarge?.copyWith(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -82,7 +82,7 @@ class IncomeVsExpenseChart extends StatelessWidget {
         height: 200,
         child: Center(
           child: Text(
-            'No data available',
+            context.l10n.noDataAvailable,
             style: context.textTheme.bodyMedium?.copyWith(
               color: context.colorScheme.onSurfaceVariant,
               fontSize: 16,
@@ -109,7 +109,7 @@ class IncomeVsExpenseChart extends StatelessWidget {
                 final comparison = comparisons[groupIndex];
                 final isIncome = rodIndex == 0;
                 return BarTooltipItem(
-                  '${isIncome ? 'Income' : 'Expense'}\n',
+                  '${isIncome ? context.l10n.income : context.l10n.expense}\n',
                   context.textTheme.labelSmall!.copyWith(
                     color: context.colorScheme.onSurface,
                     fontWeight: FontWeight.bold,

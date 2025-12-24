@@ -1,5 +1,5 @@
 import 'package:fin_track_pro/app/injection_container.dart';
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/analytics/presentation/bloc/analytics_bloc.dart';
 import 'package:fin_track_pro/features/analytics/presentation/widgets/analytics_summary_cards.dart';
 import 'package:fin_track_pro/features/analytics/presentation/widgets/income_vs_expense_chart.dart';
@@ -27,7 +27,7 @@ class AnalyticsPage extends StatelessWidget {
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
-      title: Text('Analytics', style: context.textTheme.titleLarge),
+      title: Text(context.l10n.analytics, style: context.textTheme.titleLarge),
       centerTitle: false,
     );
   }

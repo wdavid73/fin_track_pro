@@ -22,7 +22,7 @@ abstract class CustomTextFormFieldTheme {
     ),
     errorStyle: const TextStyle().copyWith(fontSize: AppSizes.fontSizeSm),
     floatingLabelStyle: const TextStyle().copyWith(
-      color: ColorTheme.black.withOpacity(0.8),
+      color: ColorTheme.black.withValues(alpha: 0.8),
     ),
     border: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(AppSizes.inputFieldRadius),
@@ -61,7 +61,7 @@ abstract class CustomTextFormFieldTheme {
     ),
     errorStyle: const TextStyle().copyWith(fontSize: AppSizes.fontSizeSm),
     floatingLabelStyle: const TextStyle().copyWith(
-      color: ColorTheme.white.withOpacity(0.8),
+      color: ColorTheme.white.withValues(alpha: 0.8),
     ),
     border: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(AppSizes.inputFieldRadius),

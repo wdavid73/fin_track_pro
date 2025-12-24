@@ -1,11 +1,11 @@
 import 'package:fin_track_pro/app/injection_container.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/home/presentation/bloc/home_bloc.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/balance_summary.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/budget_overview.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/transactions.dart';
 import 'package:fin_track_pro/features/transactions/presentation/pages/add_transaction_page.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart';
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -27,8 +27,8 @@ class HomePage extends StatelessWidget {
         appBar: _appBar(context),
         body: SafeArea(child: _body()),
         floatingActionButton: Builder(
-          builder: (context) => FloatingActionButton(
-            tooltip: 'Add Transaction',
+          builder: (ctx) => FloatingActionButton(
+            tooltip: context.l10n.addTransaction,
             onPressed: () {
               showAddTransactionModal(context);
             },
@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
             color: context.primaryColor,
           ),
           const Gap(8),
-          Text('FinTrack Pro', style: context.textTheme.titleLarge),
+          Text(context.l10n.appTitle, style: context.textTheme.titleLarge),
           const Spacer(),
           CircleAvatar(
             radius: 20,
@@ -80,7 +80,7 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     context.read<HomeBloc>().add(const RefreshHomeData());
                   },
-                  child: const Text('Retry'),
+                  child: Text(context.l10n.retry),
                 ),
               ],
             ),

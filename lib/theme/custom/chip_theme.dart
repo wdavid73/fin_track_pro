@@ -8,7 +8,7 @@ import '../utils/color_theme.dart';
 abstract class CustomChipTheme {
   /// Light theme Chip configuration
   static ChipThemeData lightChipTheme = ChipThemeData(
-    disabledColor: ColorTheme.grey.withOpacity(0.4),
+    disabledColor: ColorTheme.grey.withValues(alpha: 0.4),
     labelStyle: const TextStyle(color: ColorTheme.black),
     selectedColor: ColorTheme.primaryColor,
     padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),

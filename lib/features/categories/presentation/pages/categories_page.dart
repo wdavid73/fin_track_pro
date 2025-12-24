@@ -53,14 +53,12 @@ class _CategoryBodyState extends State<_CategoryBody> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Category'),
-        content: Text(
-          'Are you sure you want to delete "${category.name}"? This action cannot be undone.',
-        ),
+        title: Text(context.l10n.deleteCategory),
+        content: Text(context.l10n.areYouSureDeleteCategory),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -75,7 +73,7 @@ class _CategoryBodyState extends State<_CategoryBody> {
               });
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(context.l10n.delete),
           ),
         ],
       ),
@@ -85,7 +83,7 @@ class _CategoryBodyState extends State<_CategoryBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Categories'), elevation: 0),
+      appBar: AppBar(title: Text(context.l10n.categories), elevation: 0),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showCategoryForm(context),
         child: const Icon(Icons.add),
@@ -275,7 +273,7 @@ class _CategoryCard extends StatelessWidget {
               ),
               const Gap(4),
               Text(
-                '$transactionCount Transactions',
+                '$transactionCount ${context.l10n.transactions}',
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: TextStyle(fontSize: 14, color: Colors.grey[600]),
@@ -299,17 +297,26 @@ class _CategoryCard extends StatelessWidget {
               }
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'edit',
-                child: Row(children: [Icon(Icons.edit), Gap(12), Text('Edit')]),
+                child: Row(
+                  children: [
+                    const Icon(Icons.edit),
+                    const Gap(12),
+                    Text(context.l10n.edit),
+                  ],
+                ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'delete',
                 child: Row(
                   children: [
-                    Icon(Icons.delete, color: Colors.red),
-                    Gap(12),
-                    Text('Delete', style: TextStyle(color: Colors.red)),
+                    const Icon(Icons.delete, color: Colors.red),
+                    const Gap(12),
+                    Text(
+                      context.l10n.delete,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   ],
                 ),
               ),

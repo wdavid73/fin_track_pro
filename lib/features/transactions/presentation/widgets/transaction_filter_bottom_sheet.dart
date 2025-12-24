@@ -1,4 +1,4 @@
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -139,13 +139,22 @@ class _TransactionFilterBottomSheetState
               const Gap(24),
 
               // Transaction Type
-              Text('Transaction Type', style: context.textTheme.titleSmall),
+              Text(
+                context.l10n.transactionType,
+                style: context.textTheme.titleSmall,
+              ),
               const Gap(8),
               SegmentedButton<String?>(
-                segments: const [
-                  ButtonSegment(value: null, label: Text('All')),
-                  ButtonSegment(value: 'expense', label: Text('Expense')),
-                  ButtonSegment(value: 'income', label: Text('Income')),
+                segments: [
+                  ButtonSegment(value: null, label: Text(context.l10n.all)),
+                  ButtonSegment(
+                    value: 'expense',
+                    label: Text(context.l10n.expense),
+                  ),
+                  ButtonSegment(
+                    value: 'income',
+                    label: Text(context.l10n.income),
+                  ),
                 ],
                 selected: {_selectedType},
                 onSelectionChanged: (Set<String?> selection) {
@@ -159,10 +168,10 @@ class _TransactionFilterBottomSheetState
               const Gap(24),
 
               // Category
-              Text('Category', style: context.textTheme.titleSmall),
+              Text(context.l10n.category, style: context.textTheme.titleSmall),
               const Gap(8),
               DropdownButtonFormField<String?>(
-                value: _selectedCategoryId,
+                initialValue: _selectedCategoryId,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -172,11 +181,11 @@ class _TransactionFilterBottomSheetState
                     vertical: 12,
                   ),
                 ),
-                hint: const Text('All categories'),
+                hint: Text(context.l10n.allCategories),
                 items: [
-                  const DropdownMenuItem(
+                  DropdownMenuItem(
                     value: null,
-                    child: Text('All categories'),
+                    child: Text(context.l10n.allCategories),
                   ),
                   ...widget.categories
                       .where(
@@ -207,7 +216,7 @@ class _TransactionFilterBottomSheetState
               const Gap(24),
 
               // Date Range
-              Text('Date Range', style: context.textTheme.titleSmall),
+              Text(context.l10n.dateRange, style: context.textTheme.titleSmall),
               const Gap(8),
               Row(
                 children: [
@@ -271,7 +280,7 @@ class _TransactionFilterBottomSheetState
                         widget.onClearFilters();
                         Navigator.of(context).pop();
                       },
-                      child: const Text('Clear All'),
+                      child: Text(context.l10n.clearAll),
                     ),
                   ),
                   const Gap(16),
@@ -290,7 +299,7 @@ class _TransactionFilterBottomSheetState
                         );
                         Navigator.of(context).pop();
                       },
-                      child: const Text('Apply Filters'),
+                      child: Text(context.l10n.applyFilters),
                     ),
                   ),
                 ],

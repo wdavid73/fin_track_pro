@@ -1,6 +1,7 @@
 import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:fin_track_pro/core/extensions/currency_extensions.dart'
     show CurrencyFormatter;
+import 'package:fin_track_pro/core/extensions/extensions.dart';
 import 'package:fin_track_pro/core/extensions/locale_extensions.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class DonutChart extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Spent',
+                  context.l10n.spent,
                   style: context.textTheme.labelMedium?.copyWith(
                     color: context.colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.w500,

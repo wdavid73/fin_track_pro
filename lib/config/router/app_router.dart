@@ -1,5 +1,6 @@
 import 'package:fin_track_pro/config/router/routes.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
+import 'package:fin_track_pro/core/extensions/localization_extension.dart';
 import 'package:fin_track_pro/features/analytics/presentation/analytics_page.dart';
 import 'package:fin_track_pro/features/categories/presentation/pages/categories_page.dart';
 import 'package:fin_track_pro/features/home/presentation/home_page.dart';
@@ -119,26 +120,26 @@ class ScaffoldWithNavBar extends StatelessWidget {
               initialLocation: index == navigationShell.currentIndex,
             );
           },
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: 'Home',
+              icon: const Icon(Icons.home_outlined),
+              activeIcon: const Icon(Icons.home),
+              label: context.l10n.home,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart_outlined),
-              activeIcon: Icon(Icons.bar_chart),
-              label: 'Analytics',
+              icon: const Icon(Icons.bar_chart_outlined),
+              activeIcon: const Icon(Icons.bar_chart),
+              label: context.l10n.analytics,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.category_outlined),
-              activeIcon: Icon(Icons.category),
-              label: 'Categories',
+              icon: const Icon(Icons.category_outlined),
+              activeIcon: const Icon(Icons.category),
+              label: context.l10n.categories,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              activeIcon: Icon(Icons.settings),
-              label: 'Settings',
+              icon: const Icon(Icons.settings_outlined),
+              activeIcon: const Icon(Icons.settings),
+              label: context.l10n.settings,
             ),
           ],
         ),

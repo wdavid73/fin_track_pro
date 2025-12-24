@@ -1,4 +1,4 @@
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/transactions/presentation/widgets/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -169,7 +169,7 @@ class AddTransactionPage extends StatelessWidget {
                     Expanded(
                       child: TextButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('Cancel'),
+                        child: Text(context.l10n.cancel),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -193,7 +193,7 @@ class AddTransactionPage extends StatelessWidget {
                                   ),
                                 ),
                               )
-                            : const Text('Save Transaction'),
+                            : Text(context.l10n.saveTransaction),
                       ),
                     ),
                   ],

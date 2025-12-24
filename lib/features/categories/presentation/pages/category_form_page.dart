@@ -71,7 +71,9 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(isEditMode ? 'Edit Category' : 'New Category'),
+          title: Text(
+            isEditMode ? context.l10n.editCategory : context.l10n.newCategory,
+          ),
           leading: IconButton(
             icon: const Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
@@ -82,7 +84,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
               child: TextButton(
                 onPressed: _saveCategory,
                 child: Text(
-                  isEditMode ? 'Update' : 'Save',
+                  isEditMode ? context.l10n.update : context.l10n.save,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -120,21 +122,21 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Category Name',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        Text(
+          context.l10n.categoryName,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const Gap(8),
         TextFormField(
           controller: _nameController,
           decoration: InputDecoration(
-            hintText: 'e.g., Groceries',
+            hintText: context.l10n.egGroceries,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
             filled: true,
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return 'Please enter a category name';
+              return context.l10n.pleaseEnterCategoryName;
             }
             return null;
           },
@@ -147,16 +149,16 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Type',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        Text(
+          context.l10n.type,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const Gap(8),
         Row(
           children: [
             Expanded(
               child: _TypeChip(
-                label: 'Expense',
+                label: context.l10n.expense,
                 icon: Icons.arrow_downward,
                 isSelected: _selectedType == 'expense',
                 onTap: () => setState(() => _selectedType = 'expense'),
@@ -166,7 +168,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
             const Gap(12),
             Expanded(
               child: _TypeChip(
-                label: 'Income',
+                label: context.l10n.income,
                 icon: Icons.arrow_upward,
                 isSelected: _selectedType == 'income',
                 onTap: () => setState(() => _selectedType = 'income'),
@@ -204,9 +206,9 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Icon',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        Text(
+          context.l10n.icon,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const Gap(12),
         Wrap(
@@ -268,9 +270,9 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Color',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        Text(
+          context.l10n.color,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const Gap(12),
         Wrap(
@@ -320,9 +322,9 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Preview',
-            style: TextStyle(
+          Text(
+            context.l10n.preview,
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: Colors.grey,
@@ -347,7 +349,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                   children: [
                     Text(
                       _nameController.text.isEmpty
-                          ? 'Category Name'
+                          ? context.l10n.categoryName
                           : _nameController.text,
                       style: const TextStyle(
                         fontSize: 16,
@@ -356,7 +358,9 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                     ),
                     const Gap(4),
                     Text(
-                      _selectedType == 'expense' ? 'Expense' : 'Income',
+                      _selectedType == 'expense'
+                          ? context.l10n.expense
+                          : context.l10n.income,
                       style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                   ],

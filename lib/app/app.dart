@@ -1,5 +1,6 @@
 import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/config/router/app_router.dart';
+import 'package:fin_track_pro/core/l10n/app_localizations.dart';
 import 'package:fin_track_pro/features/settings/presentation/blocs/settings_bloc/settings_bloc.dart';
 import 'package:fin_track_pro/theme/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,8 @@ class MyApp extends StatelessWidget {
             themeMode: state.settings?.themeMode ?? ThemeMode.system,
             routerConfig: _router,
             scaffoldMessengerKey: messengerKey,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
           );
         },
       ),

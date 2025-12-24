@@ -31,7 +31,7 @@ class TopSpendingCategories extends StatelessWidget {
               const Skeleton(width: 200, height: 20).shimmer(isLoading: true)
             else
               Text(
-                'Top Spending Categories',
+                context.l10n.topSpendingCategories,
                 style: context.textTheme.titleLarge?.copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class TopSpendingCategories extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Text(
-            'No spending data available',
+            context.l10n.noSpendingDataAvailable,
             style: context.textTheme.bodyMedium?.copyWith(
               color: context.colorScheme.onSurfaceVariant,
               fontSize: 16,
@@ -150,7 +150,7 @@ class _CategoryItem extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '$transactionCount transaction${transactionCount != 1 ? 's' : ''}',
+                  '$transactionCount ${transactionCount != 1 ? context.l10n.transactions : context.l10n.transaction}',
                   style: context.textTheme.labelMedium?.copyWith(
                     color: context.colorScheme.onSurfaceVariant,
                     fontSize: 12,

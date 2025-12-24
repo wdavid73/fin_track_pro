@@ -1,4 +1,4 @@
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/edit_transaction_cubit/edit_transaction_cubit.dart';
@@ -138,9 +138,9 @@ class EditTransactionPage extends StatelessWidget {
                       DescriptionInput(
                         initialValue: state.description,
                         onChanged: (description) {
-                          context.read<EditTransactionCubit>().updateDescription(
-                            description,
-                          );
+                          context
+                              .read<EditTransactionCubit>()
+                              .updateDescription(description);
                         },
                       ),
 
@@ -168,7 +168,7 @@ class EditTransactionPage extends StatelessWidget {
                     Expanded(
                       child: TextButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('Cancel'),
+                        child: Text(context.l10n.cancel),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -191,7 +191,7 @@ class EditTransactionPage extends StatelessWidget {
                                   ),
                                 ),
                               )
-                            : const Text('Update Transaction'),
+                            : Text(context.l10n.updateTransaction),
                       ),
                     ),
                   ],

@@ -1,8 +1,7 @@
 import 'package:fin_track_pro/app/injection_container.dart';
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/transaction.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart';
-import 'package:fin_track_pro/features/transactions/presentation/bloc/edit_transaction_cubit/edit_transaction_cubit.dart';
 import 'package:fin_track_pro/features/transactions/presentation/pages/edit_transaction_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -137,7 +136,7 @@ class TransactionDetailsModal extends StatelessWidget {
                     ),
                   ),
                   icon: const Icon(Icons.edit_outlined),
-                  label: const Text('Edit'),
+                  label: Text(context.l10n.edit),
                 ),
               ),
               const Gap(16),
@@ -167,7 +166,7 @@ class TransactionDetailsModal extends StatelessWidget {
                     ),
                   ),
                   icon: const Icon(Icons.delete_outline),
-                  label: const Text('Delete'),
+                  label: Text(context.l10n.delete),
                 ),
               ),
             ],

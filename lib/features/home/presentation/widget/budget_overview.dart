@@ -1,9 +1,4 @@
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
-import 'package:fin_track_pro/core/utils/icon_helper.dart';
-import 'package:fin_track_pro/core/widgets/budget_category_item.dart';
-import 'package:fin_track_pro/core/widgets/donut_chart.dart';
-import 'package:fin_track_pro/core/widgets/skeleton.dart';
-import 'package:fin_track_pro/core/widgets/shimmer_wrapper.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/budget_data.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -51,20 +46,27 @@ class BudgetOverview extends StatelessWidget {
         if (_isLoading)
           const Skeleton(width: 140, height: 20).shimmer(isLoading: true)
         else
-          Text(
-            'Budget Overview',
-            style: context.textTheme.titleLarge?.copyWith(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          Flexible(
+            child: Text(
+              context.l10n.budgetOverview,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: context.textTheme.titleLarge?.copyWith(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
+
+        const Gap(8),
+
         if (_isLoading)
           const Skeleton(width: 90, height: 16).shimmer(isLoading: true)
         else
           TextButton(
             onPressed: () {},
             child: Text(
-              'View Details',
+              context.l10n.viewDetails,
               style: context.textTheme.labelLarge?.copyWith(
                 fontSize: 15,
                 color: context.primaryColor,
@@ -105,7 +107,7 @@ class BudgetOverview extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Text(
-            'No budget data available',
+            context.l10n.noBudgetDataAvailable,
             style: context.textTheme.bodyMedium?.copyWith(
               color: context.colorScheme.onSurfaceVariant,
               fontSize: 16,
@@ -156,7 +158,7 @@ class BudgetOverview extends StatelessWidget {
           const Skeleton(width: 130, height: 16).shimmer(isLoading: true)
         else
           Text(
-            'Budget Remaining',
+            context.l10n.budgetRemaining,
             style: context.textTheme.titleMedium?.copyWith(fontSize: 16),
           ),
         if (_isLoading)

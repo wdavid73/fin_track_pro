@@ -1,8 +1,7 @@
+import 'package:fin_track_pro/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:fin_track_pro/core/widgets/app_snack_bar.dart';
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 
 import 'blocs/settings_bloc/settings_bloc.dart';
 import 'widgets/theme_option_bottom_sheet.dart';
@@ -11,7 +10,7 @@ class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   void _onTap(BuildContext context) {
-    AppSnackbar().show(context, 'Comming soon...');
+    AppSnackbar().show(context, context.l10n.comingSoon);
     // AppSnackbar().success(context, 'Success soon...');
     // AppSnackbar().error(context, 'Error soon...');
     // AppSnackbar().warning(context, 'Warning soon...');
@@ -34,21 +33,21 @@ class SettingsPage extends StatelessWidget {
     ThemeOptionBottomSheet.show(context, currentTheme, settingsBloc);
   }
 
-  String _getThemeText(ThemeMode mode) {
+  String _getThemeText(BuildContext context, ThemeMode mode) {
     switch (mode) {
       case ThemeMode.light:
-        return 'Light';
+        return context.l10n.light;
       case ThemeMode.dark:
-        return 'Dark';
+        return context.l10n.dark;
       default:
-        return 'System';
+        return context.l10n.system;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(context.l10n.settings)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -56,50 +55,53 @@ class SettingsPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Gap(10),
-            const _SectionTitle(title: 'Account', toUpperCase: true),
+            _SectionTitle(title: context.l10n.account, toUpperCase: true),
             _SettingsCard(
               items: [
                 SettingsItem(
                   icon: Icons.person,
-                  title: 'Profile',
-                  subTitle: 'Manage your profile',
+                  title: context.l10n.profile,
+                  subTitle: context.l10n.manageYourProfile,
                   onTap: () => _onTap(context),
                 ),
                 SettingsItem(
                   icon: Icons.shield,
-                  title: 'Security',
-                  subTitle: 'Password, 2FA, Biometrics',
+                  title: context.l10n.security,
+                  subTitle: context.l10n.passwordBiometrics,
                   onTap: () => _onTap(context),
                 ),
               ],
             ),
             const Gap(10),
-            const _SectionTitle(title: 'Preferences', toUpperCase: true),
+            _SectionTitle(title: context.l10n.preferences, toUpperCase: true),
             _SettingsCard(
               items: [
                 SettingsItem(
                   icon: Icons.notifications,
-                  title: 'Notifications',
-                  subTitle: 'Budget alerts, reminders',
+                  title: context.l10n.notifications,
+                  subTitle: context.l10n.budgetAlertsReminders,
                   onTap: () => _onTap(context),
                 ),
                 SettingsItem(
                   icon: Icons.attach_money,
-                  title: 'Currency',
-                  trailingText: 'USD',
+                  title: context.l10n.currency,
+                  trailingText: 'COP',
                   onTap: () => _onTap(context),
                 ),
                 BlocBuilder<SettingsBloc, SettingsState>(
                   builder: (context, state) {
-                    final themeText = state.status == SettingsStatus.success
+                    final themeText =
+                        state.status == SettingsStatus.success ||
+                            state.status == SettingsStatus.initial
                         ? _getThemeText(
+                            context,
                             state.settings?.themeMode ?? ThemeMode.system,
                           )
-                        : 'System';
+                        : context.l10n.system;
 
                     return SettingsItem(
                       icon: Icons.dark_mode,
-                      title: 'Appearance',
+                      title: context.l10n.appearance,
                       trailingText: themeText,
                       onTap: () => _onChangeThemeMode(context),
                     );
@@ -109,35 +111,35 @@ class SettingsPage extends StatelessWidget {
             ),
 
             const Gap(10),
-            const _SectionTitle(title: 'Data & privacy', toUpperCase: true),
+            _SectionTitle(title: context.l10n.dataPrivacy, toUpperCase: true),
 
             _SettingsCard(
               items: [
                 SettingsItem(
                   icon: Icons.file_download,
-                  title: 'Export data',
+                  title: context.l10n.exportData,
                   onTap: () => _onTap(context),
                 ),
                 SettingsItem(
                   icon: Icons.shield_moon_sharp,
-                  title: 'Privacy Policy',
+                  title: context.l10n.privacyPolicy,
                   onTap: () => _onTap(context),
                 ),
               ],
             ),
             const Gap(10),
-            const _SectionTitle(title: 'Support', toUpperCase: true),
+            _SectionTitle(title: context.l10n.support, toUpperCase: true),
 
             _SettingsCard(
               items: [
                 SettingsItem(
                   icon: Icons.info,
-                  title: 'About',
+                  title: context.l10n.about,
                   onTap: () => _onTap(context),
                 ),
                 SettingsItem(
                   icon: Icons.question_mark,
-                  title: 'FAQ',
+                  title: context.l10n.faq,
                   onTap: () => _onTap(context),
                 ),
               ],
@@ -184,7 +186,7 @@ class _LogoutButton extends StatelessWidget {
           onPressed: () {},
           icon: const Icon(Icons.logout, color: Colors.red),
           label: Text(
-            'Log Out',
+            context.l10n.logout,
             style: context.textTheme.titleMedium?.copyWith(color: Colors.red),
           ),
         ),

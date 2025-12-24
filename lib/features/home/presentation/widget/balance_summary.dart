@@ -1,6 +1,4 @@
-import 'package:fin_track_pro/core/widgets/skeleton.dart';
-import 'package:fin_track_pro/core/widgets/shimmer_wrapper.dart';
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
@@ -33,7 +31,10 @@ class BalanceSummary extends StatelessWidget {
               if (_isLoading)
                 const Skeleton(width: 120, height: 16).shimmer(isLoading: true)
               else
-                const Text('Total Balance', style: TextStyle(fontSize: 16)),
+                Text(
+                  context.l10n.totalBalance,
+                  style: const TextStyle(fontSize: 16),
+                ),
               const Gap(8),
               if (_isLoading)
                 const Skeleton(width: 200, height: 38).shimmer(isLoading: true)

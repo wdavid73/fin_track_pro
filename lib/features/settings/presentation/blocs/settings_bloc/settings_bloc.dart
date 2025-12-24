@@ -1,9 +1,9 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fin_track_pro/features/settings/domain/entities/settings_entity.dart';
 import 'package:fin_track_pro/features/settings/domain/usecases/get_settings.dart';
 import 'package:fin_track_pro/features/settings/domain/usecases/save_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 part 'settings_event.dart';

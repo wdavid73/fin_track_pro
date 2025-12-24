@@ -2,7 +2,6 @@ import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/add_transaction_cubit/add_transaction_cubit.dart';
 import '../bloc/bloc.dart';
 
 class WrapperBlocProviderTransaction extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:fin_track_pro/app/injection_container.dart';
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/categories/domain/usecases/get_categories_use_case.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/transaction_card.dart';
 import 'package:fin_track_pro/features/transactions/presentation/widgets/transaction_details_modal.dart';
@@ -24,7 +24,10 @@ class AllTransactionsPage extends StatelessWidget {
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.pop(),
           ),
-          title: Text('All Transactions', style: context.textTheme.titleLarge),
+          title: Text(
+            context.l10n.allTransactions,
+            style: context.textTheme.titleLarge,
+          ),
           actions: [
             BlocBuilder<TransactionBloc, TransactionState>(
               builder: (context, state) {
@@ -44,8 +47,15 @@ class AllTransactionsPage extends StatelessWidget {
                         endDate: state.endDateFilter,
                         searchQuery: state.searchQuery,
                         categories: categories,
-                        onApplyFilters: (type, categoryId, startDate, endDate, searchQuery) {
-                          context.read<TransactionBloc>().add(
+                        onApplyFilters:
+                            (
+                              type,
+                              categoryId,
+                              startDate,
+                              endDate,
+                              searchQuery,
+                            ) {
+                              context.read<TransactionBloc>().add(
                                 FilterTransactions(
                                   type: type,
                                   categoryId: categoryId,
@@ -54,9 +64,11 @@ class AllTransactionsPage extends StatelessWidget {
                                   searchQuery: searchQuery,
                                 ),
                               );
-                        },
+                            },
                         onClearFilters: () {
-                          context.read<TransactionBloc>().add(const ClearFilters());
+                          context.read<TransactionBloc>().add(
+                            const ClearFilters(),
+                          );
                         },
                       );
                     }

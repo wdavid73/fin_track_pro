@@ -1,8 +1,4 @@
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
-import 'package:fin_track_pro/core/extensions/currency_extensions.dart';
-import 'package:fin_track_pro/core/extensions/locale_extensions.dart';
-import 'package:fin_track_pro/core/widgets/skeleton.dart';
-import 'package:fin_track_pro/core/widgets/shimmer_wrapper.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/theme/utils/resposive.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +33,7 @@ class AnalyticsSummaryCards extends StatelessWidget {
         SizedBox(
           width: context.wp(44),
           child: _SummaryCard(
-            title: 'Total Income',
+            title: context.l10n.totalIncome,
             amount: totalIncome,
             icon: Icons.arrow_upward_rounded,
             iconColor: context.secondaryColor,
@@ -48,7 +44,7 @@ class AnalyticsSummaryCards extends StatelessWidget {
         SizedBox(
           width: context.wp(44),
           child: _SummaryCard(
-            title: 'Total Expenses',
+            title: context.l10n.totalExpenses,
             amount: totalExpenses,
             icon: Icons.arrow_downward_rounded,
             iconColor: context.errorColor,
@@ -59,7 +55,7 @@ class AnalyticsSummaryCards extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: _SummaryCard(
-            title: 'Net Savings',
+            title: context.l10n.netSavings,
             amount: netSavings,
             icon: Icons.account_balance_wallet_outlined,
             iconColor: context.primaryColor,

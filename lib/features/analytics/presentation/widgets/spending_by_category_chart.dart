@@ -1,8 +1,4 @@
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
-import 'package:fin_track_pro/core/utils/icon_helper.dart';
-import 'package:fin_track_pro/core/widgets/donut_chart.dart';
-import 'package:fin_track_pro/core/widgets/shimmer_wrapper.dart';
-import 'package:fin_track_pro/core/widgets/skeleton.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/analytics/domain/entities/analytics_data.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -32,7 +28,7 @@ class SpendingByCategoryChart extends StatelessWidget {
               const Skeleton(width: 180, height: 20).shimmer(isLoading: true)
             else
               Text(
-                'Spending by Category',
+                context.l10n.spendingByCategory,
                 style: context.textTheme.titleLarge?.copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -78,7 +74,7 @@ class SpendingByCategoryChart extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Text(
-            'No spending data available',
+            context.l10n.noSpendingDataAvailable,
             style: context.textTheme.bodyMedium?.copyWith(
               color: context.colorScheme.onSurfaceVariant,
               fontSize: 16,
