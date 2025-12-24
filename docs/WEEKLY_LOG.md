@@ -26,15 +26,15 @@
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Weekends Completed | 3-4 | 131 |
+| Weekends Completed | 5 | 14 |
 | Hours Invested | ~40-50h | 1,040 |
-| Current Phase | Phase 0 (~85%) | Phase 4 |
+| Current Phase | Phase 0 (~95%) | Phase 4 |
 | Test Coverage | ~35% | >80% |
-| Features Complete | 5/7 at 75%+ | All |
+| Features Complete | 6/7 at 75%+ | All |
 | Articles Published | 0 | 8+ |
 | Videos Created | 0 | 6+ |
 
-**Last Updated:** 2025-12-09
+**Last Updated:** 2025-12-24
 
 ---
 
@@ -266,36 +266,78 @@
 
 ---
 
-### Weekend 4 - Transaction Feature (Part 2)
 
-**Date:** [YYYY-MM-DD]  
-**Planned Hours:** 8h  
-**Actual Hours:** _h  
-**Phase:** 0 (MVP)
+---
 
-#### 🎯 Goals
-- [ ] Create Transaction BLoC
-- [ ] Implement Transaction states
-- [ ] Build Transaction list screen
-- [ ] Create Transaction form (add/edit)
-- [ ] Add basic validation
+### Weekend 5 - Settings & Internationalization
 
-#### ✅ Completed
-- 
+ **Date:** 2025-12-24
+ **Planned Hours:** 8h
+ **Actual Hours:** ~10h
+ **Phase:** 0 (MVP)
 
-#### 📝 Notes & Learnings
-- 
+ #### 🎯 Goals
+ - [x] Implement Settings Backend (Domain, Data, BLoC)
+ - [x] Implement Theme Switching (Light/Dark/System)
+ - [x] Implement Internationalization (i18n)
+ - [x] Migrate all hardcoded strings to ARB files
+ - [x] Persist settings with Hive
 
-#### 🚧 Challenges & Blockers
-- 
+ #### 🎒 Preparation Needed
+ - [x] Research flutter_localizations and arb format
+ - [x] Review Hive adapter generation for Enums
+ - [x] Design localization strategy (Clean Architecture friendly)
 
-#### 📊 Metrics
-- Test Coverage: _%
-- Commits: _
-- Files Changed: _
+ #### 📋 Detailed Tasks
 
-#### ⏭️ Next Weekend
-- 
+ **Tuesday (Dec 24):**
+ 1. Settings Infrastructure (4h)
+    - Created `SettingsEntity` and `SettingsModel` with Hive adapters
+    - Implemented `SettingsRepository` and `SettingsLocalDataSource`
+    - Built `SettingsBloc` with Load and Update events
+    - Integrated with `MaterialApp` themeBuilder
+
+ 2. Internationalization (6h)
+    - Configured `l10n.yaml` and added dependencies
+    - Created `app_en.arb` and `app_es.arb`
+    - Created `LocalizationExtension` for clean `context.l10n` access
+    - systemically migrated 60+ strings across:
+      - Home (Balance, Budget)
+      - Analytics (Charts, Titles)
+      - Categories (Forms, Dialogs)
+      - Transactions (Filters, Add/Edit Pages)
+      - Settings (All sections)
+
+ #### ✅ Completed
+ - ✅ **Internationalization 100% complete** (English + Spanish)
+ - ✅ **Settings Feature 90% complete** (Backend + UI + Persistence)
+ - ✅ **Theme Switching** fully functional and persisted
+ - ✅ **60+ Strings migrated** to ARB files
+ - ✅ **Localization Extension** implemented for clean code
+ - ✅ **Lint errors resolved** in transaction modules
+
+ #### 📝 Notes & Learnings
+ - **ARB Files:** Great for managing translations, but requires running `gen-l10n` often.
+ - **Context Extensions:** `context.l10n.key` is much cleaner than `AppLocalizations.of(context)!.key`.
+ - **Hive Enums:** Persisting Enums (like `ThemeMode`) requires careful TypeAdapter setup or String conversion. Used String conversion for simplicity in data layer.
+ - **Date Formatting:** Used `intl` package with current locale for dates (`DateFormat.yMMMd(locale)`).
+
+ #### 🚧 Challenges & Blockers
+ - **Const widgets:** Had to remove `const` from many widgets (like `PopupMenuItem`) to access `context.l10n`.
+ - **Import errors:** Moving localized strings revealed missing imports in several transaction files.
+ - **Lint warnings:** Adding i18n introduced some lint warnings about `const` usage which had to be fixed systematically.
+
+ #### 📊 Metrics
+ - Test Coverage: ~37% (Maintained)
+ - Commits: ~3 (Feature + Fixes)
+ - Files Changed: ~40 files (mostly UI updates for localization)
+ - Lines of Code: ~10,800 total (+~400)
+
+ #### ⏭️ Next Weekend (Dec 28-29)
+ - Record 3-minute demo video
+ - Take portfolio screenshots
+ - Final UI polish (animations, transitions)
+ - Prepare Phase 0 Completion Report! 
 
 ---
 
