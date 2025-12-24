@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/features/settings/data/models/settings_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
@@ -11,6 +12,7 @@ class HiveService {
   static const String categoriesBox = 'categories';
   static const String transactionsBox = 'transactions';
   static const String budgetsBox = 'budgets';
+  static const String settingsBox = 'settings';
 
   HiveService();
 
@@ -31,11 +33,15 @@ class HiveService {
     if (!Hive.isAdapterRegistered(2)) {
       Hive.registerAdapter(BudgetModelAdapter());
     }
+    if (!Hive.isAdapterRegistered(3)) {
+      Hive.registerAdapter(SettingsModelAdapter());
+    }
 
     // Open boxes and wait for them to be fully opened
     await Hive.openBox<CategoryModel>(categoriesBox);
     await Hive.openBox<TransactionModel>(transactionsBox);
     await Hive.openBox<BudgetModel>(budgetsBox);
+    await Hive.openBox<SettingsModel>(settingsBox);
 
     // Run seeders only in development mode and if requested
     // IMPORTANT: This runs AFTER boxes are opened
@@ -55,6 +61,8 @@ class HiveService {
       return Hive.box<TransactionModel>(boxName);
     } else if (boxName == budgetsBox) {
       return Hive.box<BudgetModel>(boxName);
+    } else if (boxName == settingsBox) {
+      return Hive.box<SettingsModel>(boxName);
     }
     return Hive.box(boxName);
   }
@@ -63,6 +71,7 @@ class HiveService {
     await Hive.box(categoriesBox).clear();
     await Hive.box(transactionsBox).clear();
     await Hive.box(budgetsBox).clear();
+    await Hive.box(settingsBox).clear();
   }
 
   Future<void> close() async {

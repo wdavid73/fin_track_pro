@@ -52,6 +52,18 @@ import '../features/categories/domain/usecases/usecases.dart' as _i931;
 import '../features/categories/presentation/bloc/category_bloc/category_bloc.dart'
     as _i274;
 import '../features/home/presentation/bloc/home_bloc.dart' as _i824;
+import '../features/settings/data/datasources/settings_datasource.dart'
+    as _i602;
+import '../features/settings/data/datasources/settings_local_datasource.dart'
+    as _i307;
+import '../features/settings/data/repositories/settings_repository_impl.dart'
+    as _i1064;
+import '../features/settings/domain/repositories/settings_repository.dart'
+    as _i89;
+import '../features/settings/domain/usecases/get_settings.dart' as _i463;
+import '../features/settings/domain/usecases/save_settings.dart' as _i315;
+import '../features/settings/presentation/blocs/settings_bloc/settings_bloc.dart'
+    as _i16;
 import '../features/transactions/data/datasources/transaction_local_datasource.dart'
     as _i730;
 import '../features/transactions/data/repositories/transaction_repository_impl.dart'
@@ -114,6 +126,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i82.HiveService>(),
           gh<_i910.LoggerService>(),
         ));
+    gh.lazySingleton<_i602.SettingsDatasource>(
+        () => _i307.SettingsLocalDatasource(gh<_i82.HiveService>()));
     gh.factory<_i730.TransactionLocalDataSource>(
         () => _i730.TransactionLocalDataSource(gh<_i82.HiveService>()));
     gh.factory<_i409.CategoryLocalDataSource>(
@@ -124,6 +138,12 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i264.TransactionSeeder>(),
           gh<_i910.LoggerService>(),
         ));
+    gh.lazySingleton<_i89.SettingsRepository>(
+        () => _i1064.SettingsRepositoryImpl(gh<_i602.SettingsDatasource>()));
+    gh.factory<_i315.SaveSettings>(
+        () => _i315.SaveSettings(gh<_i89.SettingsRepository>()));
+    gh.factory<_i463.GetSettings>(
+        () => _i463.GetSettings(gh<_i89.SettingsRepository>()));
     gh.lazySingleton<_i196.BudgetDatasource>(() => _i285.BudgetLocalDatasource(
         gh<_i979.Box<_i731.BudgetModel>>(instanceName: 'budgetBox')));
     gh.lazySingleton<_i443.TransactionRepository>(() =>
@@ -145,6 +165,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1020.SaveBudget(gh<_i43.BudgetRepository>()));
     gh.factory<_i299.GetBudgets>(
         () => _i299.GetBudgets(gh<_i43.BudgetRepository>()));
+    gh.factory<_i16.SettingsBloc>(() => _i16.SettingsBloc(
+          getSettings: gh<_i463.GetSettings>(),
+          saveSettings: gh<_i315.SaveSettings>(),
+        ));
     gh.singleton<_i905.TransactionBloc>(() => _i905.TransactionBloc(
           gh<_i913.GetTransactions>(),
           gh<_i913.GetPaginatedTransactions>(),

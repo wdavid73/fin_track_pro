@@ -56,4 +56,11 @@ node_modules/
 
 coverage.sh
 
+# Generated files
 lib/app/injection_container.config.dart
+**/*.g.dart
+**/*.freezed.dart
+
+# build ouput
+
+

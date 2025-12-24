@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
 class AppSnackbar {
@@ -12,6 +13,7 @@ class AppSnackbar {
   }
 
   void _show(
+    BuildContext context,
     String message, {
     Color? backgroundColor,
     Color? textColor,
@@ -19,10 +21,14 @@ class AppSnackbar {
     Duration duration = const Duration(seconds: 3),
   }) {
     final snackBar = SnackBar(
-      content: Text(message),
+      content: Text(
+        message,
+        style: context.textTheme.bodyMedium?.copyWith(color: textColor),
+      ),
       duration: duration,
       action: action,
       behavior: SnackBarBehavior.floating,
+      backgroundColor: backgroundColor,
     );
 
     messengerKey.currentState!
@@ -31,23 +37,34 @@ class AppSnackbar {
   }
 
   /// Default snackbar
-  void show(String message) {
-    _show(message);
+  void show(BuildContext context, String message) {
+    _show(context, message);
   }
 
   /// Success snackbar
-  void success(String message) {
-    _show(message, backgroundColor: Colors.green, textColor: Colors.white);
+  void success(BuildContext context, String message) {
+    _show(
+      context,
+      message,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
   }
 
   /// Error snackbar
-  void error(String message) {
-    _show(message, backgroundColor: Colors.red, textColor: Colors.white);
+  void error(BuildContext context, String message) {
+    _show(
+      context,
+      message,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+    );
   }
 
   /// Warning snackbar
-  void warning(String message) {
+  void warning(BuildContext context, String message) {
     _show(
+      context,
       message,
       backgroundColor: Colors.orange.shade700,
       textColor: Colors.white,
@@ -56,12 +73,14 @@ class AppSnackbar {
 
   /// Custom snackbar
   void custom({
+    required BuildContext context,
     required String message,
     required Color background,
     required Color textColor,
     Duration duration = const Duration(seconds: 3),
   }) {
     _show(
+      context,
       message,
       backgroundColor: background,
       textColor: textColor,

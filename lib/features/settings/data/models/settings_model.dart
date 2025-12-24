@@ -1,0 +1,42 @@
+import 'package:fin_track_pro/features/settings/domain/entities/settings_entity.dart';
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+
+part 'settings_model.g.dart';
+
+@HiveType(typeId: 3)
+class SettingsModel extends SettingsEntity {
+  @HiveField(0)
+  final String themeModeString;
+
+  SettingsModel({required this.themeModeString})
+    : super(themeMode: _themeModeFromString(themeModeString));
+
+  factory SettingsModel.fromEntity(SettingsEntity entity) {
+    return SettingsModel(themeModeString: _themeModeToString(entity.themeMode));
+  }
+
+  static ThemeMode _themeModeFromString(String value) {
+    switch (value) {
+      case 'light':
+        return ThemeMode.light;
+      case 'dark':
+        return ThemeMode.dark;
+      case 'system':
+        return ThemeMode.system;
+      default:
+        return ThemeMode.system;
+    }
+  }
+
+  static String _themeModeToString(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.light:
+        return 'light';
+      case ThemeMode.dark:
+        return 'dark';
+      case ThemeMode.system:
+        return 'system';
+    }
+  }
+}

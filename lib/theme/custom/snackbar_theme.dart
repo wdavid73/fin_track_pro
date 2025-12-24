@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../utils/color_theme.dart';
+import '../utils/sizes.dart';
+import 'text_theme.dart';
 
 /// Custom SnackBar theme configurations for light and dark themes.
 ///
@@ -7,40 +9,30 @@ import '../utils/color_theme.dart';
 /// and shapes for both light and dark themes.
 abstract class CustomSnackBarTheme {
   /// Light theme SnackBar configuration
-  static const lightSnackBarTheme = SnackBarThemeData(
-    backgroundColor: ColorTheme.onSurfaceColor,
+  static SnackBarThemeData lightSnackBarTheme = SnackBarThemeData(
+    backgroundColor: ColorTheme.surfaceColor,
     behavior: SnackBarBehavior.floating,
-    insetPadding: EdgeInsets.all(10),
+    insetPadding: const EdgeInsets.all(AppSizes.sm),
     actionBackgroundColor: Colors.transparent,
     disabledActionBackgroundColor: Colors.transparent,
     disabledActionTextColor: Colors.white,
-    contentTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+    contentTextStyle: CustomTextTheme.lightTextTheme.bodyLarge,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
-      ),
+      borderRadius: BorderRadius.circular(AppSizes.borderRadiusLg),
     ),
   );
 
   /// Dark theme SnackBar configuration
-  static const darkSnackBarTheme = SnackBarThemeData(
-    backgroundColor: ColorTheme.surfaceColor,
+  static SnackBarThemeData darkSnackBarTheme = SnackBarThemeData(
+    backgroundColor: ColorTheme.dark,
     behavior: SnackBarBehavior.floating,
-    insetPadding: EdgeInsets.all(10),
+    insetPadding: const EdgeInsets.all(AppSizes.sm),
     actionBackgroundColor: Colors.transparent,
     disabledActionBackgroundColor: Colors.transparent,
     disabledActionTextColor: Colors.white,
-    contentTextStyle: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      color: ColorTheme.light,
-    ),
+    contentTextStyle: CustomTextTheme.darkTextTheme.bodyLarge,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
-      ),
+      borderRadius: BorderRadius.circular(AppSizes.borderRadiusLg),
     ),
   );
 }

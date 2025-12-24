@@ -20,8 +20,8 @@ abstract class CustomBottomSheetTheme {
   /// Dark theme BottomSheet configuration
   static const darkBottomSheetTheme = BottomSheetThemeData(
     showDragHandle: true,
-    backgroundColor: ColorTheme.black,
-    modalBackgroundColor: ColorTheme.black,
+    backgroundColor: ColorTheme.dark,
+    modalBackgroundColor: ColorTheme.dark,
     constraints: BoxConstraints(minWidth: double.infinity),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
