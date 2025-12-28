@@ -139,6 +139,7 @@ class Transactions extends StatelessWidget {
         final transaction = transactions[index];
         final isIncome = transaction.type == 'income';
         final category = categories[transaction.categoryId];
+        final heroTag = 'transaction_icon_home_${transaction.id}';
 
         // Get category icon and color, or use defaults
         final categoryIcon = category != null
@@ -151,6 +152,7 @@ class Transactions extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: TransactionCard(
+            heroTag: heroTag,
             amount: transaction.amount,
             icon: categoryIcon,
             iconBackgroundColor: categoryColor.withValues(alpha: 0.1),
@@ -166,6 +168,7 @@ class Transactions extends StatelessWidget {
                 icon: categoryIcon,
                 iconColor: categoryColor,
                 iconBackgroundColor: categoryColor.withValues(alpha: 0.1),
+                heroTag: heroTag,
               );
             },
           ),

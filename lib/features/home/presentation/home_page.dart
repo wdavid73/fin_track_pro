@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:animations/animations.dart';
 import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/home/presentation/bloc/home_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:fin_track_pro/features/home/presentation/widget/balance_summary.
 import 'package:fin_track_pro/features/home/presentation/widget/budget_overview.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/transactions.dart';
 import 'package:fin_track_pro/features/transactions/presentation/pages/add_transaction_page.dart';
+import 'package:fin_track_pro/features/transactions/presentation/widgets/wrapper.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,15 +29,30 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         appBar: _appBar(context),
         body: SafeArea(child: _body()),
-        floatingActionButton: Builder(
-          builder: (ctx) => FloatingActionButton(
-            tooltip: context.l10n.addTransaction,
-            onPressed: () {
-              showAddTransactionModal(context);
-            },
-            backgroundColor: context.colorScheme.primary,
-            child: const Icon(Icons.add, color: Colors.white),
+        floatingActionButton: OpenContainer(
+          transitionType: ContainerTransitionType.fadeThrough,
+          transitionDuration: const Duration(milliseconds: 400),
+          openColor: context.colorScheme.surface,
+          closedColor: context.colorScheme.primary,
+          middleColor: context.colorScheme.surface,
+          openElevation: 0,
+          closedElevation: 6.0,
+          closedShape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
           ),
+          closedBuilder: (context, action) {
+            return Container(
+              width: 56,
+              height: 56,
+              alignment: Alignment.center,
+              child: const Icon(Icons.add, color: Colors.white),
+            );
+          },
+          openBuilder: (context, action) {
+            return const WrapperBlocProviderTransaction(
+              child: AddTransactionPage(),
+            );
+          },
         ),
       ),
     );

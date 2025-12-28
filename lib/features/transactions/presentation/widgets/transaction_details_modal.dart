@@ -45,6 +45,7 @@ class TransactionDetailsModal extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final Color iconBackgroundColor;
+  final String? heroTag;
 
   const TransactionDetailsModal({
     super.key,
@@ -52,6 +53,7 @@ class TransactionDetailsModal extends StatelessWidget {
     required this.icon,
     required this.iconColor,
     required this.iconBackgroundColor,
+    this.heroTag,
   });
 
   @override
@@ -81,15 +83,32 @@ class TransactionDetailsModal extends StatelessWidget {
           const Gap(24),
 
           // Icon
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: iconBackgroundColor,
-              shape: BoxShape.circle,
+          if (heroTag != null)
+            Hero(
+              tag: heroTag!,
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: iconBackgroundColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: iconColor, size: 40),
+                ),
+              ),
+            )
+          else
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: iconBackgroundColor,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: iconColor, size: 40),
             ),
-            child: Icon(icon, color: iconColor, size: 40),
-          ),
           const Gap(16),
 
           // Amount
@@ -185,16 +204,59 @@ void showTransactionDetailsModal({
   required IconData icon,
   required Color iconColor,
   required Color iconBackgroundColor,
+  required String heroTag,
 }) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (context) => TransactionDetailsModal(
-      transaction: transaction,
-      icon: icon,
-      iconColor: iconColor,
-      iconBackgroundColor: iconBackgroundColor,
+  Navigator.of(context, rootNavigator: true).push(
+    PageRouteBuilder(
+      opaque: false,
+      barrierDismissible: true,
+      barrierColor: Colors.black54,
+      fullscreenDialog: true,
+      transitionDuration: const Duration(milliseconds: 300),
+      reverseTransitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(
+            children: [
+              // Tap listener for background dismissal
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: () => context.pop(),
+                  child: Container(color: Colors.transparent),
+                ),
+              ),
+              // Content aligned to bottom
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: SlideTransition(
+                  position:
+                      Tween<Offset>(
+                        begin: const Offset(0, 1),
+                        end: Offset.zero,
+                      ).animate(
+                        CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.easeOutCubic,
+                          reverseCurve: Curves.easeInCubic,
+                        ),
+                      ),
+                  child: GestureDetector(
+                    onTap: () {}, // Prevent tap from passing through
+                    child: TransactionDetailsModal(
+                      transaction: transaction,
+                      icon: icon,
+                      iconColor: iconColor,
+                      iconBackgroundColor: iconBackgroundColor,
+                      heroTag: heroTag,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     ),
   );
 }

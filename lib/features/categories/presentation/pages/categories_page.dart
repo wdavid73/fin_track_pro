@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/core/extensions/extensions.dart';
@@ -79,9 +80,34 @@ class _CategoryBodyState extends State<_CategoryBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.categories), elevation: 0),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showCategoryForm(context),
-        child: const Icon(Icons.add),
+      floatingActionButton: OpenContainer(
+        openBuilder: (context, _) => const CategoryFormPage(),
+        closedShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+        ),
+        closedElevation: 6.0,
+        closedColor: context.colorScheme.primaryContainer,
+        openColor: context.colorScheme.surface,
+        middleColor: context.colorScheme.surface,
+        transitionDuration: const Duration(milliseconds: 500),
+        transitionType: ContainerTransitionType.fadeThrough,
+        onClosed: (_) {
+          if (context.mounted) {
+            context.read<CategoryBloc>().add(LoadCategoryStatsEvent());
+          }
+        },
+        closedBuilder: (context, openContainer) {
+          return SizedBox(
+            width: 56,
+            height: 56,
+            child: Center(
+              child: Icon(
+                Icons.add,
+                color: context.colorScheme.onPrimaryContainer,
+              ),
+            ),
+          );
+        },
       ),
       body: BlocBuilder<CategoryBloc, CategoryState>(
         builder: (context, state) {

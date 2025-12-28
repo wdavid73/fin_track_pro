@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:fin_track_pro/config/router/fade_indexed_stack.dart';
 import 'package:fin_track_pro/config/router/routes.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
@@ -53,7 +54,22 @@ class AppRoutes {
                 routes: [
                   GoRoute(
                     path: 'transactions',
-                    builder: (context, state) => const AllTransactionsPage(),
+                    pageBuilder: (context, state) {
+                      return CustomTransitionPage(
+                        key: state.pageKey,
+                        child: const AllTransactionsPage(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                              return SharedAxisTransition(
+                                animation: animation,
+                                secondaryAnimation: secondaryAnimation,
+                                transitionType:
+                                    SharedAxisTransitionType.horizontal,
+                                child: child,
+                              );
+                            },
+                      );
+                    },
                   ),
                 ],
               ),

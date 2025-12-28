@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/categories/domain/usecases/get_categories_use_case.dart';
@@ -196,6 +197,7 @@ class _TransactionsListState extends State<_TransactionsList> {
 
               final transaction = state.transactions[index];
               final isIncome = transaction.type == 'income';
+              final heroTag = 'transaction_icon_${transaction.id}';
 
               // For now, we'll use default icons since we don't have category data
               // In a real implementation, you'd want to fetch categories too
@@ -208,24 +210,32 @@ class _TransactionsListState extends State<_TransactionsList> {
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TransactionCard(
-                  amount: transaction.amount,
-                  icon: categoryIcon,
-                  iconBackgroundColor: categoryColor.withValues(alpha: 0.1),
-                  iconColor: categoryColor,
-                  title: transaction.note ?? 'Transaction',
-                  date: DateFormat('MMM dd, yyyy').format(transaction.date),
-                  amountColor: categoryColor,
-                  isIncome: isIncome,
-                  onLongPress: () {
-                    showTransactionDetailsModal(
-                      context: context,
-                      transaction: transaction,
-                      icon: categoryIcon,
-                      iconColor: categoryColor,
-                      iconBackgroundColor: categoryColor.withValues(alpha: 0.1),
-                    );
-                  },
+                child: FadeInUp(
+                  duration: const Duration(milliseconds: 300),
+                  delay: Duration(milliseconds: index * 50),
+                  child: TransactionCard(
+                    heroTag: heroTag,
+                    amount: transaction.amount,
+                    icon: categoryIcon,
+                    iconBackgroundColor: categoryColor.withValues(alpha: 0.1),
+                    iconColor: categoryColor,
+                    title: transaction.note ?? 'Transaction',
+                    date: DateFormat('MMM dd, yyyy').format(transaction.date),
+                    amountColor: categoryColor,
+                    isIncome: isIncome,
+                    onLongPress: () {
+                      showTransactionDetailsModal(
+                        context: context,
+                        transaction: transaction,
+                        icon: categoryIcon,
+                        iconColor: categoryColor,
+                        iconBackgroundColor: categoryColor.withValues(
+                          alpha: 0.1,
+                        ),
+                        heroTag: heroTag,
+                      );
+                    },
+                  ),
                 ),
               );
             },
