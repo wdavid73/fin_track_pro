@@ -22,7 +22,6 @@ Future<void> mainCommon(Flavor flavor, String envFile) async {
     enableLogging: EnvConfig.enableLogging,
     showDebugBanner: EnvConfig.enableDebugBanner,
   );
-
   // Initialize dependency injection
   await configureDependencies();
 
