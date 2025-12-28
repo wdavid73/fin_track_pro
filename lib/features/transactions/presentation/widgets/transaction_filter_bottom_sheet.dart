@@ -144,27 +144,7 @@ class _TransactionFilterBottomSheetState
                 style: context.textTheme.titleSmall,
               ),
               const Gap(8),
-              SegmentedButton<String?>(
-                segments: [
-                  ButtonSegment(value: null, label: Text(context.l10n.all)),
-                  ButtonSegment(
-                    value: 'expense',
-                    label: Text(context.l10n.expense),
-                  ),
-                  ButtonSegment(
-                    value: 'income',
-                    label: Text(context.l10n.income),
-                  ),
-                ],
-                selected: {_selectedType},
-                onSelectionChanged: (Set<String?> selection) {
-                  setState(() {
-                    _selectedType = selection.first;
-                    // Reset category when type changes
-                    _selectedCategoryId = null;
-                  });
-                },
-              ),
+              _typeTransactionsButton(context),
               const Gap(24),
 
               // Category
@@ -240,6 +220,7 @@ class _TransactionFilterBottomSheetState
                         _startDate != null
                             ? DateFormat('MMM dd, yyyy').format(_startDate!)
                             : 'Start Date',
+                        style: context.textTheme.labelLarge,
                       ),
                     ),
                   ),
@@ -264,6 +245,7 @@ class _TransactionFilterBottomSheetState
                         _endDate != null
                             ? DateFormat('MMM dd, yyyy').format(_endDate!)
                             : 'End Date',
+                        style: context.textTheme.labelLarge,
                       ),
                     ),
                   ),
@@ -280,12 +262,14 @@ class _TransactionFilterBottomSheetState
                         widget.onClearFilters();
                         Navigator.of(context).pop();
                       },
-                      child: Text(context.l10n.clearAll),
+                      child: Text(
+                        context.l10n.clearAll,
+                        style: context.textTheme.labelLarge,
+                      ),
                     ),
                   ),
                   const Gap(16),
                   Expanded(
-                    flex: 2,
                     child: ElevatedButton(
                       onPressed: () {
                         widget.onApplyFilters(
@@ -299,7 +283,10 @@ class _TransactionFilterBottomSheetState
                         );
                         Navigator.of(context).pop();
                       },
-                      child: Text(context.l10n.applyFilters),
+                      child: Text(
+                        context.l10n.applyFilters,
+                        style: context.textTheme.labelLarge,
+                      ),
                     ),
                   ),
                 ],
@@ -307,6 +294,90 @@ class _TransactionFilterBottomSheetState
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _typeTransactionsButton(BuildContext context) {
+    return Container(
+      height: 48,
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: context.colorScheme.surfaceContainerHighest.withValues(
+          alpha: 0.3,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final itemWidth = constraints.maxWidth / 3;
+          return Stack(
+            children: [
+              // Sliding Indicator
+              AnimatedAlign(
+                alignment: _selectedType == null
+                    ? Alignment.centerLeft
+                    : _selectedType == 'expense'
+                    ? Alignment.center
+                    : Alignment.centerRight,
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOutCubic,
+                child: Container(
+                  width: itemWidth,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    color: context.colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Text Labels
+              Row(
+                children: [null, 'expense', 'income'].map((type) {
+                  final label = type == null
+                      ? context.l10n.all
+                      : (type == 'expense'
+                            ? context.l10n.expense
+                            : context.l10n.income);
+                  final isSelected = _selectedType == type;
+                  return Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        setState(() {
+                          _selectedType = type;
+                          // Reset category when type changes
+                          _selectedCategoryId = null;
+                        });
+                      },
+                      child: Center(
+                        child: AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 200),
+                          style: context.textTheme.labelLarge!.copyWith(
+                            color: isSelected
+                                ? context.colorScheme.onPrimaryContainer
+                                : context.colorScheme.onSurfaceVariant,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                          child: Text(label),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

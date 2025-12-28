@@ -64,7 +64,9 @@ class BudgetOverview extends StatelessWidget {
           const Skeleton(width: 90, height: 16).shimmer(isLoading: true)
         else
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              AppSnackbar().show(context, context.l10n.comingSoon);
+            },
             child: Text(
               context.l10n.viewDetails,
               style: context.textTheme.labelLarge?.copyWith(

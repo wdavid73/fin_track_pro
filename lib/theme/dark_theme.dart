@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/theme/custom/bottom_navigation_bar_theme.dart';
 import 'package:flutter/material.dart';
 import 'theme_constants.dart';
 import 'custom/appbar_theme.dart';
@@ -58,6 +59,10 @@ abstract class DarkTheme {
 
       // Snackbar theme
       snackBarTheme: CustomSnackBarTheme.darkSnackBarTheme,
+
+      // Bottom navigation bar theme
+      bottomNavigationBarTheme:
+          CustomBottomNavigationBarTheme.darkBottomNavigationBarTheme,
     );
   }
 }

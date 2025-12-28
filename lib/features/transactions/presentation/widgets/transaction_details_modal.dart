@@ -3,6 +3,7 @@ import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/transaction.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart';
 import 'package:fin_track_pro/features/transactions/presentation/pages/edit_transaction_page.dart';
+import 'package:fin_track_pro/theme/utils/color_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -55,7 +56,6 @@ class TransactionDetailsModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat.currency(symbol: '\$');
     final isIncome = transaction.type == 'income';
 
     return Container(
@@ -94,7 +94,7 @@ class TransactionDetailsModal extends StatelessWidget {
 
           // Amount
           Text(
-            '${isIncome ? '+' : '-'}${formatter.format(transaction.amount)}',
+            '${isIncome ? '+' : '-'}${transaction.amount.toCurrencyInt()}',
             style: context.textTheme.headlineMedium?.copyWith(
               color: isIncome ? context.secondaryColor : context.errorColor,
               fontWeight: FontWeight.bold,
@@ -163,6 +163,7 @@ class TransactionDetailsModal extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color: ColorTheme.errorColor),
                     ),
                   ),
                   icon: const Icon(Icons.delete_outline),

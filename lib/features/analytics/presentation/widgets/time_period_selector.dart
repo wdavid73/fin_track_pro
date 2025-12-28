@@ -13,50 +13,82 @@ class TimePeriodSelector extends StatelessWidget {
     required this.onPeriodChanged,
   });
 
+  Alignment _alignmentForPeriod(AnalyticsPeriod period) {
+    switch (period) {
+      case AnalyticsPeriod.week:
+        return Alignment.centerLeft;
+      case AnalyticsPeriod.month:
+        return Alignment.center;
+      case AnalyticsPeriod.year:
+        return Alignment.centerRight;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final periods = AnalyticsPeriod.values;
+
     return Container(
+      height: 48,
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: context.colorScheme.surfaceContainerHighest.withValues(
           alpha: 0.3,
         ),
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.all(4),
-      child: Row(
-        children: AnalyticsPeriod.values.map((period) {
-          final isSelected = period == selectedPeriod;
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final itemWidth = constraints.maxWidth / periods.length;
 
-          return Expanded(
-            child: GestureDetector(
-              onTap: () => onPeriodChanged(period),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInOut,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? context.colorScheme.primaryContainer
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
-                  child: Text(
-                    period.label,
-                    style: context.textTheme.labelLarge?.copyWith(
-                      color: isSelected
-                          ? context.colorScheme.onPrimaryContainer
-                          : context.colorScheme.onSurfaceVariant,
-                      fontWeight: isSelected
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                    ),
+          return Stack(
+            children: [
+              /// Indicador animado (slide)
+              AnimatedAlign(
+                alignment: _alignmentForPeriod(selectedPeriod),
+                duration: const Duration(milliseconds: 280),
+                curve: Curves.easeOutCubic,
+                child: Container(
+                  width: itemWidth,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    color: context.colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
-            ),
+
+              /// Botones
+              Row(
+                children: periods.map((period) {
+                  final isSelected = period == selectedPeriod;
+
+                  return Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => onPeriodChanged(period),
+                      child: Center(
+                        child: AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeOut,
+                          style: context.textTheme.labelLarge!.copyWith(
+                            color: isSelected
+                                ? context.colorScheme.onPrimaryContainer
+                                : context.colorScheme.onSurfaceVariant,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                          child: Text(period.label),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
           );
-        }).toList(),
+        },
       ),
     );
   }

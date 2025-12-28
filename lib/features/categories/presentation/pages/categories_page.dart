@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/core/extensions/extensions.dart';
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
@@ -230,95 +231,97 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: context.colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: Color(category.color).withValues(alpha: 0.15),
-            child: Icon(
-              _getIconData(category.icon),
-              color: Color(category.color),
-              size: 24,
+    return BounceInLeft(
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: context.colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-          ),
-          const Gap(16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                category.name,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+          ],
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 24,
+              backgroundColor: Color(category.color).withValues(alpha: 0.15),
+              child: Icon(
+                _getIconData(category.icon),
+                color: Color(category.color),
+                size: 24,
+              ),
+            ),
+            const Gap(16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  category.name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              const Gap(4),
-              Text(
-                '$transactionCount ${context.l10n.transactions}',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-              ),
-            ],
-          ),
-          const Spacer(),
-          Text(
-            amount,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-          ),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-            onSelected: (value) {
-              if (value == 'edit') {
-                onEdit();
-              } else if (value == 'delete') {
-                onDelete();
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'edit',
-                child: Row(
-                  children: [
-                    const Icon(Icons.edit),
-                    const Gap(12),
-                    Text(context.l10n.edit),
-                  ],
+                const Gap(4),
+                Text(
+                  '$transactionCount ${context.l10n.transactions}',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                 ),
-              ),
-              PopupMenuItem(
-                value: 'delete',
-                child: Row(
-                  children: [
-                    const Icon(Icons.delete, color: Colors.red),
-                    const Gap(12),
-                    Text(
-                      context.l10n.delete,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ],
+              ],
+            ),
+            const Spacer(),
+            Text(
+              amount,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              onSelected: (value) {
+                if (value == 'edit') {
+                  onEdit();
+                } else if (value == 'delete') {
+                  onDelete();
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'edit',
+                  child: Row(
+                    children: [
+                      const Icon(Icons.edit),
+                      const Gap(12),
+                      Text(context.l10n.edit),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                PopupMenuItem(
+                  value: 'delete',
+                  child: Row(
+                    children: [
+                      const Icon(Icons.delete, color: Colors.red),
+                      const Gap(12),
+                      Text(
+                        context.l10n.delete,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

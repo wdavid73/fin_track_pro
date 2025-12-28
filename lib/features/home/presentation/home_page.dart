@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/features/home/presentation/bloc/home_bloc.dart';
@@ -43,6 +44,14 @@ class HomePage extends StatelessWidget {
   AppBar _appBar(BuildContext context) {
     return AppBar(
       title: Row(
+        children: [_logoApp(context), const Spacer(), _avatar(context)],
+      ),
+    );
+  }
+
+  Widget _logoApp(BuildContext context) {
+    return FlipInX(
+      child: Row(
         children: [
           Icon(
             Icons.account_balance_wallet_outlined,
@@ -50,16 +59,20 @@ class HomePage extends StatelessWidget {
           ),
           const Gap(8),
           Text(context.l10n.appTitle, style: context.textTheme.titleLarge),
-          const Spacer(),
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: context.colorScheme.primaryContainer,
-            child: Icon(
-              Icons.person_outline_rounded,
-              color: context.colorScheme.onPrimaryContainer,
-            ),
-          ),
         ],
+      ),
+    );
+  }
+
+  Widget _avatar(BuildContext context) {
+    return ZoomIn(
+      child: CircleAvatar(
+        radius: 20,
+        backgroundColor: context.colorScheme.primaryContainer,
+        child: Icon(
+          Icons.person_outline_rounded,
+          color: context.colorScheme.onPrimaryContainer,
+        ),
       ),
     );
   }
@@ -116,14 +129,14 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  BalanceSummary(balance: state.totalBalance),
+                  BalanceSummary(balance: state.totalBalance).fadeIn(),
                   const Gap(16),
-                  BudgetOverview(budgetData: state.budgetData),
+                  BudgetOverview(budgetData: state.budgetData).fadeIn(),
                   const Gap(16),
                   Transactions(
                     transactions: state.recentTransactions,
                     categories: state.categories,
-                  ),
+                  ).fadeIn(),
                 ],
               ),
             ),

@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/config/router/fade_indexed_stack.dart';
 import 'package:fin_track_pro/config/router/routes.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
 import 'package:fin_track_pro/core/extensions/localization_extension.dart';
@@ -33,7 +34,13 @@ class AppRoutes {
         path: RouteConstants.splash,
         builder: (context, state) => const SplashPage(),
       ),
-      StatefulShellRoute.indexedStack(
+      StatefulShellRoute(
+        navigatorContainerBuilder: (context, navigationShell, children) {
+          return FadeIndexedStack(
+            index: navigationShell.currentIndex,
+            children: children,
+          );
+        },
         builder: (context, state, navigationShell) {
           return ScaffoldWithNavBar(navigationShell: navigationShell);
         },
@@ -104,16 +111,6 @@ class ScaffoldWithNavBar extends StatelessWidget {
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: navigationShell.currentIndex,
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey,
-          selectedLabelStyle: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
           onTap: (index) {
             navigationShell.goBranch(
               index,
