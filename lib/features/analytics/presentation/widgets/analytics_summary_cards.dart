@@ -136,7 +136,7 @@ class _SummaryCard extends StatelessWidget {
             const Skeleton(width: 80, height: 20).shimmer(isLoading: true)
           else
             Text(
-              amount.toCurrencyInt(locale: context.locale.languageCode),
+              amount.toCompactCurrency(locale: context.locale.languageCode),
               style: context.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,

@@ -1,4 +1,5 @@
 import 'package:fin_track_pro/features/transactions/presentation/widgets/description_input.dart';
+import 'package:fin_track_pro/core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,6 +10,8 @@ void main() {
     String? hintText,
   }) {
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         body: DescriptionInput(
           initialValue: initialValue,

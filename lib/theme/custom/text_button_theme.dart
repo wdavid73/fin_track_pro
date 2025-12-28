@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/theme/custom/text_theme.dart';
 import 'package:flutter/material.dart';
 import '../utils/color_theme.dart';
 
@@ -8,17 +9,17 @@ import '../utils/color_theme.dart';
 /// light and dark themes.
 abstract class CustomTextButtonTheme {
   /// TextButton theme (shared for both light and dark themes)
-  static final textButtonTheme = TextButtonThemeData(
+  static TextButtonThemeData textButtonTheme = TextButtonThemeData(
     style: TextButton.styleFrom(
       padding: const EdgeInsets.symmetric(vertical: 16),
       foregroundColor: ColorTheme.textSecondary,
-      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      textStyle: CustomTextTheme.lightTextTheme.bodyMedium!,
     ),
   );
 
   /// Light theme TextButton configuration (alias)
-  static final lightTextButtonTheme = textButtonTheme;
+  static TextButtonThemeData lightTextButtonTheme = textButtonTheme;
 
   /// Dark theme TextButton configuration (alias)
-  static final darkTextButtonTheme = textButtonTheme;
+  static TextButtonThemeData darkTextButtonTheme = textButtonTheme;
 }

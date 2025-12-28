@@ -1,7 +1,5 @@
-import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
-
-import 'package:intl/intl.dart';
+import 'package:fin_track_pro/core/extensions/extensions.dart';
 
 class TransactionCard extends StatelessWidget {
   final IconData icon;
@@ -29,8 +27,6 @@ class TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat.currency(symbol: '\$');
-
     return Container(
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
@@ -91,7 +87,7 @@ class TransactionCard extends StatelessWidget {
 
                 // Monto
                 Text(
-                  '${isIncome ? '+' : '-'}${formatter.format(amount)}',
+                  '${isIncome ? '+' : '-'}${amount.toCompactCurrency(locale: context.locale.languageCode)}',
                   style: context.textTheme.titleMedium?.copyWith(
                     color: amountColor,
                     fontWeight: FontWeight.w600,

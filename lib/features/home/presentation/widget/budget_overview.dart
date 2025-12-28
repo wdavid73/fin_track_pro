@@ -165,7 +165,7 @@ class BudgetOverview extends StatelessWidget {
           const Skeleton(width: 100, height: 28).shimmer(isLoading: true)
         else
           Text(
-            '\$${budgetData?.remaining.toStringAsFixed(2) ?? '0.00'}',
+            '\$${budgetData?.remaining.toCompactCurrency(locale: context.locale.languageCode) ?? '0.00'}',
             style: context.textTheme.headlineMedium?.copyWith(
               fontSize: 24,
               fontWeight: FontWeight.bold,

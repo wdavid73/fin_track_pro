@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/theme/custom/text_theme.dart';
 import 'package:flutter/material.dart';
 import '../utils/color_theme.dart';
 import '../utils/sizes.dart';
@@ -9,45 +10,41 @@ import '../utils/sizes.dart';
 /// icon and text colors.
 abstract class CustomAppBarTheme {
   /// Light theme AppBar configuration
-  static const lightAppBarTheme = AppBarTheme(
+  static AppBarTheme lightAppBarTheme = AppBarTheme(
     elevation: 0,
     centerTitle: false,
     scrolledUnderElevation: 0,
-    backgroundColor: Colors.transparent,
+    backgroundColor: ColorTheme.light,
     surfaceTintColor: Colors.transparent,
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: ColorTheme.black,
       size: AppSizes.iconMd,
     ),
-    actionsIconTheme: IconThemeData(
+    actionsIconTheme: const IconThemeData(
       color: ColorTheme.black,
       size: AppSizes.iconMd,
     ),
-    titleTextStyle: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w600,
+    titleTextStyle: CustomTextTheme.lightTextTheme.headlineSmall!.copyWith(
       color: ColorTheme.black,
     ),
   );
 
   /// Dark theme AppBar configuration
-  static const darkAppBarTheme = AppBarTheme(
+  static AppBarTheme darkAppBarTheme = AppBarTheme(
     elevation: 0,
     centerTitle: false,
     scrolledUnderElevation: 0,
     backgroundColor: Colors.transparent,
     surfaceTintColor: Colors.transparent,
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: ColorTheme.white,
       size: AppSizes.iconMd,
     ),
-    actionsIconTheme: IconThemeData(
+    actionsIconTheme: const IconThemeData(
       color: ColorTheme.white,
       size: AppSizes.iconMd,
     ),
-    titleTextStyle: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w600,
+    titleTextStyle: CustomTextTheme.darkTextTheme.headlineSmall!.copyWith(
       color: ColorTheme.white,
     ),
   );

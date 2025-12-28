@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/theme/custom/text_theme.dart';
 import 'package:flutter/material.dart';
 import '../utils/color_theme.dart';
 import '../utils/sizes.dart';
@@ -10,7 +11,7 @@ import '../utils/sizes.dart';
 /// remains consistent across light and dark modes.
 abstract class CustomElevatedButtonTheme {
   /// Shared ElevatedButton configuration for both light and dark themes
-  static final elevatedButtonTheme = ElevatedButtonThemeData(
+  static ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       elevation: 0,
       foregroundColor: ColorTheme.textWhite,
@@ -19,7 +20,7 @@ abstract class CustomElevatedButtonTheme {
       disabledBackgroundColor: ColorTheme.buttonDisabled,
       side: const BorderSide(color: ColorTheme.primaryColor),
       padding: const EdgeInsets.symmetric(vertical: AppSizes.buttonHeight),
-      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      textStyle: CustomTextTheme.lightTextTheme.bodyMedium!,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
       ),
@@ -27,22 +28,23 @@ abstract class CustomElevatedButtonTheme {
   );
 
   /// Light theme specific configuration (if needed in the future)
-  static final lightElevatedButtonTheme = elevatedButtonTheme;
+  static ElevatedButtonThemeData lightElevatedButtonTheme = elevatedButtonTheme;
 
   /// Dark theme specific configuration (if needed in the future)
-  static final darkElevatedButtonTheme = ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      elevation: 0,
-      foregroundColor: ColorTheme.textWhite,
-      backgroundColor: ColorTheme.primaryColor,
-      disabledForegroundColor: ColorTheme.darkGrey,
-      disabledBackgroundColor: ColorTheme.buttonDisabled,
-      side: const BorderSide(color: ColorTheme.primaryColor),
-      padding: const EdgeInsets.symmetric(vertical: AppSizes.buttonHeight),
-      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
-      ),
-    ),
-  );
+  static ElevatedButtonThemeData darkElevatedButtonTheme =
+      ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          foregroundColor: ColorTheme.textWhite,
+          backgroundColor: ColorTheme.primaryColor,
+          disabledForegroundColor: ColorTheme.darkGrey,
+          disabledBackgroundColor: ColorTheme.buttonDisabled,
+          side: const BorderSide(color: ColorTheme.primaryColor),
+          padding: const EdgeInsets.symmetric(vertical: AppSizes.buttonHeight),
+          textStyle: CustomTextTheme.darkTextTheme.bodyMedium!,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
+          ),
+        ),
+      );
 }

@@ -70,16 +70,6 @@ class CategorySelector extends StatelessWidget {
                 onTap: () => onCategorySelected(category.id),
               );
             }),
-            // Add "New" button (placeholder for future implementation)
-            CategoryChip(
-              label: 'New',
-              icon: Icons.add,
-              color: context.colorScheme.onSurfaceVariant,
-              isSelected: false,
-              onTap: () {
-                // TODO: Implement add new category
-              },
-            ),
           ],
         ),
       ],

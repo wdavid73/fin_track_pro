@@ -1,4 +1,5 @@
 import 'package:fin_track_pro/core/widgets/donut_chart.dart';
+import 'package:fin_track_pro/core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -6,6 +7,9 @@ void main() {
   testWidgets('DonutChart should render with correct size', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: Locale('en'),
         home: Scaffold(
           body: DonutChart(
             totalSpent: 500,
@@ -25,12 +29,10 @@ void main() {
   testWidgets('DonutChart should display "Spent" label', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
-          body: DonutChart(
-            totalSpent: 500,
-            totalBudget: 1000,
-            segments: [],
-          ),
+          body: DonutChart(totalSpent: 500, totalBudget: 1000, segments: []),
         ),
       ),
     );
@@ -41,12 +43,10 @@ void main() {
   testWidgets('DonutChart should display total spent amount', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
-          body: DonutChart(
-            totalSpent: 500,
-            totalBudget: 1000,
-            segments: [],
-          ),
+          body: DonutChart(totalSpent: 500, totalBudget: 1000, segments: []),
         ),
       ),
     );
@@ -63,6 +63,8 @@ void main() {
 
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: DonutChart(
             totalSpent: 500,
@@ -76,16 +78,15 @@ void main() {
     expect(find.byType(DonutChart), findsOneWidget);
   });
 
-  testWidgets('DonutChart should use default size when not specified',
-      (tester) async {
+  testWidgets('DonutChart should use default size when not specified', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
-          body: DonutChart(
-            totalSpent: 500,
-            totalBudget: 1000,
-            segments: [],
-          ),
+          body: DonutChart(totalSpent: 500, totalBudget: 1000, segments: []),
         ),
       ),
     );

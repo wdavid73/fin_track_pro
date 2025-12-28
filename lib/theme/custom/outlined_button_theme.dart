@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/theme/custom/text_theme.dart';
 import 'package:flutter/material.dart';
 import '../utils/color_theme.dart';
 import '../utils/sizes.dart';
@@ -8,44 +9,38 @@ import '../utils/sizes.dart';
 /// text styles, and padding for both light and dark themes.
 abstract class CustomOutlinedButtonTheme {
   /// Light theme OutlinedButton configuration
-  static final lightOutlinedButtonTheme = OutlinedButtonThemeData(
-    style: OutlinedButton.styleFrom(
-      elevation: 0,
-      foregroundColor: ColorTheme.dark,
-      side: const BorderSide(color: ColorTheme.borderPrimary),
-      textStyle: const TextStyle(
-        fontSize: 16,
-        color: ColorTheme.black,
-        fontWeight: FontWeight.w600,
-      ),
-      padding: const EdgeInsets.symmetric(
-        vertical: AppSizes.buttonHeight,
-        horizontal: 20,
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
-      ),
-    ),
-  );
+  static OutlinedButtonThemeData lightOutlinedButtonTheme =
+      OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          elevation: 0,
+          foregroundColor: ColorTheme.dark,
+          side: const BorderSide(color: ColorTheme.borderPrimary),
+          textStyle: CustomTextTheme.lightTextTheme.bodyMedium!,
+          padding: const EdgeInsets.symmetric(
+            vertical: AppSizes.buttonHeight,
+            horizontal: 20,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
+          ),
+        ),
+      );
 
   /// Dark theme OutlinedButton configuration
-  static final darkOutlinedButtonTheme = OutlinedButtonThemeData(
-    style: OutlinedButton.styleFrom(
-      elevation: 0,
-      foregroundColor: ColorTheme.light,
-      side: const BorderSide(color: ColorTheme.borderPrimary),
-      textStyle: const TextStyle(
-        fontSize: 16,
-        color: ColorTheme.textWhite,
-        fontWeight: FontWeight.w600,
-      ),
-      padding: const EdgeInsets.symmetric(
-        vertical: AppSizes.buttonHeight,
-        horizontal: 20,
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
-      ),
-    ),
-  );
+  static OutlinedButtonThemeData darkOutlinedButtonTheme =
+      OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          elevation: 0,
+          foregroundColor: ColorTheme.light,
+          side: const BorderSide(color: ColorTheme.borderPrimary),
+          textStyle: CustomTextTheme.darkTextTheme.bodyMedium!,
+          padding: const EdgeInsets.symmetric(
+            vertical: AppSizes.buttonHeight,
+            horizontal: 20,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
+          ),
+        ),
+      );
 }

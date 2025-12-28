@@ -1,12 +1,16 @@
 import 'package:fin_track_pro/core/widgets/budget_category_item.dart';
+import 'package:fin_track_pro/core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('BudgetCategoryItem should display category name',
-      (tester) async {
+  testWidgets('BudgetCategoryItem should display category name', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: BudgetCategoryItem(
             color: Colors.red,
@@ -21,10 +25,13 @@ void main() {
     expect(find.text('Food'), findsOneWidget);
   });
 
-  testWidgets('BudgetCategoryItem should display spent and budget amounts',
-      (tester) async {
+  testWidgets('BudgetCategoryItem should display spent and budget amounts', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: BudgetCategoryItem(
             color: Colors.red,
@@ -40,10 +47,13 @@ void main() {
     expect(find.text('\$150 / \$500'), findsOneWidget);
   });
 
-  testWidgets('BudgetCategoryItem should render color indicator',
-      (tester) async {
+  testWidgets('BudgetCategoryItem should render color indicator', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: BudgetCategoryItem(
             color: Colors.blue,
@@ -67,10 +77,13 @@ void main() {
     expect(decoration.shape, BoxShape.circle);
   });
 
-  testWidgets('BudgetCategoryItem should format large amounts correctly',
-      (tester) async {
+  testWidgets('BudgetCategoryItem should format large amounts correctly', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: BudgetCategoryItem(
             color: Colors.green,
@@ -88,6 +101,8 @@ void main() {
   testWidgets('BudgetCategoryItem should handle zero values', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: BudgetCategoryItem(
             color: Colors.orange,
@@ -102,10 +117,11 @@ void main() {
     expect(find.text('\$0 / \$100'), findsOneWidget);
   });
 
-  testWidgets('BudgetCategoryItem should have correct padding',
-      (tester) async {
+  testWidgets('BudgetCategoryItem should have correct padding', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: BudgetCategoryItem(
             color: Colors.red,
@@ -118,16 +134,16 @@ void main() {
     );
 
     final padding = tester.widget<Padding>(find.byType(Padding).first);
-    expect(
-      padding.padding,
-      const EdgeInsets.symmetric(vertical: 8.0),
-    );
+    expect(padding.padding, const EdgeInsets.symmetric(vertical: 8.0));
   });
 
-  testWidgets('BudgetCategoryItem color indicator should have correct size',
-      (tester) async {
+  testWidgets('BudgetCategoryItem color indicator should have correct size', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: BudgetCategoryItem(
             color: Colors.purple,

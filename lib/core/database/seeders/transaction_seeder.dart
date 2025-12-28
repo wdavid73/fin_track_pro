@@ -87,7 +87,9 @@ class TransactionSeeder extends Seeder {
         transactions.add(
           TransactionModel(
             id: _uuid.v4(),
-            amount: 3000.0 + _random.nextDouble() * 2000.0, // 3000-5000
+            amount:
+                3000000.0 +
+                _random.nextDouble() * 3000000.0, // 3,000,000 - 6,000,000
             categoryId: category.id,
             type: 'income',
             note: 'Pago quincenal',
@@ -106,7 +108,9 @@ class TransactionSeeder extends Seeder {
         transactions.add(
           TransactionModel(
             id: _uuid.v4(),
-            amount: 500.0 + _random.nextDouble() * 1500.0, // 500-2000
+            amount:
+                500000.0 +
+                _random.nextDouble() * 1500000.0, // 500,000 - 2,000,000
             categoryId: freelanceCategory.id,
             type: 'income',
             note: 'Proyecto freelance',
@@ -132,23 +136,24 @@ class TransactionSeeder extends Seeder {
   double _generateExpenseAmount(String categoryName) {
     switch (categoryName) {
       case 'Alimentación':
-        return 10.0 + _random.nextDouble() * 90.0; // 10-100
+        return 20000.0 + _random.nextDouble() * 130000.0; // 20,000 - 150,000
       case 'Transporte':
-        return 5.0 + _random.nextDouble() * 45.0; // 5-50
+        return 5000.0 + _random.nextDouble() * 45000.0; // 5,000 - 50,000
       case 'Vivienda':
-        return 500.0 + _random.nextDouble() * 1500.0; // 500-2000
+        return 100000.0 + _random.nextDouble() * 400000.0; // 100,000 - 500,000
       case 'Entretenimiento':
-        return 20.0 + _random.nextDouble() * 180.0; // 20-200
+        return 30000.0 + _random.nextDouble() * 270000.0; // 30,000 - 300,000
       case 'Salud':
-        return 30.0 + _random.nextDouble() * 470.0; // 30-500
+        return 50000.0 + _random.nextDouble() * 450000.0; // 50,000 - 500,000
       case 'Educación':
-        return 50.0 + _random.nextDouble() * 450.0; // 50-500
+        return 100000.0 +
+            _random.nextDouble() * 900000.0; // 100,000 - 1,000,000
       case 'Compras':
-        return 15.0 + _random.nextDouble() * 285.0; // 15-300
+        return 50000.0 + _random.nextDouble() * 450000.0; // 50,000 - 500,000
       case 'Servicios':
-        return 20.0 + _random.nextDouble() * 180.0; // 20-200
+        return 50000.0 + _random.nextDouble() * 250000.0; // 50,000 - 300,000
       default:
-        return 10.0 + _random.nextDouble() * 90.0; // 10-100
+        return 20000.0 + _random.nextDouble() * 80000.0; // 20,000 - 100,000
     }
   }
 

@@ -160,7 +160,7 @@ class _CategoryItem extends StatelessWidget {
             ),
           ),
           Text(
-            '-${amount.toCurrencyInt(locale: context.locale.languageCode)}',
+            '-${amount.toCompactCurrency(locale: context.locale.languageCode)}',
             style: context.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: 16,

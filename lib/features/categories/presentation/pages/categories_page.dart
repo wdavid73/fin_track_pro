@@ -6,7 +6,6 @@ import 'package:fin_track_pro/features/categories/presentation/pages/category_fo
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 
 class CategoriesPage extends StatelessWidget {
   const CategoriesPage({super.key});
@@ -29,11 +28,6 @@ class _CategoryBodyState extends State<_CategoryBody> {
   void initState() {
     super.initState();
     context.read<CategoryBloc>().add(LoadCategoryStatsEvent());
-  }
-
-  String _formatAmount(double amount) {
-    final formatter = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
-    return formatter.format(amount);
   }
 
   void _showCategoryForm(BuildContext context, {Category? category}) {
@@ -116,7 +110,9 @@ class _CategoryBodyState extends State<_CategoryBody> {
                     return _CategoryCard(
                       category: stats.category,
                       transactionCount: stats.transactionCount,
-                      amount: _formatAmount(stats.totalAmount),
+                      amount: stats.totalAmount.toCompactCurrency(
+                        locale: context.locale.languageCode,
+                      ),
                       onEdit: () =>
                           _showCategoryForm(context, category: stats.category),
                       onDelete: () =>

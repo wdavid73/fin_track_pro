@@ -1,4 +1,5 @@
 import 'package:fin_track_pro/features/transactions/presentation/widgets/transaction_type_toggle.dart';
+import 'package:fin_track_pro/core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,6 +9,8 @@ void main() {
     required ValueChanged<String> onTypeChanged,
   }) {
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         body: TransactionTypeToggle(
           selectedType: selectedType,

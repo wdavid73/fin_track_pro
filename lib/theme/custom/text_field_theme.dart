@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/theme/custom/text_theme.dart';
 import 'package:flutter/material.dart';
 import '../utils/color_theme.dart';
 import '../utils/sizes.dart';
@@ -12,16 +13,18 @@ abstract class CustomTextFormFieldTheme {
     errorMaxLines: 3,
     prefixIconColor: ColorTheme.darkGrey,
     suffixIconColor: ColorTheme.darkGrey,
-    labelStyle: const TextStyle().copyWith(
+    labelStyle: CustomTextTheme.lightTextTheme.bodyMedium!.copyWith(
       fontSize: AppSizes.fontSizeMd,
       color: ColorTheme.black,
     ),
-    hintStyle: const TextStyle().copyWith(
+    hintStyle: CustomTextTheme.lightTextTheme.bodyMedium!.copyWith(
       fontSize: AppSizes.fontSizeSm,
       color: ColorTheme.black,
     ),
-    errorStyle: const TextStyle().copyWith(fontSize: AppSizes.fontSizeSm),
-    floatingLabelStyle: const TextStyle().copyWith(
+    errorStyle: CustomTextTheme.lightTextTheme.bodyMedium!.copyWith(
+      fontSize: AppSizes.fontSizeSm,
+    ),
+    floatingLabelStyle: CustomTextTheme.lightTextTheme.bodyMedium!.copyWith(
       color: ColorTheme.black.withValues(alpha: 0.8),
     ),
     border: const OutlineInputBorder().copyWith(
@@ -51,16 +54,18 @@ abstract class CustomTextFormFieldTheme {
     errorMaxLines: 2,
     prefixIconColor: ColorTheme.darkGrey,
     suffixIconColor: ColorTheme.darkGrey,
-    labelStyle: const TextStyle().copyWith(
+    labelStyle: CustomTextTheme.darkTextTheme.bodyMedium!.copyWith(
       fontSize: AppSizes.fontSizeMd,
       color: ColorTheme.white,
     ),
-    hintStyle: const TextStyle().copyWith(
+    hintStyle: CustomTextTheme.darkTextTheme.bodyMedium!.copyWith(
       fontSize: AppSizes.fontSizeSm,
       color: ColorTheme.white,
     ),
-    errorStyle: const TextStyle().copyWith(fontSize: AppSizes.fontSizeSm),
-    floatingLabelStyle: const TextStyle().copyWith(
+    errorStyle: CustomTextTheme.darkTextTheme.bodyMedium!.copyWith(
+      fontSize: AppSizes.fontSizeSm,
+    ),
+    floatingLabelStyle: CustomTextTheme.darkTextTheme.bodyMedium!.copyWith(
       color: ColorTheme.white.withValues(alpha: 0.8),
     ),
     border: const OutlineInputBorder().copyWith(

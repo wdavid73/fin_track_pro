@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:fin_track_pro/core/l10n/app_localizations.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/transaction.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart';
@@ -44,7 +45,11 @@ void main() {
   });
 
   Widget createWidgetUnderTest() {
-    return const MaterialApp(home: AllTransactionsPage());
+    return const MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: AllTransactionsPage(),
+    );
   }
 
   final tTransactions = [
@@ -116,9 +121,7 @@ void main() {
 
     testWidgets('renders error state correctly', (tester) async {
       const errorMessage = 'Failed to load transactions';
-      when(
-        () => mockTransactionBloc.state,
-      ).thenReturn(
+      when(() => mockTransactionBloc.state).thenReturn(
         const TransactionState(
           status: TransactionStatus.error,
           errorMessage: errorMessage,
@@ -134,9 +137,7 @@ void main() {
 
     testWidgets('triggers LoadPaginatedTransactions on retry', (tester) async {
       const errorMessage = 'Failed to load transactions';
-      when(
-        () => mockTransactionBloc.state,
-      ).thenReturn(
+      when(() => mockTransactionBloc.state).thenReturn(
         const TransactionState(
           status: TransactionStatus.error,
           errorMessage: errorMessage,

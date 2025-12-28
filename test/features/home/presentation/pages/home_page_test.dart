@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:fin_track_pro/core/l10n/app_localizations.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
 import 'package:fin_track_pro/features/home/presentation/bloc/home_bloc.dart';
@@ -57,7 +58,11 @@ void main() {
   });
 
   Widget createWidgetUnderTest() {
-    return const MaterialApp(home: HomePage());
+    return const MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: HomePage(),
+    );
   }
 
   final tTransactions = [
