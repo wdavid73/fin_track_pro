@@ -385,20 +385,30 @@
 - [ ] Record demo video (Next)
 
 #### ✅ Completed
-- ✅ Implemented animations across the app
-- ✅ Improved overall user experience with smooth transitions
+- ✅ **Staggered List Animations**: Implemented cascading entrance in `AllTransactionsPage` using `animate_do`
+- ✅ **OpenContainer Transform**: FAB expansion animation in `HomePage` and `CategoriesPage` using `animations` package
+- ✅ **Shared Axis Transitions**: Horizontal page transitions for navigation using `go_router` + `animations`
+- ✅ **Hero Animations**: Icon "flight" from transaction cards to detail modal with custom `PageRouteBuilder`
+- ✅ Fixed modal transparency issues with `rootNavigator` approach
+- ✅ Created `docs/ANIMATION_PLAN.md` documenting implementation strategy
 
 #### 📝 Notes & Learnings
-- Animations make the app feel much more premium and responsive.
-- `flutter_animate` or custom animations (depending on implementation) add great value with low effort.
+- `showModalBottomSheet` conflicts with Hero animations; solved with custom transparent `PageRouteBuilder`
+- Material Design 3 motion patterns significantly elevate perceived quality
+- `OpenContainer` creates seamless parent-child navigation relationships
+- Hero widgets require `Material` wrapper for proper rendering during flight
+- Staggered animations with 50ms delays create organic, premium feel
 
 #### 🚧 Challenges & Blockers
-- Balancing performance with visual richness.
+- Initial Hero animation not working due to `ModalBottomSheet` route limitations
+- Solved by replacing with custom `PageRouteBuilder` maintaining sheet-like UX
+- Background transparency required `rootNavigator: true` for nested navigation contexts
 
 #### 📊 Metrics
-- Test Coverage: Maintained
-- Commits: ~1-2
-- Files Changed: UI widgets
+- Test Coverage: Maintained at ~37%
+- Commits: 1 (💄 add animations pt3)
+- Files Changed: 12 files (UI widgets, router, modals)
+- New Dependencies: `animations` package added
 
 #### ⏭️ Next Weekend
 - Record demo video
