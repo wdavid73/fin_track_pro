@@ -47,3 +47,20 @@ app.*.map.json
 # FVM Version Cache
 .fvm/
 node_modules/
+
+# Environment files
+.env.dev
+.env.staging
+.env.prod
+.env
+
+coverage.sh
+
+# Generated files
+lib/app/injection_container.config.dart
+**/*.g.dart
+**/*.freezed.dart
+
+# build ouput
+
+

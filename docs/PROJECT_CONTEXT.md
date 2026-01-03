@@ -184,6 +184,45 @@ features/
 - Strong typing and compile-time checks
 - Great for learning backend development
 
+**Why Hive instead of Drift?**
+
+*Decision Made:* Weekend 1 (Nov 2025)
+
+During Phase 0 implementation, a strategic decision was made to use **Hive** instead of the originally planned **Drift** for local persistence. This decision was based on both technical and practical considerations:
+
+**Comparison Table:**
+
+| Aspect | Hive | Drift |
+|--------|------|-------|
+| **Type** | NoSQL (key-value) | SQL (relational) |
+| **Setup Complexity** | Simple | Moderate |
+| **Learning Curve** | Low | Medium |
+| **Performance** | Excellent (in-memory) | Very Good |
+| **Type Safety** | Good (with adapters) | Excellent (compile-time) |
+| **Queries** | Key-based, filtering | Complex SQL queries |
+| **Code Generation** | Minimal | Required for tables |
+| **Migration** | Simple | Requires planning |
+| **Best For** | Simple data models | Complex relationships |
+| **Developer Experience** | Fast iteration | More structured |
+
+**Technical Rationale:**
+- **MVP Speed:** Hive allows faster iteration for Phase 0 MVP with simpler setup
+- **Data Model Fit:** FinTrack Pro's data model (transactions, categories, budgets) works well with key-value storage
+- **Performance:** Hive's in-memory caching provides excellent read performance for frequent queries
+- **Code Generation:** Less boilerplate compared to Drift's table definitions
+- **Flexibility:** Easy to add/modify fields without complex migrations
+
+**Personal Context:**
+This was also a personal decision - I had previously worked with Hive in other projects and felt more comfortable with its API and patterns. This familiarity allowed me to focus on implementing Clean Architecture and business logic rather than learning a new database abstraction during the critical MVP phase.
+
+**Future Considerations:**
+- Hive is suitable for Phase 0-2
+- May revisit for Phase 3 when implementing custom Go backend
+- If complex queries become necessary, migration to Drift or direct SQL is possible
+- The Clean Architecture's repository pattern makes this transition straightforward
+
+**Decision Status:** ✅ Validated - Working well for MVP needs
+
 ### Testing Strategy
 
 **Test Pyramid:**
@@ -218,13 +257,13 @@ features/
 - Balance tracking
 - Basic analytics with charts
 - Clean Architecture setup
-- Local persistence with Drift
+- Local persistence with Hive *(changed from Drift - see Technical Strategy)*
 - Material Design 3 UI
 
 **Learning Focus:**
 - Clean Architecture implementation
 - BLoC pattern mastery
-- Drift database
+- Hive database *(local key-value storage)*
 - fl_chart for visualizations
 
 **Demo Video:** 3-minute MVP showcase
@@ -285,6 +324,7 @@ features/
 **Content Creation:**
 - Article: "Implementing Offline-First Architecture in Flutter"
 - Article: "Building a Monorepo with Melos"
+- Article: "Hive to Firestore: Local-First to Cloud Sync Migration" *(updated)*
 - Video: "Firebase Integration Best Practices"
 
 ---
@@ -741,7 +781,7 @@ features/
 1. "Building FinTrack Pro: Clean Architecture in Flutter" (Phase 0)
 2. "Complete CI/CD Pipeline for Flutter Apps" (Phase 1)
 3. "Testing Strategy for Production Apps" (Phase 1)
-4. "Offline-First Architecture with Drift" (Phase 2)
+4. "Hive vs Drift: Choosing the Right Local Database" (Phase 2) *(updated)*
 5. "Managing a Flutter Monorepo with Melos" (Phase 2)
 6. "Building a Go Backend for Flutter" (Phase 3)
 7. "Real-time Features with WebSocket" (Phase 3)
@@ -823,14 +863,17 @@ features/
 
 ## Document Control
 
-**Document Version:** 1.0  
-**Last Updated:** November 2024  
-**Status:** ✅ Planning Complete - Ready to Start  
-**Next Action:** Create GitHub repository (Weekend 1, Task 0.1.1)
+**Document Version:** 1.1
+**Last Updated:** December 2025
+**Status:** 🚧 In Progress - Phase 0 MVP (~60% complete)
+**Next Action:** Weekend 3 - Transaction Edit & Analytics
 
 **Change Log:**
 - 2024-11-XX: Initial document creation
-- [Future updates will be tracked here]
+- 2025-11-23: Project started - Weekend 1 completed
+- 2025-12-06: Updated with Hive vs Drift decision rationale
+- 2025-12-06: Updated Phase 0 progress status (~60% complete)
+- 2025-12-06: Updated tech stack to reflect actual implementation (Hive)
 
 ---
 

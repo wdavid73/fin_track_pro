@@ -6,6 +6,9 @@
 ![Dart Version](https://img.shields.io/badge/Dart-3.5+-0175C2?logo=dart)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
+![Phase](https://img.shields.io/badge/Phase-0%20MVP%20(60%25)-blue)
+![Test Coverage](https://img.shields.io/badge/Coverage-70.5%25-green)
+![Commits](https://img.shields.io/badge/Commits-15-brightgreen)
 
 **A comprehensive personal finance management application built with Flutter**
 
@@ -19,6 +22,8 @@
 
 **FinTrack Pro** is a professional-grade mobile application for personal finance management, designed to demonstrate advanced Flutter development skills and modern software architecture. This project showcases Clean Architecture, comprehensive testing, CI/CD pipelines, and a custom Go backend.
 
+> **Current Progress:** Phase 0 MVP (~60% complete) | ~3 weekends invested | 15 commits | 6,022 LOC
+
 ### 🎯 Project Goals
 
 - 🏗️ Demonstrate mastery of Flutter and advanced architectures (Clean Architecture, Feature-First, MVVM)
@@ -26,6 +31,16 @@
 - 🚀 Implement complete CI/CD pipelines and DevOps practices
 - 🎓 Serve as a portfolio piece for senior/staff engineering positions
 - 📱 Deploy to App Store and Google Play with real users
+
+### 📊 Quick Stats
+
+| Metric | Current | Target |
+|--------|---------|--------|
+| Phase | Phase 0 (60%) | Phase 4 Complete |
+| Weekends | ~3 | 131 total |
+| Test Coverage | 70.5% | >80% |
+| LOC | 6,022 | - |
+| Features | 3/6 core | All complete |
 
 ## ✨ Features
 
@@ -70,14 +85,16 @@
 ## 🛠 Tech Stack
 
 ### Frontend
-- **Framework:** Flutter 3.38+ / Dart 3.10+
-- **State Management:** BLoC 8.x, Riverpod
+- **Framework:** Flutter 3.24+ / Dart 3.10+
+- **State Management:** BLoC (flutter_bloc 9.1.1)
 - **Architecture:** Clean Architecture, Feature-First, MVVM
-- **Local Database:** Drift (SQLite)
-- **Navigation:** go_router
-- **Code Generation:** injectable, build_runner
-- **Testing:** bloc_test, Mockito, Patrol, Golden tests
-- **UI:** Material Design 3, fl_chart
+- **Local Database:** Hive 2.2.3 (NoSQL, key-value)
+- **Navigation:** go_router 17.0.0
+- **Dependency Injection:** get_it 9.1.0 + injectable 2.6.0
+- **Code Generation:** injectable_generator, build_runner, hive_generator
+- **Testing:** bloc_test 10.0.0, mocktail 1.0.4
+- **UI:** Material Design 3, fl_chart 0.69.0, shimmer 3.0.0
+- **Forms:** formz 0.8.0
 
 ### Backend
 - **Language:** Go 1.21+
@@ -139,16 +156,17 @@ flutter run
 ### Running Tests
 
 ```bash
-# Unit tests
-flutter test
+# Run all tests
+fvm flutter test
 
-# Integration tests
-flutter test integration_test/
+# Run tests with coverage (recommended)
+./coverage.sh
 
-# Coverage report
-flutter test --coverage
-genhtml coverage/lcov.info -o coverage/html
+# View coverage report
+open coverage/html/index.html
 ```
+
+📖 **For detailed testing documentation, see [TESTING.md](TESTING.md)**
 
 ## 📂 Project Structure
 
@@ -188,10 +206,19 @@ See [ROADMAP.md](docs/ROADMAP.md) for detailed timeline.
 
 ## 📊 Project Metrics
 
-- **Test Coverage:** Target >80%
-- **Code Quality:** Following Clean Architecture principles
-- **Performance:** <2s cold start time
-- **App Size:** Target <2MB
+- **Test Coverage:** 70.5% (Target: >80%) 📈
+  - Models: 100% ✅
+  - Datasources: 100% ✅
+  - Use Cases: 100% ✅
+  - BLoCs: 100% ✅
+  - Core Widgets: 100% ✅
+- **Code Quality:** Following Clean Architecture principles ✅
+- **Commits:** 15 with conventional commits (gitmoji)
+- **Performance:** <2s cold start time (TBD)
+- **App Size:** Target <2MB (TBD)
+- **CI/CD:** GitHub Actions configured ✅
+
+**Detailed Metrics:** See [docs/METRICS.md](docs/METRICS.md) for comprehensive dashboard
 
 ## 🤝 Contributing
 

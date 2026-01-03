@@ -26,147 +26,316 @@
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Weekends Completed | 0 | 131 |
-| Hours Invested | 0 | 1,040 |
-| Current Phase | Phase 0 | Phase 4 |
-| Test Coverage | 0% | >80% |
-| Features Complete | 0 | All |
+| Weekends Completed | 5 | 14 |
+| Hours Invested | ~40-50h | 1,040 |
+| Current Phase | Phase 0 (~95%) | Phase 4 |
+| Test Coverage | ~35% | >80% |
+| Features Complete | 6/7 at 75%+ | All |
 | Articles Published | 0 | 8+ |
 | Videos Created | 0 | 6+ |
+
+**Last Updated:** 2025-12-24
 
 ---
 
 ## Phase 0: MVP Foundation (Weekends 1-14)
 
-### Weekend 1 - Project Setup
+### Weekend 1 - Project Setup & Foundation
 
-**Date:** [YYYY-MM-DD]  
-**Planned Hours:** 8h  
-**Actual Hours:** _h  
+**Date:** 2025-11-23 to 2025-11-24
+**Planned Hours:** 8h
+**Actual Hours:** ~12-16h (intense setup period)
 **Phase:** 0 (MVP)
 
 #### 🎯 Goals
-- [ ] Create GitHub repository
-- [ ] Initialize Flutter project with FVM
-- [ ] Setup project structure (feature-first)
-- [ ] Configure analysis_options.yaml
-- [ ] Setup basic CI/CD (GitHub Actions)
+- [x] Create GitHub repository
+- [x] Initialize Flutter project
+- [x] Setup project structure (feature-first)
+- [x] Configure analysis_options.yaml
+- [x] Setup basic CI/CD (GitHub Actions)
 
 #### ✅ Completed
-- 
+- ✅ Project initialized with commitizen configuration
+- ✅ Feature-first folder structure implemented
+- ✅ Dependency injection setup (get_it + injectable)
+- ✅ Hive local database configured
+- ✅ Flutter flavors (dev, staging, prod)
+- ✅ GitHub Actions CI for PR testing
+- ✅ Material Design 3 theme configuration
+- ✅ Initial libraries added (flutter_bloc, go_router, dio, etc.)
+- ✅ Transaction domain layer (entities, use cases, repositories)
+- ✅ Transaction data layer (models, datasources)
+- ✅ Basic testing setup with 6 test files
+
+**Commits:** ~10 commits
+- 🎉 Init project with commitizen
+- 🎨 Add initial libraries
+- ⚡️ Implement get_it + injectable
+- 🎨 Add flavors dev, staging, prod
+- ✨ Hive setup successfully
+- ✨ Add usecase, repositories, datasource and testing
+- 👷 Add CI to launch test when create PR to develop
+- 💄 App base theme configuration
 
 #### 📝 Notes & Learnings
-- 
+- **Hive vs Drift:** Decided to use Hive instead of planned Drift for simpler setup and better DX in MVP phase
+- **Injectable:** Massive time saver for dependency injection, auto-generates code
+- **Flavors:** Setting up early makes environment management much easier
+- **Clean Architecture:** Feature-first structure with domain/data/presentation layers working well
+- **Commitizen:** Enforces consistent commit messages with gitmoji
 
 #### 🚧 Challenges & Blockers
-- 
+- Initial setup took longer than expected (~12-16h vs 8h planned)
+- Injectable configuration required learning curve
+- Hive type adapters needed code generation understanding
+- Flavors setup for iOS more complex than Android
 
 #### 📊 Metrics
-- Test Coverage: _%
-- Commits: _
-- Files Changed: _
+- Test Coverage: ~15% (6 test files for transactions)
+- Commits: 10
+- Files Changed: ~70+ files created
+- Dart Files: ~60
+- Lines of Code: ~3,000
 
 #### ⏭️ Next Weekend
-- 
+- Start building UI for transactions
+- Implement home page design
+- Add budget overview feature
+- Create category management
 
 ---
 
-### Weekend 2 - Core Architecture
+### Weekend 2 - UI Development & Home Page
 
-**Date:** [YYYY-MM-DD]  
-**Planned Hours:** 8h  
-**Actual Hours:** _h  
+**Date:** 2025-11-29 to 2025-11-30
+**Planned Hours:** 8h
+**Actual Hours:** ~8-12h
 **Phase:** 0 (MVP)
 
 #### 🎯 Goals
-- [ ] Setup dependency injection (GetIt/Injectable)
-- [ ] Implement core network layer
-- [ ] Configure Drift database
-- [ ] Setup navigation (Auto Route)
-- [ ] Create basic app theme (Material Design 3)
+- [x] Build home page design
+- [x] Create transaction UI components
+- [x] Add budget overview chart
+- [x] Implement shimmer loading effects
+- [ ] Complete transaction CRUD UI (partially done)
 
 #### ✅ Completed
-- 
+- ✅ Home page design with Material Design 3
+- ✅ Balance summary widget with shimmer
+- ✅ Transaction card component
+- ✅ Budget overview chart using fl_chart
+- ✅ Budget data loading from Hive
+- ✅ Transaction shimmer loading states
+- ✅ Budget overview shimmer
+- ✅ Add transaction page created
+- ✅ All transactions page (pagination ready)
+- ✅ Remove transaction functionality
+- ✅ Category selector widget
+- ✅ Amount input widget
+- ✅ Date selector widget
+- ✅ Transaction type toggle (income/expense)
+
+**Commits:** ~5 commits
+- 🚧 Working in home page
+- 🎨 Home page design
+- ✨ Load budget overview chart from hive and add shimmer
+- ✨ Page to add transaction
+- ✨ Add remove transaction and page all transaction
 
 #### 📝 Notes & Learnings
-- 
+- **fl_chart:** Great library for charts, but requires understanding of data structure
+- **Shimmer:** Adds professional polish to loading states
+- **Budget Data:** Successfully integrated budget tracking with Hive
+- **Pagination:** Prepared infrastructure for large transaction lists
+- **Material Design 3:** Consistent theming makes UI development faster
+- **Widget Composition:** Reusable widgets (CategorySelector, AmountInput) speed up development
 
 #### 🚧 Challenges & Blockers
-- 
+- Budget chart data structure required multiple iterations
+- Hive async operations needed careful state management
+- Transaction edit UI not completed (create works, edit pending)
+- Category management UI still basic
 
 #### 📊 Metrics
-- Test Coverage: _%
-- Commits: _
-- Files Changed: _
+- Test Coverage: ~15-20% (no new tests added - RISK!)
+- Commits: 5
+- Files Changed: ~40+
+- New Widgets: ~10 presentation widgets
+- Lines of Code: ~6,022 total
 
 #### ⏭️ Next Weekend
-- 
+- Complete transaction edit functionality
+- Add transaction filters and search
+- Implement category CRUD UI
+- Write widget tests for new components
+- Add analytics charts (expense by category)
 
 ---
 
-### Weekend 3 - Transaction Feature (Part 1)
+### Weekend 3 - Analytics, Documentation & Categories
 
-**Date:** [YYYY-MM-DD]  
-**Planned Hours:** 8h  
-**Actual Hours:** _h  
-**Phase:** 0 (MVP)
+ **Date:** 2025-12-06 to 2025-12-08
+ **Planned Hours:** 8h
+ **Actual Hours:** ~12h (extended to complete categories)
+ **Phase:** 0 (MVP)
 
-#### 🎯 Goals
-- [ ] Create Transaction entity (domain layer)
-- [ ] Implement Transaction repository interface
-- [ ] Create local data source (Drift)
-- [ ] Implement repository implementation
-- [ ] Add use cases (CreateTransaction, GetTransactions)
+ #### 🎯 Goals
+ - [x] Implement Analytics Page
+ - [x] Create Analytics Domain Layer (Entities, UseCases)
+ - [x] Create Analytics Presentation Layer (BLoC, Widgets)
+ - [x] Create reusable chart widgets (Donut, Bar)
+ - [x] Create documentation (ADR, METRICS, CURRENT_STATUS)
+ - [x] **BONUS:** Complete Categories feature with full tests
+ - [x] **BONUS:** Design Settings page UI
 
-#### ✅ Completed
-- 
+ #### 🎒 Preparation Needed
+ - [x] Review fl_chart documentation for pie charts
+ - [x] Study bloc_test for widget testing patterns
+ - [x] Plan analytics data queries
+ - [x] Design filter UI mockups
 
-#### 📝 Notes & Learnings
-- 
+ #### 📋 Detailed Tasks
 
-#### 🚧 Challenges & Blockers
-- 
+ **Saturday (6 hours):**
+ 1. Analytics Implementation (4h)
+    - Created `AnalyticsPeriod` enum and `AnalyticsData` entity
+    - Implemented `GetAnalyticsData` use case with calculations
+    - Created `AnalyticsBloc` with events and states
+    - Built 5 custom widgets: `TimePeriodSelector`, `AnalyticsSummaryCards`, `SpendingByCategoryChart`, `IncomeVsExpenseChart`, `TopSpendingCategories`
+    - Integrated everything into `AnalyticsPage`
 
-#### 📊 Metrics
-- Test Coverage: _%
-- Commits: _
-- Files Changed: _
+ 2. Documentation (2h)
+    - Created `ADR.md` for architectural decisions
+    - Created `METRICS.md` for project tracking
+    - Created `CURRENT_STATUS.md` for quick reference
+    - Updated `WEEKLY_LOG.md`
 
-#### ⏭️ Next Weekend
-- 
+ **Sunday (6 hours):**
+ 3. Categories Feature (4h)
+    - Implemented 6 use cases: Create, Update, Delete, Get, Search, GetStats
+    - Created `CategoryStats` entity for analytics
+    - Built `CategoryBloc` with full state management
+    - Designed category management page UI
+    - Added comprehensive tests (10 test files)
+    - Icon helper utility for category icons
+
+ 4. Settings & Polish (2h)
+    - Designed Settings page UI (Material Design 3)
+    - Added navigation to settings
+    - Polished existing features
+
+ #### ✅ Completed
+ - ✅ Full Analytics feature implemented (95% complete)
+ - ✅ 5 new reusable analytics widgets
+ - ✅ Currency formatting extension with locale support
+ - ✅ Comprehensive documentation suite (ADR, METRICS, CURRENT_STATUS)
+ - ✅ `fl_chart` integration for complex charts
+ - ✅ **Categories feature 90% complete** (10 tests!)
+ - ✅ **Settings UI designed** (60% complete)
+ - ✅ **Test count jumped from ~13 to 52 tests!**
+
+ #### 📝 Notes & Learnings
+ - **fl_chart:** Powerful but verbose. Creating wrapper widgets was a good decision.
+ - **Extensions:** `CurrencyFormatter` extension makes price formatting consistent and cleaner.
+ - **Documentation:** Creating structured docs (ADR, Metrics) helps visualize progress and debt.
+ - **BLoC:** Reusing `TransactionBloc` updates to trigger `AnalyticsBloc` refresh works great.
+ - **Testing Momentum:** Adding tests becomes easier with established patterns. 52 tests is huge!
+ - **Clean Architecture:** Domain-first approach made Categories implementation very fast.
+
+ #### 🚧 Challenges & Blockers
+ - Handling `NaN` in percentage calculations when income is 0.
+ - Deprecated `withOpacity` in Flutter 3.27 required migration to `withValues`.
+ - Chart data preparation logic belongs in Domain layer to keep UI clean.
+ - Balancing feature implementation vs testing - chose to do both simultaneously.
+
+ #### 📊 Metrics
+ - Test Coverage: ~35% (MAJOR improvement from 20%!)
+ - Test Files: 52 (from ~13!)
+ - Commits: ~5-7
+ - Files Changed: ~30+
+ - New Widgets: 10+ (Analytics + Categories)
+ - Lines of Code: 9,176 total
+
+ #### ⏭️ Next Weekend
+ - Implement Settings backend (domain, data, BLoC)
+ - Theme switching functionality
+ - Currency selection with persistence
+ - UI polish and animations
+ - Error handling improvements
+ - Optional: Transaction edit UI
 
 ---
 
-### Weekend 4 - Transaction Feature (Part 2)
 
-**Date:** [YYYY-MM-DD]  
-**Planned Hours:** 8h  
-**Actual Hours:** _h  
-**Phase:** 0 (MVP)
+---
 
-#### 🎯 Goals
-- [ ] Create Transaction BLoC
-- [ ] Implement Transaction states
-- [ ] Build Transaction list screen
-- [ ] Create Transaction form (add/edit)
-- [ ] Add basic validation
+### Weekend 5 - Settings & Internationalization
 
-#### ✅ Completed
-- 
+ **Date:** 2025-12-24
+ **Planned Hours:** 8h
+ **Actual Hours:** ~10h
+ **Phase:** 0 (MVP)
 
-#### 📝 Notes & Learnings
-- 
+ #### 🎯 Goals
+ - [x] Implement Settings Backend (Domain, Data, BLoC)
+ - [x] Implement Theme Switching (Light/Dark/System)
+ - [x] Implement Internationalization (i18n)
+ - [x] Migrate all hardcoded strings to ARB files
+ - [x] Persist settings with Hive
 
-#### 🚧 Challenges & Blockers
-- 
+ #### 🎒 Preparation Needed
+ - [x] Research flutter_localizations and arb format
+ - [x] Review Hive adapter generation for Enums
+ - [x] Design localization strategy (Clean Architecture friendly)
 
-#### 📊 Metrics
-- Test Coverage: _%
-- Commits: _
-- Files Changed: _
+ #### 📋 Detailed Tasks
 
-#### ⏭️ Next Weekend
-- 
+ **Tuesday (Dec 24):**
+ 1. Settings Infrastructure (4h)
+    - Created `SettingsEntity` and `SettingsModel` with Hive adapters
+    - Implemented `SettingsRepository` and `SettingsLocalDataSource`
+    - Built `SettingsBloc` with Load and Update events
+    - Integrated with `MaterialApp` themeBuilder
+
+ 2. Internationalization (6h)
+    - Configured `l10n.yaml` and added dependencies
+    - Created `app_en.arb` and `app_es.arb`
+    - Created `LocalizationExtension` for clean `context.l10n` access
+    - systemically migrated 60+ strings across:
+      - Home (Balance, Budget)
+      - Analytics (Charts, Titles)
+      - Categories (Forms, Dialogs)
+      - Transactions (Filters, Add/Edit Pages)
+      - Settings (All sections)
+
+ #### ✅ Completed
+ - ✅ **Internationalization 100% complete** (English + Spanish)
+ - ✅ **Settings Feature 90% complete** (Backend + UI + Persistence)
+ - ✅ **Theme Switching** fully functional and persisted
+ - ✅ **60+ Strings migrated** to ARB files
+ - ✅ **Localization Extension** implemented for clean code
+ - ✅ **Lint errors resolved** in transaction modules
+
+ #### 📝 Notes & Learnings
+ - **ARB Files:** Great for managing translations, but requires running `gen-l10n` often.
+ - **Context Extensions:** `context.l10n.key` is much cleaner than `AppLocalizations.of(context)!.key`.
+ - **Hive Enums:** Persisting Enums (like `ThemeMode`) requires careful TypeAdapter setup or String conversion. Used String conversion for simplicity in data layer.
+ - **Date Formatting:** Used `intl` package with current locale for dates (`DateFormat.yMMMd(locale)`).
+
+ #### 🚧 Challenges & Blockers
+ - **Const widgets:** Had to remove `const` from many widgets (like `PopupMenuItem`) to access `context.l10n`.
+ - **Import errors:** Moving localized strings revealed missing imports in several transaction files.
+ - **Lint warnings:** Adding i18n introduced some lint warnings about `const` usage which had to be fixed systematically.
+
+ #### 📊 Metrics
+ - Test Coverage: ~37% (Maintained)
+ - Commits: ~3 (Feature + Fixes)
+ - Files Changed: ~40 files (mostly UI updates for localization)
+ - Lines of Code: ~10,800 total (+~400)
+
+ #### ⏭️ Next Weekend (Dec 28-29) - **Current**
+- Continue with UI Polish
+- Demo video 
 
 ---
 
@@ -203,36 +372,47 @@
 
 ---
 
-### Weekend 6 - Home Dashboard
+### Weekend 6 - UI Polish & Animations
 
-**Date:** [YYYY-MM-DD]  
-**Planned Hours:** 8h  
-**Actual Hours:** _h  
+**Date:** 2025-12-28
+**Planned Hours:** 4h
+**Actual Hours:** ~4h
 **Phase:** 0 (MVP)
 
 #### 🎯 Goals
-- [ ] Design home screen layout
-- [ ] Display current balance
-- [ ] Show recent transactions
-- [ ] Add income/expense summary cards
-- [ ] Implement pull-to-refresh
+- [x] Add animations to the app
+- [x] Polish UI transitions
+- [ ] Record demo video (Next)
 
 #### ✅ Completed
-- 
+- ✅ **Staggered List Animations**: Implemented cascading entrance in `AllTransactionsPage` using `animate_do`
+- ✅ **OpenContainer Transform**: FAB expansion animation in `HomePage` and `CategoriesPage` using `animations` package
+- ✅ **Shared Axis Transitions**: Horizontal page transitions for navigation using `go_router` + `animations`
+- ✅ **Hero Animations**: Icon "flight" from transaction cards to detail modal with custom `PageRouteBuilder`
+- ✅ Fixed modal transparency issues with `rootNavigator` approach
+- ✅ Created `docs/ANIMATION_PLAN.md` documenting implementation strategy
 
 #### 📝 Notes & Learnings
-- 
+- `showModalBottomSheet` conflicts with Hero animations; solved with custom transparent `PageRouteBuilder`
+- Material Design 3 motion patterns significantly elevate perceived quality
+- `OpenContainer` creates seamless parent-child navigation relationships
+- Hero widgets require `Material` wrapper for proper rendering during flight
+- Staggered animations with 50ms delays create organic, premium feel
 
 #### 🚧 Challenges & Blockers
-- 
+- Initial Hero animation not working due to `ModalBottomSheet` route limitations
+- Solved by replacing with custom `PageRouteBuilder` maintaining sheet-like UX
+- Background transparency required `rootNavigator: true` for nested navigation contexts
 
 #### 📊 Metrics
-- Test Coverage: _%
-- Commits: _
-- Files Changed: _
+- Test Coverage: Maintained at ~37%
+- Commits: 1 (💄 add animations pt3)
+- Files Changed: 12 files (UI widgets, router, modals)
+- New Dependencies: `animations` package added
 
 #### ⏭️ Next Weekend
-- 
+- Record demo video
+- Portfolio screenshots
 
 ---
 

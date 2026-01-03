@@ -1,1 +1,36 @@
 include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  plugins:
+    - flutter
+  exclude:
+    - "**.g.dart" # Generated files (if you use any code generation tools later)
+    - "**.freezed.dart" # Freezed-generated files (kept here just in case event if not used)
+linter:
+  rules:
+    # Formatting and code styles rules
+    prefer_single_quotes: true
+    prefer_const_constructors: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    prefer_relative_imports: false
+    unnecessary_this: true
+    sort_child_properties_last: true
+    curly_braces_in_flow_control_structures: true
+
+    # Intent and code clarity rules
+    always_declare_return_types: true
+    annotate_overrides: true
+    avoid_empty_else: true
+    use_key_in_widget_constructors: true
+    no_logic_in_create_state: true
+    avoid_unnecessary_containers: true
+
+    # Performance and best practices
+    avoid_print: false # Set to true in production to avoid using print
+
+statements:
+  avoid_init_to_null: true
+  prefer_const_literals_to_create_immutables: true
+  avoid_redundant_argument_values: true
+  unnecessary_late: true
