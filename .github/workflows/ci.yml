@@ -26,6 +26,14 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
       
+      - name: Verify CI works without .env files
+        run: |
+          if [ -f .env ] || [ -f .env.dev ] || [ -f .env.staging ] || [ -f .env.prod ]; then
+            echo "❌ .env files should not exist in CI"
+            exit 1
+          fi
+          echo "✅ No .env files - using fallback values"
+      
       - name: Analyze code
         run: flutter analyze
       
