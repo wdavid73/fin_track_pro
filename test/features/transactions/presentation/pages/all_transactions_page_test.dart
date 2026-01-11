@@ -97,6 +97,7 @@ void main() {
       );
 
       await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpAndSettle();
 
       expect(find.byType(TransactionCard), findsNWidgets(2));
       expect(find.text('Groceries'), findsOneWidget);
