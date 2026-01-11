@@ -2,30 +2,38 @@ name: Flutter CI
 
 on:
   pull_request:
-    branches:
-      - develop
+    branches: [develop]
   push:
-    branches:
-      - develop
+    branches: [develop]
 
 jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
+      - uses: actions/checkout@v4
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: stable
           cache: true
-      
+
+      # 🔥 Cache Pub dependencies
+      - name: Cache Pub
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
       - name: Get dependencies
         run: flutter pub get
-      
+
       - name: Verify CI works without .env files
         run: |
           if [ -f .env ] || [ -f .env.dev ] || [ -f .env.staging ] || [ -f .env.prod ]; then
@@ -33,20 +41,22 @@ jobs:
             exit 1
           fi
           echo "✅ No .env files - using fallback values"
-      
+
+      # ⚡ Analyze sin pub get
       - name: Analyze code
-        run: flutter analyze
-      
+        run: flutter analyze --no-pub
+
+      # ⚡ Tests sin pub get
       - name: Run tests
-        run: flutter test --coverage
-      
+        run: flutter test --no-pub --coverage
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
-          files: ./coverage/lcov.info
+          files: coverage/lcov.info
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
-      
+
       - name: Test Summary
         run: |
           echo "✅ All tests passed!"
