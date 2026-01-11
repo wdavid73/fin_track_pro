@@ -2,12 +2,12 @@
 
 <div align="center">
 
-![Flutter Version](https://img.shields.io/badge/Flutter-3.24+-02569B?logo=flutter)
+![Flutter Version](https://img.shields.io/badge/Flutter-3.32.0+-02569B?logo=flutter)
 ![Dart Version](https://img.shields.io/badge/Dart-3.5+-0175C2?logo=dart)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
-![Phase](https://img.shields.io/badge/Phase-0%20MVP%20(60%25)-blue)
-![Test Coverage](https://img.shields.io/badge/Coverage-70.5%25-green)
+![Phase](https://img.shields.io/badge/Phase-1%20Testing%20&%20CI/CD%20(5%25)-blue)
+[![codecov](https://codecov.io/gh/wdavid73/fintrack-pro/branch/main/graph/badge.svg)](https://codecov.io/gh/wdavid73/fintrack-pro)
 ![Commits](https://img.shields.io/badge/Commits-15-brightgreen)
 
 **A comprehensive personal finance management application built with Flutter**
