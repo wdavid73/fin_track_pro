@@ -51,6 +51,12 @@ jobs:
       - name: Analyze code
         run: flutter analyze --no-pub --suppress-analytics 2>&1 | grep -v "asset_does_not_exist" || flutter analyze --no-pub
 
+      - name: Create empty env files
+        run: |
+          touch .env.dev
+          touch .env.staging
+          touch .env.prod
+
       # ⚡ Tests sin pub get
       - name: Run tests
         run: flutter test --no-pub --coverage
