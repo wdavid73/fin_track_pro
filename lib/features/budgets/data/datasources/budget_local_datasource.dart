@@ -1,4 +1,4 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:injectable/injectable.dart';
 import 'package:fin_track_pro/features/budgets/data/datasources/budget_datasource.dart';
 import 'package:fin_track_pro/features/budgets/data/models/budget_model.dart';

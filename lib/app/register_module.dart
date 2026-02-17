@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:dio/dio.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:fin_track_pro/features/budgets/data/models/budget_model.dart';
 
 /// Module for registering external dependencies

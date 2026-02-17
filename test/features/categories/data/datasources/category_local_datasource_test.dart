@@ -2,7 +2,7 @@ import 'package:fin_track_pro/core/database/hive_service.dart';
 import 'package:fin_track_pro/features/categories/data/datasources/category_local_datasource.dart';
 import 'package:fin_track_pro/features/categories/data/models/category_model.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockHiveService extends Mock implements HiveService {}

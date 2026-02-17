@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -10,7 +11,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
-import 'package:hive/hive.dart' as _i979;
+import 'package:hive_ce/hive_ce.dart' as _i1055;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../core/database/hive_service.dart' as _i82;
@@ -96,147 +97,192 @@ import '../features/transactions/presentation/bloc/transaction_bloc/transaction_
 import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
-// initializes the registration of main-scope dependencies inside of GetIt
+  // initializes the registration of main-scope dependencies inside of GetIt
   _i174.GetIt init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
   }) {
-    final gh = _i526.GetItHelper(
-      this,
-      environment,
-      environmentFilter,
-    );
+    final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
     gh.singleton<_i82.HiveService>(() => _i82.HiveService());
     gh.singleton<_i910.LoggerService>(() => _i910.LoggerService());
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
-    gh.lazySingleton<_i979.Box<_i731.BudgetModel>>(
+    gh.lazySingleton<_i1055.Box<_i731.BudgetModel>>(
       () => registerModule.budgetBox,
       instanceName: 'budgetBox',
     );
-    gh.singleton<_i406.BudgetSeeder>(() => _i406.BudgetSeeder(
-          gh<_i82.HiveService>(),
-          gh<_i910.LoggerService>(),
-        ));
-    gh.singleton<_i12.CategorySeeder>(() => _i12.CategorySeeder(
-          gh<_i82.HiveService>(),
-          gh<_i910.LoggerService>(),
-        ));
-    gh.singleton<_i264.TransactionSeeder>(() => _i264.TransactionSeeder(
-          gh<_i82.HiveService>(),
-          gh<_i910.LoggerService>(),
-        ));
+    gh.singleton<_i406.BudgetSeeder>(
+      () =>
+          _i406.BudgetSeeder(gh<_i82.HiveService>(), gh<_i910.LoggerService>()),
+    );
+    gh.singleton<_i12.CategorySeeder>(
+      () => _i12.CategorySeeder(
+        gh<_i82.HiveService>(),
+        gh<_i910.LoggerService>(),
+      ),
+    );
+    gh.singleton<_i264.TransactionSeeder>(
+      () => _i264.TransactionSeeder(
+        gh<_i82.HiveService>(),
+        gh<_i910.LoggerService>(),
+      ),
+    );
     gh.lazySingleton<_i602.SettingsDatasource>(
-        () => _i307.SettingsLocalDatasource(gh<_i82.HiveService>()));
-    gh.factory<_i730.TransactionLocalDataSource>(
-        () => _i730.TransactionLocalDataSource(gh<_i82.HiveService>()));
+      () => _i307.SettingsLocalDatasource(gh<_i82.HiveService>()),
+    );
     gh.factory<_i409.CategoryLocalDataSource>(
-        () => _i409.CategoryLocalDataSource(gh<_i82.HiveService>()));
-    gh.singleton<_i118.DatabaseSeeder>(() => _i118.DatabaseSeeder(
-          gh<_i12.CategorySeeder>(),
-          gh<_i406.BudgetSeeder>(),
-          gh<_i264.TransactionSeeder>(),
-          gh<_i910.LoggerService>(),
-        ));
+      () => _i409.CategoryLocalDataSource(gh<_i82.HiveService>()),
+    );
+    gh.factory<_i730.TransactionLocalDataSource>(
+      () => _i730.TransactionLocalDataSource(gh<_i82.HiveService>()),
+    );
+    gh.singleton<_i118.DatabaseSeeder>(
+      () => _i118.DatabaseSeeder(
+        gh<_i12.CategorySeeder>(),
+        gh<_i406.BudgetSeeder>(),
+        gh<_i264.TransactionSeeder>(),
+        gh<_i910.LoggerService>(),
+      ),
+    );
     gh.lazySingleton<_i89.SettingsRepository>(
-        () => _i1064.SettingsRepositoryImpl(gh<_i602.SettingsDatasource>()));
-    gh.factory<_i315.SaveSettings>(
-        () => _i315.SaveSettings(gh<_i89.SettingsRepository>()));
+      () => _i1064.SettingsRepositoryImpl(gh<_i602.SettingsDatasource>()),
+    );
     gh.factory<_i463.GetSettings>(
-        () => _i463.GetSettings(gh<_i89.SettingsRepository>()));
-    gh.lazySingleton<_i196.BudgetDatasource>(() => _i285.BudgetLocalDatasource(
-        gh<_i979.Box<_i731.BudgetModel>>(instanceName: 'budgetBox')));
-    gh.lazySingleton<_i443.TransactionRepository>(() =>
-        _i667.TransactionRepositoryImpl(
-            gh<_i730.TransactionLocalDataSource>()));
+      () => _i463.GetSettings(gh<_i89.SettingsRepository>()),
+    );
+    gh.factory<_i315.SaveSettings>(
+      () => _i315.SaveSettings(gh<_i89.SettingsRepository>()),
+    );
+    gh.lazySingleton<_i196.BudgetDatasource>(
+      () => _i285.BudgetLocalDatasource(
+        gh<_i1055.Box<_i731.BudgetModel>>(instanceName: 'budgetBox'),
+      ),
+    );
+    gh.lazySingleton<_i443.TransactionRepository>(
+      () => _i667.TransactionRepositoryImpl(
+        gh<_i730.TransactionLocalDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i43.BudgetRepository>(
-        () => _i310.BudgetRepositoryImpl(gh<_i196.BudgetDatasource>()));
-    gh.factory<_i1058.GetTransactions>(
-        () => _i1058.GetTransactions(gh<_i443.TransactionRepository>()));
+      () => _i310.BudgetRepositoryImpl(gh<_i196.BudgetDatasource>()),
+    );
     gh.factory<_i333.CreateTransaction>(
-        () => _i333.CreateTransaction(gh<_i443.TransactionRepository>()));
-    gh.factory<_i735.GetPaginatedTransactions>(() =>
-        _i735.GetPaginatedTransactions(gh<_i443.TransactionRepository>()));
-    gh.factory<_i974.UpdateTransaction>(
-        () => _i974.UpdateTransaction(gh<_i443.TransactionRepository>()));
+      () => _i333.CreateTransaction(gh<_i443.TransactionRepository>()),
+    );
     gh.factory<_i424.DeleteTransaction>(
-        () => _i424.DeleteTransaction(gh<_i443.TransactionRepository>()));
-    gh.factory<_i1020.SaveBudget>(
-        () => _i1020.SaveBudget(gh<_i43.BudgetRepository>()));
+      () => _i424.DeleteTransaction(gh<_i443.TransactionRepository>()),
+    );
+    gh.factory<_i735.GetPaginatedTransactions>(
+      () => _i735.GetPaginatedTransactions(gh<_i443.TransactionRepository>()),
+    );
+    gh.factory<_i1058.GetTransactions>(
+      () => _i1058.GetTransactions(gh<_i443.TransactionRepository>()),
+    );
+    gh.factory<_i974.UpdateTransaction>(
+      () => _i974.UpdateTransaction(gh<_i443.TransactionRepository>()),
+    );
     gh.factory<_i299.GetBudgets>(
-        () => _i299.GetBudgets(gh<_i43.BudgetRepository>()));
-    gh.factory<_i16.SettingsBloc>(() => _i16.SettingsBloc(
-          getSettings: gh<_i463.GetSettings>(),
-          saveSettings: gh<_i315.SaveSettings>(),
-        ));
-    gh.singleton<_i905.TransactionBloc>(() => _i905.TransactionBloc(
-          gh<_i913.GetTransactions>(),
-          gh<_i913.GetPaginatedTransactions>(),
-          gh<_i913.CreateTransaction>(),
-          gh<_i913.UpdateTransaction>(),
-          gh<_i913.DeleteTransaction>(),
-        ));
-    gh.lazySingleton<_i745.CategoryRepository>(() =>
-        _i346.CategoryRepositoryImpl(gh<_i409.CategoryLocalDataSource>()));
+      () => _i299.GetBudgets(gh<_i43.BudgetRepository>()),
+    );
+    gh.factory<_i1020.SaveBudget>(
+      () => _i1020.SaveBudget(gh<_i43.BudgetRepository>()),
+    );
+    gh.factory<_i16.SettingsBloc>(
+      () => _i16.SettingsBloc(
+        getSettings: gh<_i463.GetSettings>(),
+        saveSettings: gh<_i315.SaveSettings>(),
+      ),
+    );
+    gh.singleton<_i905.TransactionBloc>(
+      () => _i905.TransactionBloc(
+        gh<_i913.GetTransactions>(),
+        gh<_i913.GetPaginatedTransactions>(),
+        gh<_i913.CreateTransaction>(),
+        gh<_i913.UpdateTransaction>(),
+        gh<_i913.DeleteTransaction>(),
+      ),
+    );
+    gh.lazySingleton<_i745.CategoryRepository>(
+      () => _i346.CategoryRepositoryImpl(gh<_i409.CategoryLocalDataSource>()),
+    );
     gh.factory<_i909.GetRecentTransactions>(
-        () => _i909.GetRecentTransactions(gh<_i443.TransactionRepository>()));
+      () => _i909.GetRecentTransactions(gh<_i443.TransactionRepository>()),
+    );
     gh.factory<_i605.GetTotalBalance>(
-        () => _i605.GetTotalBalance(gh<_i443.TransactionRepository>()));
-    gh.factory<_i230.GetBudgetData>(() => _i230.GetBudgetData(
-          gh<_i443.TransactionRepository>(),
-          gh<_i745.CategoryRepository>(),
-          gh<_i299.GetBudgets>(),
-        ));
-    gh.factory<_i867.SearchCategoriesUseCase>(
-        () => _i867.SearchCategoriesUseCase(gh<_i745.CategoryRepository>()));
-    gh.factory<_i374.GetCategoriesUseCase>(
-        () => _i374.GetCategoriesUseCase(gh<_i745.CategoryRepository>()));
+      () => _i605.GetTotalBalance(gh<_i443.TransactionRepository>()),
+    );
+    gh.factory<_i230.GetBudgetData>(
+      () => _i230.GetBudgetData(
+        gh<_i443.TransactionRepository>(),
+        gh<_i745.CategoryRepository>(),
+        gh<_i299.GetBudgets>(),
+      ),
+    );
     gh.factory<_i946.CreateCategoryUseCase>(
-        () => _i946.CreateCategoryUseCase(gh<_i745.CategoryRepository>()));
+      () => _i946.CreateCategoryUseCase(gh<_i745.CategoryRepository>()),
+    );
     gh.factory<_i189.DeleteCategoryUseCase>(
-        () => _i189.DeleteCategoryUseCase(gh<_i745.CategoryRepository>()));
+      () => _i189.DeleteCategoryUseCase(gh<_i745.CategoryRepository>()),
+    );
+    gh.factory<_i374.GetCategoriesUseCase>(
+      () => _i374.GetCategoriesUseCase(gh<_i745.CategoryRepository>()),
+    );
+    gh.factory<_i867.SearchCategoriesUseCase>(
+      () => _i867.SearchCategoriesUseCase(gh<_i745.CategoryRepository>()),
+    );
     gh.factory<_i331.UpdateCategoryUseCase>(
-        () => _i331.UpdateCategoryUseCase(gh<_i745.CategoryRepository>()));
-    gh.factory<_i824.HomeBloc>(() => _i824.HomeBloc(
-          gh<_i909.GetRecentTransactions>(),
-          gh<_i605.GetTotalBalance>(),
-          gh<_i374.GetCategoriesUseCase>(),
-          gh<_i230.GetBudgetData>(),
-          gh<_i905.TransactionBloc>(),
-        ));
-    gh.factory<_i86.GetAnalyticsData>(() => _i86.GetAnalyticsData(
-          gh<_i443.TransactionRepository>(),
-          gh<_i745.CategoryRepository>(),
-        ));
-    gh.factory<_i30.GetCategoryStatsUseCase>(() => _i30.GetCategoryStatsUseCase(
-          gh<_i745.CategoryRepository>(),
-          gh<_i443.TransactionRepository>(),
-        ));
-    gh.factory<_i70.AddTransactionCubit>(() => _i70.AddTransactionCubit(
-          gh<_i374.GetCategoriesUseCase>(),
-          gh<_i333.CreateTransaction>(),
-        ));
-    gh.factory<_i260.AnalyticsBloc>(() => _i260.AnalyticsBloc(
-          gh<_i86.GetAnalyticsData>(),
-          gh<_i905.TransactionBloc>(),
-        ));
-    gh.factoryParam<_i581.EditTransactionCubit, _i593.Transaction, dynamic>((
-      transaction,
-      _,
-    ) =>
-        _i581.EditTransactionCubit(
-          gh<_i374.GetCategoriesUseCase>(),
-          gh<_i974.UpdateTransaction>(),
-          transaction,
-        ));
-    gh.factory<_i274.CategoryBloc>(() => _i274.CategoryBloc(
-          getCategories: gh<_i931.GetCategoriesUseCase>(),
-          getCategoryStats: gh<_i931.GetCategoryStatsUseCase>(),
-          createCategory: gh<_i931.CreateCategoryUseCase>(),
-          updateCategory: gh<_i931.UpdateCategoryUseCase>(),
-          deleteCategory: gh<_i931.DeleteCategoryUseCase>(),
-          searchCategories: gh<_i931.SearchCategoriesUseCase>(),
-        ));
+      () => _i331.UpdateCategoryUseCase(gh<_i745.CategoryRepository>()),
+    );
+    gh.factory<_i824.HomeBloc>(
+      () => _i824.HomeBloc(
+        gh<_i909.GetRecentTransactions>(),
+        gh<_i605.GetTotalBalance>(),
+        gh<_i374.GetCategoriesUseCase>(),
+        gh<_i230.GetBudgetData>(),
+        gh<_i905.TransactionBloc>(),
+      ),
+    );
+    gh.factory<_i86.GetAnalyticsData>(
+      () => _i86.GetAnalyticsData(
+        gh<_i443.TransactionRepository>(),
+        gh<_i745.CategoryRepository>(),
+      ),
+    );
+    gh.factory<_i30.GetCategoryStatsUseCase>(
+      () => _i30.GetCategoryStatsUseCase(
+        gh<_i745.CategoryRepository>(),
+        gh<_i443.TransactionRepository>(),
+      ),
+    );
+    gh.factory<_i70.AddTransactionCubit>(
+      () => _i70.AddTransactionCubit(
+        gh<_i374.GetCategoriesUseCase>(),
+        gh<_i333.CreateTransaction>(),
+      ),
+    );
+    gh.factory<_i260.AnalyticsBloc>(
+      () => _i260.AnalyticsBloc(
+        gh<_i86.GetAnalyticsData>(),
+        gh<_i905.TransactionBloc>(),
+      ),
+    );
+    gh.factoryParam<_i581.EditTransactionCubit, _i593.Transaction, dynamic>(
+      (transaction, _) => _i581.EditTransactionCubit(
+        gh<_i374.GetCategoriesUseCase>(),
+        gh<_i974.UpdateTransaction>(),
+        transaction,
+      ),
+    );
+    gh.factory<_i274.CategoryBloc>(
+      () => _i274.CategoryBloc(
+        getCategories: gh<_i931.GetCategoriesUseCase>(),
+        getCategoryStats: gh<_i931.GetCategoryStatsUseCase>(),
+        createCategory: gh<_i931.CreateCategoryUseCase>(),
+        updateCategory: gh<_i931.UpdateCategoryUseCase>(),
+        deleteCategory: gh<_i931.DeleteCategoryUseCase>(),
+        searchCategories: gh<_i931.SearchCategoriesUseCase>(),
+      ),
+    );
     return this;
   }
 }
