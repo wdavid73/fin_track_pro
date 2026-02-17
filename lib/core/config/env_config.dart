@@ -24,7 +24,17 @@ class EnvConfig {
       dotenv.get('ENVIRONMENT', fallback: 'development');
 
   /// Load environment variables from the specified file
+  ///
+  /// If the file is not found or cannot be loaded, fallback values will be used.
+  /// This is expected in CI/CD environments where .env files are not available.
   static Future<void> load(String fileName) async {
-    await dotenv.load(fileName: fileName);
+    try {
+      await dotenv.load(fileName: fileName);
+    } catch (e) {
+      // File not found or error loading - use fallback values
+      // This is expected in CI/CD environments
+      // ignore: avoid_print
+      print('⚠️  Could not load $fileName - using fallback values');
+    }
   }
 }

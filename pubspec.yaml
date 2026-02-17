@@ -49,6 +49,9 @@ flutter:
   # Internalization
   generate: true
 
+  # Environment files loaded via flutter_dotenv
+  # These files are optional - if missing, fallback values are used
+  # In CI/CD, warnings about missing files are expected and safe to ignore
   assets:
     - .env.dev
     - .env.staging
