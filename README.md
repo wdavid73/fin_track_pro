@@ -138,17 +138,12 @@ git clone https://github.com/wdavid73/fintrack-pro.git
 cd fintrack-pro
 ```
 
-2. **Install dependencies**
+2. **Run project setup** (installs dependencies, configures git hooks, runs code generation)
 ```bash
-flutter pub get
+./setup.sh
 ```
 
-3. **Generate code**
-```bash
-dart run build_runner build --delete-conflicting-outputs
-```
-
-4. **Run the app**
+3. **Run the app**
 ```bash
 flutter run
 ```
