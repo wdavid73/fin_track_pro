@@ -246,6 +246,52 @@ void validateIosPbxproj() {
       }
     }
   }
+
+  // Check base configurations (Debug, Release, Profile)
+  // In flavor-based projects these may not exist (replaced by flavor variants)
+  print('');
+  print('  Base Configurations (Debug, Release, Profile):');
+  for (final configName in ['Debug', 'Release', 'Profile']) {
+    if (!content.contains('name = "$configName"')) {
+      pass(
+        'iOS',
+        '[$configName] Not present (replaced by flavor variants — correct)',
+      );
+      continue;
+    }
+
+    final block = configBlocks[configName];
+    if (block == null) {
+      warn('iOS', '[$configName] Exists but could not parse build settings');
+      continue;
+    }
+
+    final bundleId = block['PRODUCT_BUNDLE_IDENTIFIER'] ?? '';
+    final productName = block['PRODUCT_NAME'] ?? '';
+
+    // Warn if bundle ID still has com.example (Xcode default)
+    if (bundleId.contains('com.example')) {
+      warn(
+        'iOS',
+        '[$configName] PRODUCT_BUNDLE_IDENTIFIER uses default '
+            '"$bundleId" (has com.example)',
+      );
+    } else {
+      pass('iOS', '[$configName] PRODUCT_BUNDLE_IDENTIFIER = $bundleId');
+    }
+
+    // Warn if PRODUCT_NAME is $(TARGET_NAME) which resolves to "Runner"
+    if (productName == r'$(TARGET_NAME)') {
+      warn(
+        'iOS',
+        '[$configName] PRODUCT_NAME = "\$(TARGET_NAME)" '
+            '(resolves to "Runner" — default Xcode value)',
+      );
+    } else {
+      pass('iOS', '[$configName] PRODUCT_NAME = "$productName"');
+    }
+  }
+
   print('');
 }
 
@@ -318,6 +364,33 @@ void validateIosSchemes() {
   print('🔧 iOS Xcode Schemes');
   print('───────────────────────────────────────────────');
 
+  // Expected buildConfiguration for each action per flavor
+  // dev/staging: LaunchAction uses Debug (for hot reload & debugging)
+  // prod: LaunchAction uses Release (production testing)
+  final schemeExpectations = <String, Map<String, String>>{
+    'dev': {
+      'TestAction': 'Debug-dev',
+      'LaunchAction': 'Debug-dev',
+      'ProfileAction': 'Release-dev',
+      'AnalyzeAction': 'Debug-dev',
+      'ArchiveAction': 'Release-dev',
+    },
+    'staging': {
+      'TestAction': 'Debug-staging',
+      'LaunchAction': 'Debug-staging',
+      'ProfileAction': 'Release-staging',
+      'AnalyzeAction': 'Debug-staging',
+      'ArchiveAction': 'Release-staging',
+    },
+    'prod': {
+      'TestAction': 'Debug-prod',
+      'LaunchAction': 'Release-prod',
+      'ProfileAction': 'Release-prod',
+      'AnalyzeAction': 'Debug-prod',
+      'ArchiveAction': 'Release-prod',
+    },
+  };
+
   for (final flavor in flavors) {
     final schemeFile = File(
       'ios/Runner.xcodeproj/xcshareddata/xcschemes/$flavor.xcscheme',
@@ -330,28 +403,34 @@ void validateIosSchemes() {
 
     pass('Schemes', '$flavor.xcscheme exists');
 
-    // Parse scheme and check ArchiveAction buildConfiguration
     final content = schemeFile.readAsStringSync();
     final document = XmlDocument.parse(content);
 
-    final archiveAction = document.findAllElements('ArchiveAction');
-    if (archiveAction.isEmpty) {
-      warn('Schemes', '[$flavor] No ArchiveAction found in scheme');
-      continue;
-    }
+    final expected = schemeExpectations[flavor]!;
 
-    final archiveConfig =
-        archiveAction.first.getAttribute('buildConfiguration') ?? '';
-    final expectedConfig = 'Release-$flavor';
+    // Validate each action uses the correct buildConfiguration
+    for (final entry in expected.entries) {
+      final actionName = entry.key;
+      final expectedBuildConfig = entry.value;
 
-    if (archiveConfig == expectedConfig) {
-      pass('Schemes', '[$flavor] ArchiveAction uses $expectedConfig');
-    } else {
-      fail(
-        'Schemes',
-        '[$flavor] ArchiveAction buildConfiguration: '
-            'expected "$expectedConfig", got "$archiveConfig"',
-      );
+      final elements = document.findAllElements(actionName);
+      if (elements.isEmpty) {
+        warn('Schemes', '[$flavor] $actionName not found in scheme');
+        continue;
+      }
+
+      final actualConfig =
+          elements.first.getAttribute('buildConfiguration') ?? '';
+
+      if (actualConfig == expectedBuildConfig) {
+        pass('Schemes', '[$flavor] $actionName → $actualConfig');
+      } else {
+        fail(
+          'Schemes',
+          '[$flavor] $actionName: expected "$expectedBuildConfig", '
+              'got "$actualConfig"',
+        );
+      }
     }
   }
   print('');
@@ -736,6 +815,11 @@ void printSummary() {
   }
 
   print('');
-  print('═══════════════════════════════════════════════════════');
+  print('───────────────────────────────────────────────────────');
+  print('  MANUAL CHECK REMINDER:');
+  print('  Verify in Xcode that scheme "prod" is selected');
+  print('  before archiving or building for release.');
+  print('  (Xcode > Product > Scheme > prod)');
+  print('───────────────────────────────────────────────────────');
   print('');
 }
