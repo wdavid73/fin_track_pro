@@ -155,12 +155,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1058.GetTransactions(gh<_i443.TransactionRepository>()));
     gh.factory<_i333.CreateTransaction>(
         () => _i333.CreateTransaction(gh<_i443.TransactionRepository>()));
+    gh.factory<_i735.GetPaginatedTransactions>(() =>
+        _i735.GetPaginatedTransactions(gh<_i443.TransactionRepository>()));
     gh.factory<_i974.UpdateTransaction>(
         () => _i974.UpdateTransaction(gh<_i443.TransactionRepository>()));
     gh.factory<_i424.DeleteTransaction>(
         () => _i424.DeleteTransaction(gh<_i443.TransactionRepository>()));
-    gh.factory<_i735.GetPaginatedTransactions>(() =>
-        _i735.GetPaginatedTransactions(gh<_i443.TransactionRepository>()));
     gh.factory<_i1020.SaveBudget>(
         () => _i1020.SaveBudget(gh<_i43.BudgetRepository>()));
     gh.factory<_i299.GetBudgets>(
