@@ -68,6 +68,9 @@ jobs:
       # 🧹 Filter generated files from coverage report
       # Removes: Hive adapters (*.g.dart), l10n generated files,
       # injectable modules and other auto-generated code
+      - name: Install lcov
+        run: sudo apt-get install -y lcov
+
       - name: Filter generated files from coverage
         run: |
           lcov \
