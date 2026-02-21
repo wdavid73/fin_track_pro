@@ -26,15 +26,15 @@
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Weekends Completed | 6 | 131 |
-| Hours Invested | ~62-72h | 1,040 |
-| Current Phase | Phase 1 (~5%) | Phase 4 |
-| Test Coverage | ~37% | >80% |
+| Weekends Completed | 8 (sessions) | 131 |
+| Hours Invested | ~75-82h | 1,040 |
+| Current Phase | Phase 1 (~28%) | Phase 4 |
+| Test Coverage | **72.3%** (filtrado) | >80% |
 | Features Complete | 7/7 Phase 0 | All |
 | Articles Published | 0 | 8+ |
 | Videos Created | 0 | 6+ |
 
-**Last Updated:** 2026-01-11
+**Last Updated:** 2026-02-21
 
 ---
 
@@ -541,7 +541,82 @@
 
 ---
 
-### Weekend 8 - Unit Test Expansion
+### Session 2 - Phase 1: Widget Tests + CI/CD Improvements
+
+**Date:** 2026-02-21 (continuación)
+**Planned Hours:** 3h
+**Actual Hours:** ~3h
+**Phase:** 1 (Testing & CI/CD)
+
+#### 🎯 Goals
+- [x] Escribir widget tests para `TransactionFilterBottomSheet`
+- [x] Escribir widget tests para `TransactionDetailsModal`
+- [x] Escribir widget tests para `EditTransactionPage`
+- [x] Corregir el pipeline CI/CD (`lcov: command not found`)
+- [x] Agregar coverage gate (≥60%) al CI
+- [x] Tests para `EnvConfig` (fix Codecov patch coverage)
+- [x] Tests para `AppSnackbar` y `Budget` entity
+
+#### ✅ Completed
+
+**Widget Tests — Transactions (37 nuevos tests):**
+- ✅ `transaction_filter_bottom_sheet_test.dart` — 13 tests
+  - Rendering (header, search field, type toggle, botones)
+  - Interacciones (typing, clear, Apply, Clear All)
+  - Category dropdown con filtrado por tipo
+- ✅ `transaction_details_modal_test.dart` — 9 tests
+  - Amounts con prefijo +/- , note/fallback, Hero tag, fecha formateada
+  - Botones Edit y Delete
+- ✅ `edit_transaction_page_test.dart` — 10 tests
+  - Header, botones Cancel/Update, CategorySelector/spinner
+  - Update habilitado/deshabilitado, spinner en submitting
+  - Income type rendering, `saveTransaction()` al tap
+- ✅ `MockEditTransactionCubit` — agregado a `transactions_mocks.dart`
+
+**Core Tests (32 nuevos tests):**
+- ✅ `env_config_test.dart` — 14 tests
+  - 8 fallback values (sin .env), 5 valores desde `loadFromString`, 1 test de `load()` con archivo inexistente
+  - Truco: `dotenv.loadFromString(envString: '', isOptional: true)` para flutter_dotenv v6
+- ✅ `app_snack_bar_test.dart` — 7 tests
+  - Singleton, show/success/error/warning/custom, floating behavior
+  - 0% → ~100% coverage en `app_snack_bar.dart`
+- ✅ `budget_test.dart` — 11 tests
+  - Equatable (igual/distinto por id, amount, period), props, toString
+  - 60% → 100% coverage en `budget.dart`
+
+**CI/CD Improvements:**
+- ✅ `sudo apt-get install -y lcov` — fix de `command not found` en ubuntu-latest runner
+- ✅ Coverage gate ≥60% — CI falla con mensaje claro si baja la cobertura
+- ✅ PR comment con emoji dinámico (🟢 ≥80% / 🟡 ≥60% / 🔴 <60%)
+- ✅ `coverage.sh` — script local para correr tests + ver cobertura filtrada
+- ✅ Filtrado de archivos generados del LCOV (*.g.dart, l10n, injection_container)
+
+#### 📝 Notes & Learnings
+- `BlocConsumer` usa dos suscriptores sobre el mismo stream → requiere broadcast stream o mock diferente para tests de listener side-effects
+- `flutter_dotenv` v6 no tiene `testLoad()` — usar `loadFromString(isOptional: true)`
+- `copyWith(note: null)` con `??` en Dart no sobreescribe con null → crear la entidad directamente
+- `find.textContaining('-')` puede ser ambiguo → usar `find.textContaining('-\$')` para amounts únicos
+- `Navigator.pop()` en widget tests requiere stack de rutas con historial; mejor testear en integration tests
+
+#### 🚧 Challenges & Blockers
+- `MockTransactionBloc.close()` retornaba `null` en lugar de `Future<void>` → removido `tearDown` que lo llamaba
+- Test del listener `submitSuccess → LoadTransactions` necesita Navigator stack completo — documentado para integration tests
+
+#### 📊 Metrics
+- Test Coverage: **72.3%** (↑ desde 62.7% al inicio de la sesión)
+- Lineas cubiertas: 2120 / 2933 (excl. generados)
+- New Test Files: 6 nuevos archivos
+- New Tests: 67 nuevos (total sesión completa Feb 21: 67+57=124 desde 319)
+- Total Tests: **386** (0 regresiones)
+
+#### ⏭️ Next Session
+- Widget tests para `add_transaction_page.dart` (~+2 pp)
+- Widget tests para `all_transactions_page.dart` (~+3 pp)
+- Seeders unit tests (0% → potencial +7 pp)
+- Target: alcanzar **80%** de cobertura filtrada
+
+---
+
 
 **Date:** [YYYY-MM-DD]  
 **Planned Hours:** 8h  

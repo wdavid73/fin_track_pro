@@ -6,7 +6,7 @@
 **Current Date:** Week of 2026-02-21
 **Phase:** Phase 1 - Testing & CI/CD
 **Phase 0 Status:** ✅ Complete (100%)
-**Phase 1 Progress:** ~12% (Settings + Analytics + Home unit tests)
+**Phase 1 Progress:** ~28% (Unit tests + Widget tests + CI/CD improvements)
  
  ---
  
@@ -20,7 +20,7 @@
  - ✅ Analytics page with 5 custom widgets and charts
  - ✅ Budget tracking with visualization (5 tests)
  - ✅ Settings UI fully designed
- - ✅ **62 test files, 319 tests** (~43% coverage)
+ - ✅ **76 test files, 386 tests** (**72.3% cobertura filtrada** ↑)
  - ✅ CI/CD runs tests on every PR
  - ✅ Material Design 3 throughout
  - ✅ **Internationalization (i18n)** complete with English and Spanish support (60+ strings)
@@ -28,6 +28,12 @@
 - ✅ **Settings feature: 100% unit test coverage** (Phase 1 first win!)
 - ✅ **Analytics entities: 100% test coverage** (CategorySpending, AnalyticsData)
 - ✅ **GetAnalyticsData: extended tests** (year/week/month + income-only/expense-only edge cases)
+- ✅ **Widget tests: TransactionFilterBottomSheet + TransactionDetailsModal** (27 tests)
+- ✅ **Widget tests: EditTransactionPage** (10 tests)
+- ✅ **EnvConfig tests** (14 tests — fixes Codecov patch coverage)
+- ✅ **AppSnackbar widget tests** (7 tests — 0% → ~100%)
+- ✅ **Budget entity tests** (11 tests — 60% → 100%)
+- ✅ **CI/CD: coverage gate ≥60% + lcov install + PR emoji comment**
 
  ### What's Missing
  - 🟡 Demo video and screenshots
@@ -49,15 +55,16 @@
  Lines of Code:      10,500+ (high quality)
  ```
 
-### Phase 1 Progress: Testing & CI/CD (~12%)
+### Phase 1 Progress: Testing & CI/CD (~28%)
 
  ```
- Phase 1 Progress: ██░░░░░░░░░░░░░░░░░░ 12%
+ Phase 1 Progress: █████░░░░░░░░░░░░░░░ 28%
 
  Target Weekends:    18 weekends
  Target Hours:       144h
  Focus Areas:        Unit tests, Widget tests, Integration tests, CI/CD
- Completed:          Settings (21 tests), Analytics entities+usecase+bloc (29 tests), Home edge cases (7 tests)
+ Completed:          Unit tests (57), Widget tests (67), Core tests (32)
+ Coverage Gate:      ≥60% enforced in CI ✅ | Actual: 72.3%
  ```
  
  ### Feature Breakdown
@@ -225,11 +232,12 @@
  
  ### Codebase
  - **Total Files:** 133+ Dart files
- - **Lines of Code:** 10,500+ (high quality)
+ - **Lines of Code:** 10,500+
  - **Features:** 7 (transactions, categories, budgets, home, analytics, settings, splash)
- - **Test Files:** 62 files / 319 tests 🎉
- - **Commits:** 24+
- - **Active Days:** 10 (Nov 23, 24, 25, 29, 30, Dec 6, 8, 13, 24, Feb 21)
+ - **Test Files:** 76 files / **386 tests** 🎉
+ - **Test Coverage:** **72.3%** (filtrado, excl. generados)
+ - **Commits:** 26+
+ - **Active Days:** 11 (Nov 23, 24, 25, 29, 30, Dec 6, 8, 13, 24, Feb 21 x2)
  
  ### Dependencies
  - **State Management:** flutter_bloc 9.1.1
