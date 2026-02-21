@@ -130,11 +130,11 @@ void main() {
     });
 
     test('netSavings is negative when expenses exceed income', () {
-      final deficit = AnalyticsData(
+      final deficit = const AnalyticsData(
         totalIncome: 500.0,
         totalExpenses: 800.0,
-        categorySpending: const [],
-        comparisons: const [],
+        categorySpending: [],
+        comparisons: [],
       );
       expect(deficit.netSavings, -300.0);
     });
@@ -149,11 +149,11 @@ void main() {
     );
 
     test('topSpendingCategories returns empty list when no spending', () {
-      final empty = AnalyticsData(
+      final empty = const AnalyticsData(
         totalIncome: 100.0,
         totalExpenses: 0.0,
-        categorySpending: const [],
-        comparisons: const [],
+        categorySpending: [],
+        comparisons: [],
       );
       expect(empty.topSpendingCategories, isEmpty);
     });
