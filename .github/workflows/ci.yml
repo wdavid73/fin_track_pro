@@ -65,6 +65,38 @@ jobs:
       - name: Run tests
         run: flutter test --no-pub --coverage
 
+      # 🧹 Filter generated files from coverage report
+      # Removes: Hive adapters (*.g.dart), l10n generated files,
+      # injectable modules and other auto-generated code
+      - name: Filter generated files from coverage
+        run: |
+          lcov \
+            --remove coverage/lcov.info \
+            '**/*.g.dart' \
+            '**/*.freezed.dart' \
+            '**/app_localizations*.dart' \
+            '**/injection_container.dart' \
+            '**/register_module.dart' \
+            --output-file coverage/lcov.info \
+            --ignore-errors unused,unused
+
+      # 🚦 Coverage gate — fail CI if coverage drops below 60%
+      - name: Check coverage threshold (≥ 60%)
+        run: |
+          LINES=$(grep -o 'LF:[0-9]*' coverage/lcov.info | awk -F: '{sum+=$2} END {print sum}')
+          LINES_HIT=$(grep -o 'LH:[0-9]*' coverage/lcov.info | awk -F: '{sum+=$2} END {print sum}')
+          if [ "$LINES" -gt 0 ]; then
+            COVERAGE=$(awk "BEGIN {printf \"%.2f\", ($LINES_HIT/$LINES)*100}")
+            echo "📊 Coverage (filtered): $COVERAGE%"
+            PASS=$(awk "BEGIN {print ($COVERAGE >= 60.0) ? 1 : 0}")
+            if [ "$PASS" -eq 0 ]; then
+              echo "❌ Coverage $COVERAGE% is below the 60% threshold. Please add more tests."
+              exit 1
+            fi
+            echo "✅ Coverage gate passed: $COVERAGE% >= 60%"
+            echo "COVERAGE_PERCENTAGE=$COVERAGE" >> $GITHUB_ENV
+          fi
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
@@ -72,21 +104,7 @@ jobs:
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      # 📊 Generate coverage summary for PR comments
-      - name: Generate Coverage Report
-        if: github.event_name == 'pull_request'
-        run: |
-          if [ -f coverage/lcov.info ]; then
-            # Extract coverage percentage from lcov.info
-            LINES=$(grep -o 'LF:[0-9]*' coverage/lcov.info | awk -F: '{sum+=$2} END {print sum}')
-            LINES_HIT=$(grep -o 'LH:[0-9]*' coverage/lcov.info | awk -F: '{sum+=$2} END {print sum}')
-            if [ "$LINES" -gt 0 ]; then
-              COVERAGE=$(awk "BEGIN {printf \"%.2f\", ($LINES_HIT/$LINES)*100}")
-              echo "COVERAGE_PERCENTAGE=$COVERAGE" >> $GITHUB_ENV
-              echo "📊 Coverage: $COVERAGE%"
-            fi
-          fi
-
+      # 📊 PR Comment with coverage (emoji by threshold: 🟢 ≥80%, 🟡 ≥60%, 🔴 <60%)
       - name: Comment PR with Coverage
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
@@ -95,7 +113,9 @@ jobs:
           script: |
             const coverage = process.env.COVERAGE_PERCENTAGE;
             if (coverage) {
-              const body = `## 📊 Test Coverage Report\n\n**Coverage:** ${coverage}%\n\n✅ All tests passed!\n\nView detailed coverage report on [Codecov](https://codecov.io/gh/${{ github.repository }})`;
+              const pct = parseFloat(coverage);
+              const emoji = pct >= 80 ? '🟢' : pct >= 60 ? '🟡' : '🔴';
+              const body = `## 📊 Test Coverage Report\n\n${emoji} **Coverage:** ${coverage}% (excl. generated files)\n\n✅ All tests passed!\n\nView detailed coverage report on [Codecov](https://codecov.io/gh/${{ github.repository }})`;
               github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,

@@ -486,36 +486,58 @@
 
 ## Phase 1: Testing & CI/CD (Weekends 7-24)
 
-### Weekend 7 - Phase 1 Kickoff
+### Session 1 - Phase 1: Settings + Analytics + Home Unit Tests
 
-**Date:** 2026-01-11 to 2026-01-12
-**Planned Hours:** 8h
-**Actual Hours:** _h
+**Date:** 2026-02-21
+**Planned Hours:** 4h
+**Actual Hours:** ~4h
 **Phase:** 1 (Testing & CI/CD)
 
 #### 🎯 Goals
-- [ ] Review Phase 0 codebase and identify testing gaps
-- [ ] Create comprehensive testing strategy document
-- [ ] Research Patrol for integration testing
-- [ ] Setup code coverage reporting
-- [ ] Write first batch of new unit tests
+- [x] Analyze project status and identify testing gaps
+- [x] Write unit tests for Settings feature (0% → 100%)
+- [x] Write Analytics entity, use case, and BLoC extended tests
+- [x] Write HomeBloc edge case tests
+- [x] Run full test suite to verify no regressions
 
 #### ✅ Completed
-- 
+**Settings (21 new tests):**
+- ✅ `settings_mocks.dart` – MockSettingsRepository, MockGetSettings, MockSaveSettings, MockSettingsDatasource
+- ✅ `get_settings_test.dart` – 4 tests (success, error, ThemeMode variants)
+- ✅ `save_settings_test.dart` – 5 tests (success, error, all 3 ThemeModes with capture)
+- ✅ `settings_repository_impl_test.dart` – 5 tests (entity→model conversion, error wrapping)
+- ✅ `settings_bloc_test.dart` – 6 tests (LoadSettings + ChangeThemeMode events)
+
+**Analytics (29 new tests):**
+- ✅ `analytics_data_test.dart` – 14 tests: CategorySpending.getPercentage (edge cases), IncomeExpenseComparison.net, AnalyticsData.topSpendingCategories (sorting + immutability)
+- ✅ `get_analytics_data_extended_test.dart` – 9 tests: year/week/month comparison counts, income-only, expense-only, category accumulation, day/month labels
+- ✅ `analytics_bloc_extended_test.dart` – 6 tests: ChangePeriod for all 3 periods, error on ChangePeriod, error on RefreshAnalyticsData, consecutive changes
+
+**Home BLoC (7 new tests):**
+- ✅ `home_bloc_extended_test.dart` – 7 tests: zero balance, negative balance, multi-category mapping, getTotalBalance error, getCategories error, 5-transaction limit, refresh failure without Loading
+
+**Total: 319 tests passing** – 0 regressions
 
 #### 📝 Notes & Learnings
-- 
+- `SettingsBloc` uses `finally` to emit `initial` after every event → state sequence is `[loading, success, initial]`
+- `SettingsRepositoryImpl` wraps exceptions → test must match the wrapper message string
+- `AnalyticsData.topSpendingCategories` creates a copy before sorting; test confirms original list order is preserved
+- HomeBloc `RefreshHomeData` skips the `HomeLoading()` state — goes directly to `HomeLoaded` or `HomeError`
 
 #### 🚧 Challenges & Blockers
-- 
+- None — established patterns worked consistently across all features
 
 #### 📊 Metrics
-- Test Coverage: _%
-- Commits: _
-- Files Changed: _
+- Test Coverage: ~43% (up from 37%)
+- New Test Files: 10 (9 test files + 1 mocks file)
+- New Tests: 57
+- Total Tests: 319 (up from ~263)
 
-#### ⏭️ Next Weekend
-- 
+#### ⏭️ Next Session
+- Widget tests for Settings page UI
+- Widget tests for Transactions (TransactionCard, AddTransactionPage)
+- Analytics Period enum unit tests
+- Configure CI coverage gate (fail if < 45%)
 
 ---
 
