@@ -79,6 +79,7 @@ class _CategoryBodyState extends State<_CategoryBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key('categories_page'),
       appBar: AppBar(title: Text(context.l10n.categories), elevation: 0),
       floatingActionButton: OpenContainer(
         openBuilder: (context, _) => const CategoryFormPage(),

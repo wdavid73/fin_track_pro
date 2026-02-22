@@ -6,7 +6,7 @@
 **Current Date:** Week of 2026-02-22
 **Phase:** Phase 1 - Testing & CI/CD
 **Phase 0 Status:** ✅ Complete (100%)
-**Phase 1 Progress:** ~33% (Unit + Widget + Seeders + CI/CD)
+**Phase 1 Progress:** ~55% (Unit + Widget + Golden + Patrol + Fastlane + CD)
  
  ---
  
@@ -20,7 +20,7 @@
  - ✅ Analytics page with 5 custom widgets and charts
  - ✅ Budget tracking with visualization (5 tests)
  - ✅ Settings UI fully designed
- - ✅ **83 test files, 453 tests** (**79.2% cobertura filtrada** ↑ — gate CI: ≥60%)
+ - ✅ **87 test files, 457 tests** (**79.2% cobertura filtrada** — gate CI: ≥60% | +4 golden tests)
  - ✅ CI/CD runs tests on every PR
  - ✅ Material Design 3 throughout
  - ✅ **Internationalization (i18n)** complete with English and Spanish support (60+ strings)
@@ -37,6 +37,13 @@
 - ✅ **Core tests: Failures, ShimmerBox, Skeleton, SettingsEntity, SettingsLocalDatasource** (35 tests)
 - ✅ **CI/CD: coverage gate ≥60% + lcov install + PR emoji comment**
 - ✅ **Target de cobertura revisado a ≥75%** (79.2% alcanzado ✅)
+- ✅ **Golden Tests: 4 escenarios** — TransactionCard income/expense/long title/no-hero (capturas base generadas)
+- ✅ **Patrol configurado**: patrol.yaml + smoke_test.dart (3 flujos: tabs, FAB, filtros)
+- ✅ **Fastlane Android**: lanes test/beta/release + Firebase App Distribution
+- ✅ **Fastlane iOS**: lanes test/beta/release + Match + TestFlight + ExportOptions-adhoc.plist
+- ✅ **CD Workflow**: .github/workflows/cd.yml con 5 jobs (Quality Gate → Goldens → Android Beta → iOS Beta → Notify)
+- ✅ **Widget Keys**: home_page, analytics_page, categories_page, settings_page añadidas para Patrol
+- ✅ **AUTOMATION_INFRASTRUCTURE.md**: Documentación de la infraestructura de automatización
 
  ### What's Missing
  - 🟡 Demo video and screenshots

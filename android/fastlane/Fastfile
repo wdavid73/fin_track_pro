@@ -1,0 +1,49 @@
+# Fastfile — FinTrack Pro (Android)
+#
+# Estado actual:
+#   ✅ lane :beta   → Activo (APK debug sin firma, Firebase App Distribution)
+#   🔒 lane :release → Deshabilitado hasta tener cuenta de Google Play
+#
+# Prerrequisito para activar :release:
+#   1. Crear cuenta de Desarrollador en Google Play ($25 único pago)
+#   2. Generar un keystore: `keytool -genkey -v -keystore release.keystore`
+#   3. Agregar KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD
+#      a los GitHub Secrets del repositorio.
+#
+# Secretos requeridos AHORA para :beta:
+#   FIREBASE_APP_DIST_TOKEN  → Token de Firebase CLI (firebase login:ci)
+#   FIREBASE_ANDROID_APP_ID  → App ID en Firebase Console > Project Settings
+
+default_platform(:android)
+
+platform :android do
+  # ─── Lane: Test ──────────────────────────────────────────────────────────────
+  desc "🧪 Run all unit tests with coverage"
+  lane :test do
+    sh("fvm flutter test --coverage")
+    sh("lcov --remove coverage/lcov.info '**/*.g.dart' '**/*.freezed.dart' '**/app_localizations*.dart' --output-file coverage/lcov.info --ignore-errors unused,unused")
+  end
+
+  # ─── Lane: Beta (ACTIVO) ─────────────────────────────────────────────────────
+  desc "🚀 Build APK debug (dev flavor, sin firma) → Firebase App Distribution"
+  lane :beta do
+    build_number = sh("git rev-list --count HEAD").strip
+
+    # APK debug: no requiere keystore ni cuenta de desarrollador
+    sh("fvm flutter build apk --flavor dev -t lib/flavors/main_dev.dart --debug --build-number #{build_number}")
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_ANDROID_APP_ID"],
+      firebase_cli_token: ENV["FIREBASE_APP_DIST_TOKEN"],
+      apk_path: "build/app/outputs/flutter-apk/app-dev-debug.apk",
+      groups: "internal-testers",
+      release_notes: sh("git log -1 --pretty=format:'%s'").strip,
+    )
+  end
+
+  # ─── Lane: Release (DESHABILITADO — requiere cuenta Google Play) ─────────────
+  desc "📦 [DISABLED] Build release APK — requiere cuenta Google Play y keystore"
+  lane :release do
+    UI.user_error!("⛔ Lane :release deshabilitada. Actívala cuando tengas una cuenta Google Play y el keystore configurado. Ver comentarios en este Fastfile.")
+  end
+end

@@ -27,6 +27,7 @@ class HomePage extends StatelessWidget {
         BlocProvider.value(value: getIt<TransactionBloc>()),
       ],
       child: Scaffold(
+        key: const Key('home_page'),
         appBar: _appBar(context),
         body: SafeArea(child: _body()),
         floatingActionButton: OpenContainer(

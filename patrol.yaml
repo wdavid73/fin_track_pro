@@ -1,0 +1,5 @@
+app_id_android: com.example.fin_track_pro.dev
+app_id_ios: com.example.finTrackPro.dev
+# Use strings to avoid YAML parsing issues
+wait_for_connection_timeout: "120"
+native_automation: false

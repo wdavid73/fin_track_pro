@@ -47,6 +47,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key('settings_page'),
       appBar: AppBar(title: Text(context.l10n.settings)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16),

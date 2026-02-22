@@ -19,6 +19,7 @@ class AnalyticsPage extends StatelessWidget {
       create: (context) =>
           getIt<AnalyticsBloc>()..add(const LoadAnalyticsData()),
       child: Scaffold(
+        key: const Key('analytics_page'),
         appBar: _appBar(context),
         body: SafeArea(child: _body()),
       ),

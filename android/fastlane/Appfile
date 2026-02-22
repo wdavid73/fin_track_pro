@@ -1,0 +1,2 @@
+json_key_file ""  # Path del JSON de Service Account (si se usa en CI)
+package_name "com.fintrackpro.app"

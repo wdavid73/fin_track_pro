@@ -1,0 +1,252 @@
+name: 🚀 CD — Beta Distribution
+
+# Trigger: push a main o ramas release/*, o manual para tests urgentes
+on:
+  push:
+    branches:
+      - main
+      - 'release/*'
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to distribute'
+        required: true
+        default: 'android'
+        type: choice
+        options:
+          - android
+          - ios
+          - all
+
+jobs:
+  # ──────────────────────────────────────
+  # 1. Quality Gate (reutiliza el CI test)
+  # ──────────────────────────────────────
+  quality:
+    name: ✅ Quality Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Cache Pub
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Create empty env files
+        run: |
+          touch .env.dev && touch .env.staging && touch .env.prod
+
+      - name: Analyze
+        run: flutter analyze --no-pub
+
+      - name: Test + Coverage gate
+        run: |
+          flutter test --no-pub --coverage
+          sudo apt-get install -y lcov
+          lcov --remove coverage/lcov.info '**/*.g.dart' '**/*.freezed.dart' '**/app_localizations*.dart' '**/injection_container.dart' '**/register_module.dart' --output-file coverage/lcov.info --ignore-errors unused,unused
+          LINES=$(grep -o 'LF:[0-9]*' coverage/lcov.info | awk -F: '{sum+=$2} END {print sum}')
+          LINES_HIT=$(grep -o 'LH:[0-9]*' coverage/lcov.info | awk -F: '{sum+=$2} END {print sum}')
+          COVERAGE=$(awk "BEGIN {printf \"%.2f\", ($LINES_HIT/$LINES)*100}")
+          echo "📊 Coverage: $COVERAGE%"
+          PASS=$(awk "BEGIN {print ($COVERAGE >= 60.0) ? 1 : 0}")
+          [ "$PASS" -eq 1 ] || (echo "❌ Coverage $COVERAGE% < 60%" && exit 1)
+
+  # ──────────────────────────────────────
+  # 2. Golden Tests (Regresión Visual)
+  # ──────────────────────────────────────
+  golden-tests:
+    name: 🖼️ Golden Tests
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Create empty env files
+        run: |
+          touch .env.dev && touch .env.staging && touch .env.prod
+
+      - name: Run Golden Tests (validate — no update)
+        run: flutter test test/goldens/ --no-pub
+        # Si falla: significa que algún widget cambió visualmente.
+        # Actualizar goldens con: flutter test --update-goldens test/goldens/
+        # Luego hacer commit de los nuevos .png y re-abrir el PR.
+
+      - name: Upload golden failures as artifacts (si los hay)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-test-failures
+          path: test/goldens/failures/
+          retention-days: 7
+
+  # ──────────────────────────────────────
+  # 3. Android Beta (Firebase App Distribution)
+  # ──────────────────────────────────────
+  distribute-android:
+    name: 📦 Android → Firebase App Distribution
+    runs-on: ubuntu-latest
+    needs: [quality, golden-tests]
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       (inputs.platform == 'android' || inputs.platform == 'all'))
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Setup Ruby & Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: android
+
+      - name: Restore Pub cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Create env files
+        run: |
+          cp .env.dev.example .env.dev
+          cp .env.staging.example .env.staging
+          cp .env.prod.example .env.prod
+
+      - name: 🚀 Distribute via Fastlane
+        working-directory: android
+        env:
+          FIREBASE_APP_DIST_TOKEN: ${{ secrets.FIREBASE_APP_DIST_TOKEN }}
+          FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+        run: bundle exec fastlane beta
+
+  # ──────────────────────────────────────
+  # 4. iOS Beta — DESHABILITADO
+  #    Motivo: No se cuenta con Apple Developer Account aún.
+  #    Para habilitar:
+  #      1. Crear cuenta en developer.apple.com ($99/año)
+  #      2. Configurar Match con un repo privado de certificados
+  #      3. Agregar secrets: APP_STORE_CONNECT_API_KEY_ID,
+  #         APP_STORE_CONNECT_API_ISSUER_ID, APP_STORE_CONNECT_API_KEY_BASE64,
+  #         MATCH_GIT_BASIC_AUTHORIZATION, MATCH_PASSWORD, FIREBASE_IOS_APP_ID
+  #      4. Cambiar `if: false` → por la condición real de plataforma
+  # ──────────────────────────────────────
+  distribute-ios:
+    name: 🍎 iOS → Firebase [DISABLED — No Apple Dev Account]
+    runs-on: macos-14
+    needs: [quality, golden-tests]
+    if: false  # ← Cambiar cuando se tenga Apple Developer Account
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Setup Ruby & Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: ios
+
+      - name: Restore Pub cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Create env files
+        run: |
+          cp .env.dev.example .env.dev
+          cp .env.staging.example .env.staging
+          cp .env.prod.example .env.prod
+
+      - name: 🚀 Distribute via Fastlane
+        working-directory: ios
+        env:
+          FIREBASE_APP_DIST_TOKEN: ${{ secrets.FIREBASE_APP_DIST_TOKEN }}
+          FIREBASE_IOS_APP_ID: ${{ secrets.FIREBASE_IOS_APP_ID }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        run: bundle exec fastlane beta
+
+  # ──────────────────────────────────────
+  # 5. Notificación de Resultado
+  # ──────────────────────────────────────
+  notify:
+    name: 📣 Notify Result
+    runs-on: ubuntu-latest
+    needs: [distribute-android]
+    if: always()
+    steps:
+      - name: Summary
+        run: |
+          echo "## 🚀 CD Pipeline Result" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Android Beta | ${{ needs.distribute-android.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| iOS Beta | ⏭️ Disabled (no Apple Dev Account) |" >> $GITHUB_STEP_SUMMARY
