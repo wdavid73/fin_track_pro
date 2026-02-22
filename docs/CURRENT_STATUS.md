@@ -2,11 +2,11 @@
  
  > Quick reference for project state and next actions
  
- **Last Updated:** 2026-02-21
-**Current Date:** Week of 2026-02-21
+ **Last Updated:** 2026-02-22
+**Current Date:** Week of 2026-02-22
 **Phase:** Phase 1 - Testing & CI/CD
 **Phase 0 Status:** ✅ Complete (100%)
-**Phase 1 Progress:** ~28% (Unit tests + Widget tests + CI/CD improvements)
+**Phase 1 Progress:** ~33% (Unit + Widget + Seeders + CI/CD)
  
  ---
  
@@ -20,7 +20,7 @@
  - ✅ Analytics page with 5 custom widgets and charts
  - ✅ Budget tracking with visualization (5 tests)
  - ✅ Settings UI fully designed
- - ✅ **76 test files, 386 tests** (**72.3% cobertura filtrada** ↑)
+ - ✅ **83 test files, 453 tests** (**79.2% cobertura filtrada** ↑ — gate CI: ≥60%)
  - ✅ CI/CD runs tests on every PR
  - ✅ Material Design 3 throughout
  - ✅ **Internationalization (i18n)** complete with English and Spanish support (60+ strings)
@@ -33,7 +33,10 @@
 - ✅ **EnvConfig tests** (14 tests — fixes Codecov patch coverage)
 - ✅ **AppSnackbar widget tests** (7 tests — 0% → ~100%)
 - ✅ **Budget entity tests** (11 tests — 60% → 100%)
+- ✅ **Seeders tests: 31 tests** (Seeder, CategorySeeder, BudgetSeeder, TransactionSeeder — 0% → 81%+)
+- ✅ **Core tests: Failures, ShimmerBox, Skeleton, SettingsEntity, SettingsLocalDatasource** (35 tests)
 - ✅ **CI/CD: coverage gate ≥60% + lcov install + PR emoji comment**
+- ✅ **Target de cobertura revisado a ≥75%** (79.2% alcanzado ✅)
 
  ### What's Missing
  - 🟡 Demo video and screenshots
