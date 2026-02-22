@@ -122,12 +122,39 @@
         ]
       },
       {
-        "name": "Run integration tests",
+        "name": "Run Golden Tests",
         "autoExecuteCommands": false,
-        "icon": "debug-alt",
+        "icon": "eye",
+        "color": "terminal.ansiCyan",
+        "commands": [
+          "fvm flutter test test/goldens/"
+        ]
+      },
+      {
+        "name": "Update Golden Tests",
+        "autoExecuteCommands": false,
+        "icon": "refresh",
+        "color": "terminal.ansiYellow",
+        "commands": [
+          "fvm flutter test test/goldens/ --update-goldens"
+        ]
+      },
+      {
+        "name": "Coverage Script (Filtered)",
+        "autoExecuteCommands": false,
+        "icon": "graph",
+        "color": "terminal.ansiGreen",
+        "commands": [
+          "./coverage.sh"
+        ]
+      },
+      {
+        "name": "Patrol Smoke Tests (Dev)",
+        "autoExecuteCommands": false,
+        "icon": "beaker",
         "color": "terminal.ansiRed",
         "commands": [
-          "flutter test test/integration"
+          "patrol test --target integration_test/smoke_test.dart --flavor dev"
         ]
       }
     ]

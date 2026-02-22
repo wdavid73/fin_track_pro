@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  ExportOptions para distribución Ad-Hoc (Firebase App Distribution).
+  Usado por: ios/fastlane/Fastfile → lane :beta
+  
+  Prerrequisitos:
+    1. Crear un perfil de aprovisionamiento Ad-Hoc en developer.apple.com
+       para el bundle ID: com.fintrackpro.dev
+    2. Actualizar el campo "provisioningProfiles" con el nombre exacto del perfil.
+    3. El certificado de distribución debe estar en el Keychain del CI (gestionado por Match).
+-->
+<plist version="1.0">
+<dict>
+  <key>method</key>
+  <string>ad-hoc</string>
+  
+  <key>teamID</key>
+  <string>YOUR_TEAM_ID</string>
+  
+  <key>provisioningProfiles</key>
+  <dict>
+    <!-- Bundle ID del flavor dev → nombre del perfil Ad-Hoc en App Store Connect -->
+    <key>com.fintrackpro.dev</key>
+    <string>match AdHoc com.fintrackpro.dev</string>
+  </dict>
+  
+  <key>compileBitcode</key>
+  <false/>
+  
+  <key>stripSwiftSymbols</key>
+  <true/>
+  
+  <key>uploadSymbols</key>
+  <true/>
+</dict>
+</plist>

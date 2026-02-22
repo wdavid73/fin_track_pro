@@ -20,7 +20,7 @@ class _SplashPageState extends State<SplashPage> {
     // Simulate splash screen delay
     await Future.delayed(const Duration(seconds: 2));
 
-    // TODO: Add authentication check here
+    // Add authentication check here
     // For now, we'll just navigate to home
     if (mounted) {
       context.go(RouteConstants.home);

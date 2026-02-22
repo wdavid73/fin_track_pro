@@ -1,6 +1,6 @@
 import 'package:fin_track_pro/features/settings/domain/entities/settings_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 part 'settings_model.g.dart';
 

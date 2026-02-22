@@ -101,6 +101,9 @@ void main() {
       ).thenReturn(const TransactionState());
 
       await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pump(
+        const Duration(seconds: 1),
+      ); // Wait for entrance animations, ignore shimmers
 
       expect(
         find.byType(BalanceSummary),
@@ -130,6 +133,7 @@ void main() {
       ).thenReturn(const TransactionState());
 
       await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpAndSettle();
 
       expect(find.text('FinTrack Pro'), findsOneWidget);
       expect(find.byType(BalanceSummary), findsOneWidget);
@@ -145,7 +149,8 @@ void main() {
       ).thenReturn(const TransactionState());
 
       await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pump(); // Allow error widget to build
+      await tester
+          .pumpAndSettle(); // Allow error widget to build and animations to finish
 
       expect(find.text(errorMessage), findsOneWidget);
       expect(find.text('Retry'), findsOneWidget);
@@ -159,7 +164,7 @@ void main() {
       ).thenReturn(const TransactionState());
 
       await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       await tester.tap(find.text('Retry'));
 
@@ -173,6 +178,9 @@ void main() {
       ).thenReturn(const TransactionState());
 
       await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pump(
+        const Duration(seconds: 1),
+      ); // Wait for entrance animations, ignore shimmers
 
       verify(() => mockHomeBloc.add(const LoadHomeData())).called(1);
     });

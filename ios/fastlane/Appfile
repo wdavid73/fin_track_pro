@@ -1,0 +1,4 @@
+app_identifier "com.fintrackpro.app"
+apple_id "your-apple-id@example.com"
+itc_team_id "YOUR_ITC_TEAM_ID"
+team_id "YOUR_TEAM_ID"

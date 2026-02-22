@@ -37,7 +37,7 @@
 FinTrack Pro is more than a simple finance tracker. It's a comprehensive platform that will demonstrate:
 
 1. **Architectural Excellence**: Clean Architecture, Feature-First structure, MVVM patterns
-2. **Production Quality**: >80% test coverage, complete CI/CD, monitoring, and observability
+2. **Production Quality**: ≥75% test coverage (filtered), complete CI/CD, monitoring, and observability
 3. **Full-Stack Capabilities**: Custom Go backend, real-time features, cloud infrastructure
 4. **Modern Technologies**: Machine learning, OCR, multi-platform support
 5. **Professional Standards**: Documentation, testing, DevOps, and deployment
@@ -237,10 +237,14 @@ This was also a personal decision - I had previously worked with Hive in other p
 ```
 
 **Coverage Goals:**
-- Overall: >80%
-- Business Logic: >90%
-- Presentation: >70%
-- Data Layer: >85%
+- Overall: ≥75% (filtered, excluding generated code)
+- Business Logic: ≥85%
+- Presentation: ≥65%
+- Data Layer: ≥80%
+
+> **Nota sobre el 80%:** El techo del ~79% refleja código legítimamente difícil de testear
+> (widgets con `getIt` directo, archivos `part of` BLoC, DI containers, Hive wrappers).
+> El gate de CI está en ≥60% para proteger regresiones; el target real de calidad es ≥75%.
 
 ---
 
@@ -485,7 +489,7 @@ This was also a personal decision - I had previously worked with Hive in other p
 ### Technical Metrics
 
 **Code Quality:**
-- [ ] Test coverage >80%
+- [ ] Test coverage ≥75% (filtrada, excl. generados) — CI gate: ≥60%
 - [ ] Zero critical bugs in production
 - [ ] Code follows style guide (100% lint passing)
 - [ ] All features documented

@@ -1,4 +1,4 @@
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:fin_track_pro/core/utils/logger_service.dart';
 
 /// Abstract base class for all database seeders

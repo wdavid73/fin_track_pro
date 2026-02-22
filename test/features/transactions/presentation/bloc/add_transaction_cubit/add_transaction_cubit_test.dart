@@ -310,33 +310,75 @@ void main() {
       );
     });
 
-    group('resetForm', () {
-      blocTest<AddTransactionCubit, AddTransactionState>(
-        'should reset form to initial state but keep categories',
-        build: () =>
-            AddTransactionCubit(mockGetCategories, mockCreateTransaction),
-        seed: () => AddTransactionState(
-          selectedDate: tDate,
-          amount: 100.0,
-          selectedCategoryId: 'cat1',
-          description: 'Test',
-          transactionType: 'income',
-          categories: tCategories,
-          isLoadingCategories: false,
-        ),
-        act: (cubit) => cubit.resetForm(),
-        expect: () => [
-          predicate<AddTransactionState>(
-            (state) =>
-                state.amount == null &&
-                state.selectedCategoryId == null &&
-                state.description == '' &&
-                state.transactionType == 'expense' &&
-                state.categories == tCategories &&
-                !state.isLoadingCategories,
-          ),
-        ],
+    test('emits error message when form is not valid', () async {
+      final cubit = AddTransactionCubit(
+        mockGetCategories,
+        mockCreateTransaction,
+      );
+      // Wait for constructor's loadCategories to complete
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      // Set state with isFormValid = false via emitted states
+      expect(cubit.state.isFormValid, isFalse); // default state
+
+      await cubit.saveTransaction();
+
+      expect(
+        cubit.state.errorMessage,
+        'Please enter an amount and select a category',
+      );
+      verifyNever(() => mockCreateTransaction(any()));
+    });
+
+    test('emits error state when createTransaction throws', () async {
+      when(() => mockCreateTransaction(any())).thenThrow(Exception('DB error'));
+
+      final cubit = AddTransactionCubit(
+        mockGetCategories,
+        mockCreateTransaction,
+      );
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      // Set up a valid form via actions
+      cubit.updateAmount(100.0);
+      cubit.updateCategory('cat1');
+
+      await cubit.saveTransaction();
+
+      expect(cubit.state.isSubmitting, isFalse);
+      expect(
+        cubit.state.errorMessage,
+        contains('Failed to create transaction'),
       );
     });
+  });
+
+  group('resetForm', () {
+    blocTest<AddTransactionCubit, AddTransactionState>(
+      'should reset form to initial state but keep categories',
+      build: () =>
+          AddTransactionCubit(mockGetCategories, mockCreateTransaction),
+      seed: () => AddTransactionState(
+        selectedDate: tDate,
+        amount: 100.0,
+        selectedCategoryId: 'cat1',
+        description: 'Test',
+        transactionType: 'income',
+        categories: tCategories,
+        isLoadingCategories: false,
+      ),
+      act: (cubit) => cubit.resetForm(),
+      expect: () => [
+        predicate<AddTransactionState>(
+          (state) =>
+              state.amount == null &&
+              state.selectedCategoryId == null &&
+              state.description == '' &&
+              state.transactionType == 'expense' &&
+              state.categories == tCategories &&
+              !state.isLoadingCategories,
+        ),
+      ],
+    );
   });
 }

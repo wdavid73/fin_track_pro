@@ -1,5 +1,5 @@
 import 'package:fin_track_pro/features/settings/data/models/settings_model.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
 import 'package:fin_track_pro/core/database/seeders/database_seeder.dart';

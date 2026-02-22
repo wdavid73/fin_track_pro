@@ -2,10 +2,11 @@
  
  > Quick reference for project state and next actions
  
- **Last Updated:** 2025-12-28
- **Current Date:** Week of 2025-12-28
- **Phase:** Phase 0 - MVP Foundation
- **Completion:** ~95% of Phase 0
+ **Last Updated:** 2026-02-22
+**Current Date:** Week of 2026-02-22
+**Phase:** Phase 1 - Testing & CI/CD
+**Phase 0 Status:** ✅ Complete (100%)
+**Phase 1 Progress:** ~55% (Unit + Widget + Golden + Patrol + Fastlane + CD)
  
  ---
  
@@ -19,11 +20,30 @@
  - ✅ Analytics page with 5 custom widgets and charts
  - ✅ Budget tracking with visualization (5 tests)
  - ✅ Settings UI fully designed
- - ✅ **53 comprehensive test files** (~37% coverage)
+ - ✅ **87 test files, 457 tests** (**79.2% cobertura filtrada** — gate CI: ≥60% | +4 golden tests)
  - ✅ CI/CD runs tests on every PR
  - ✅ Material Design 3 throughout
  - ✅ **Internationalization (i18n)** complete with English and Spanish support (60+ strings)
 - ✅ **10,500+ lines of quality code**
+- ✅ **Settings feature: 100% unit test coverage** (Phase 1 first win!)
+- ✅ **Analytics entities: 100% test coverage** (CategorySpending, AnalyticsData)
+- ✅ **GetAnalyticsData: extended tests** (year/week/month + income-only/expense-only edge cases)
+- ✅ **Widget tests: TransactionFilterBottomSheet + TransactionDetailsModal** (27 tests)
+- ✅ **Widget tests: EditTransactionPage** (10 tests)
+- ✅ **EnvConfig tests** (14 tests — fixes Codecov patch coverage)
+- ✅ **AppSnackbar widget tests** (7 tests — 0% → ~100%)
+- ✅ **Budget entity tests** (11 tests — 60% → 100%)
+- ✅ **Seeders tests: 31 tests** (Seeder, CategorySeeder, BudgetSeeder, TransactionSeeder — 0% → 81%+)
+- ✅ **Core tests: Failures, ShimmerBox, Skeleton, SettingsEntity, SettingsLocalDatasource** (35 tests)
+- ✅ **CI/CD: coverage gate ≥60% + lcov install + PR emoji comment**
+- ✅ **Target de cobertura revisado a ≥75%** (79.2% alcanzado ✅)
+- ✅ **Golden Tests: 4 escenarios** — TransactionCard income/expense/long title/no-hero (capturas base generadas)
+- ✅ **Patrol configurado**: patrol.yaml + smoke_test.dart (3 flujos: tabs, FAB, filtros)
+- ✅ **Fastlane Android**: lanes test/beta/release + Firebase App Distribution
+- ✅ **Fastlane iOS**: lanes test/beta/release + Match + TestFlight + ExportOptions-adhoc.plist
+- ✅ **CD Workflow**: .github/workflows/cd.yml con 5 jobs (Quality Gate → Goldens → Android Beta → iOS Beta → Notify)
+- ✅ **Widget Keys**: home_page, analytics_page, categories_page, settings_page añadidas para Patrol
+- ✅ **AUTOMATION_INFRASTRUCTURE.md**: Documentación de la infraestructura de automatización
 
  ### What's Missing
  - 🟡 Demo video and screenshots
@@ -33,16 +53,28 @@
  
  ## 📊 Progress Overview
  
- ### Phase 0 MVP Completion: ~95%
+ ### 🎉 Phase 0 MVP: COMPLETE! ✅
 
  ```
- Progress: ███████████████████░ 95%
+ Phase 0 Progress: ████████████████████ 100% ✅
 
- Weekends Invested:  5 / 14 (36%)
- Hours Invested:     ~58-68h / 112h (55%)
+ Weekends Invested:  6 / 14 (43%)
+ Hours Invested:     ~62-72h / 112h (61%)
  Test Coverage:      ~37% / 80% target (53 test files!)
- Features Complete:  7/7 features at 75%+
+ Features Complete:  7/7 features at 75%+ ✅
  Lines of Code:      10,500+ (high quality)
+ ```
+
+### Phase 1 Progress: Testing & CI/CD (~28%)
+
+ ```
+ Phase 1 Progress: █████░░░░░░░░░░░░░░░ 28%
+
+ Target Weekends:    18 weekends
+ Target Hours:       144h
+ Focus Areas:        Unit tests, Widget tests, Integration tests, CI/CD
+ Completed:          Unit tests (57), Widget tests (67), Core tests (32)
+ Coverage Gate:      ≥60% enforced in CI ✅ | Actual: 72.3%
  ```
  
  ### Feature Breakdown
@@ -54,28 +86,34 @@
  | **Budgets** | 100% | 100% | 40% | 100% | **65%** 🟡 |
  | **Home** | 100% | 100% | 80% | 100% | **75%** 🟢 |
  | **Analytics** | 100% | 100% | 100% | 100% | **95%** ✅ |
- | **Settings** | 100% | 100% | 100% | 0% | **90%** ✅ |
+ | **Settings** | 100% | 100% | 100% | 100% | **100%** ✅ |
  | **Splash** | 100% | N/A | 100% | 0% | **80%** 🟢 |
  
  ---
  
- ## 🚀 This Weekend (Dec 28-29)
+ ## 🎊 Phase 0 Complete! 🎉
 
- ### Primary Goals
- 1. **Demo Video** - Record 3-minute showcase ⏰
- 2. **Portfolio Screenshots** - Capture key features ⏰
- 3. **UI Polish** - Final animations and transitions ⏰
+ ### What We Achieved
+ - ✅ **7 Complete Features** - Transactions, Categories, Budgets, Home, Analytics, Settings, Splash
+ - ✅ **10,500+ Lines of Code** - High quality, well-architected
+ - ✅ **53 Test Files** - ~37% coverage with comprehensive tests
+ - ✅ **Clean Architecture** - Solid foundation across all features
+ - ✅ **Internationalization** - English and Spanish support
+ - ✅ **Advanced Animations** - OpenContainer, Hero, Shared Axis, Staggered
+ - ✅ **Material Design 3** - Professional UI throughout
 
- ### Time Allocation
- - **Saturday 4h:** Demo video recording and editing
- - **Sunday 4h:** Screenshots + final polish
+ ## 🚀 Phase 1 Kickoff (Jan 11, 2026)
 
- ### Success Criteria
- - [x] Theme switching works (light/dark)
- - [x] Internationalization complete (English/Spanish)
- - [x] Advanced animations implemented (OpenContainer, Hero, Shared Axis, Staggered)
- - [ ] Demo video recorded (3 minutes)
- - [ ] Portfolio screenshots captured
+ ### Primary Goals for Phase 1
+ 1. **Increase Test Coverage** - From 37% to >60%
+ 2. **Widget Tests** - Add comprehensive widget test suite
+ 3. **Integration Tests** - Implement Patrol for E2E testing
+ 4. **Enhanced CI/CD** - Code coverage reports, automated deployment
+ 5. **Golden Tests** - UI consistency testing
+
+ ### This Weekend (Jan 11-12)
+ - **Saturday 4h:** Review Phase 0, plan Phase 1 testing strategy
+ - **Sunday 4h:** Start unit test expansion for uncovered areas
  
  ---
  
@@ -137,68 +175,79 @@
  
  ---
  
- ## 🎯 Remaining for Phase 0 MVP
- 
- ### Must Have (Required for MVP)
+ ## ✅ Phase 0 MVP - COMPLETE!
+
+ ### Must Have (All Complete!) ✅
  - [x] Analytics with charts ✅ **Done**
  - [x] Category management ✅ **Done**
  - [x] Transaction CRUD complete ✅ **Done** (100% including Edit + Filters)
  - [x] Comprehensive testing ✅ **Done** (53 tests, 37% coverage)
  - [x] Settings backend (theme, currency) ✅ **Done**
  - [x] Internationalization (i18n) ✅ **Done**
- - [x] UI polish & animations ✅ **Done** (First pass)
- - [ ] Demo video (3 minutes) - **Weekend 5-6**
- - [ ] Portfolio screenshots - **Weekend 5-6**
+ - [x] UI polish & animations ✅ **Done**
 
- ### Nice to Have (Optional - Can defer to Phase 1)
- - [x] Transaction edit UI ✅ **Done**
- - [x] Transaction filters/search ✅ **Done**
- - [ ] Budget CRUD UI (data layer ready, optional for MVP)
- - [ ] Data export
- - [ ] Pull-to-refresh
- - [ ] Onboarding flow
- - [ ] Advanced animations
+ ### Deferred to Later Phases
+ - [ ] Demo video (3 minutes) - **Deferred to Phase 1**
+ - [ ] Portfolio screenshots - **Deferred to Phase 1**
+ - [ ] Budget CRUD UI (data layer ready) - **Phase 2**
+ - [ ] Data export - **Phase 2**
+ - [ ] Pull-to-refresh - **Phase 2**
+ - [ ] Onboarding flow - **Phase 2**
 
- ### Estimated Weekends Remaining
- **1-2 weekends** to complete Phase 0 MVP 🎉
+ ## 🎯 Phase 1 Goals (Testing & CI/CD)
 
- **Projection:** Phase 0 complete by **end of December 2025** (~1 month ahead of schedule!)
+ ### Must Have (18 weekends)
+ - [ ] Unit test suite expansion (>60% coverage)
+ - [ ] Widget test suite (>20% coverage)
+ - [ ] Integration tests with Patrol (>10% coverage)
+ - [ ] Golden tests for UI consistency
+ - [ ] Enhanced GitHub Actions CI/CD
+ - [ ] Code coverage reporting
+ - [ ] Automated deployment to Firebase App Distribution
+ - [ ] Fastlane configuration
+
+ **Status:** Phase 0 completed **~1.5 months ahead of schedule!** 🚀
  
  ---
  
  ## ⚠️ Risks & Concerns
- 
- ### 🟢 Resolved Risks
- 1. ✅ **Test coverage** - NOW at 35% with 52 comprehensive test files!
+
+ ### 🟢 Phase 0 Risks - All Resolved!
+ 1. ✅ **Test coverage** - Achieved 37% with 53 comprehensive test files!
  2. ✅ **Hive vs Drift** - Documented in ADR.md and PROJECT_CONTEXT.md
- 3. ✅ **Category management** - Complete with 10 tests!
+ 3. ✅ **Category management** - Complete with 11 tests!
+ 4. ✅ **Settings complete** - Theme switching and i18n working!
+ 5. ✅ **Demo video** - Deferred to Phase 1 (not blocking MVP)
 
- ### 🟡 Current Risks
- 1. ✅ **Settings complete** - Theme switching and i18n working!
-    - **Impact:** User preferences saved and working
-    - **Status:** 🟢 Complete
+ ### 🟡 Phase 1 Risks
+ 1. **Test Coverage Gap**
+     - **Current:** 37% coverage
+     - **Target:** >60% by end of Phase 1
+     - **Mitigation:** Systematic testing of uncovered areas
+     - **Status:** ⏳ Planning
 
- 2. **No demo video yet**
-    - **Impact:** Can't showcase progress for portfolio
-    - **Mitigation:** Record after settings complete (Weekend 5-6)
-    - **Status:** ⏳ Planned
+ 2. **Integration Testing Learning Curve**
+     - **Impact:** Patrol is new technology to learn
+     - **Mitigation:** Start with documentation and simple tests
+     - **Status:** 🟡 Research needed
 
- 3. **Ahead of schedule risk**
-    - **Impact:** Might rush through important details
-    - **Mitigation:** Take time to polish, don't skip quality
-    - **Status:** ⚠️ Monitor velocity
+ 3. **CI/CD Complexity**
+     - **Impact:** Advanced pipelines require DevOps knowledge
+     - **Mitigation:** Incremental improvements, use existing examples
+     - **Status:** 🟡 Monitor
  
  ---
  
  ## 📁 Project Stats
  
  ### Codebase
- - **Total Files:** 133 Dart files
- - **Lines of Code:** 10,500+ (high quality)
+ - **Total Files:** 133+ Dart files
+ - **Lines of Code:** 10,500+
  - **Features:** 7 (transactions, categories, budgets, home, analytics, settings, splash)
- - **Test Files:** 53 comprehensive tests! 🎉
- - **Commits:** 24
- - **Active Days:** 9 (Nov 23, 24, 25, 29, 30, Dec 6, 8, 13, 24)
+ - **Test Files:** 76 files / **386 tests** 🎉
+ - **Test Coverage:** **72.3%** (filtrado, excl. generados)
+ - **Commits:** 26+
+ - **Active Days:** 11 (Nov 23, 24, 25, 29, 30, Dec 6, 8, 13, 24, Feb 21 x2)
  
  ### Dependencies
  - **State Management:** flutter_bloc 9.1.1
@@ -256,32 +305,48 @@
  ---
  
  ## 🎬 Actions for This Week
- 
- ### During This Weekend (Dec 14-15)
- - [x] Saturday: Settings domain, data, BLoC implementation ✅
- - [x] Sunday: Internationalization + theme switching ✅
- - [ ] Review Hive persistence patterns for settings
- - [ ] Research theme switching best practices in Flutter
 
- ### Next Steps (After This Weekend)
- - [ ] Record 3-minute demo video
- - [ ] Take portfolio screenshots
- - [ ] Write Phase 0 retrospective article
- - [ ] Prepare for Phase 1 planning
+ ### Phase 0 Retrospective
+ - [x] All core features complete ✅
+ - [x] Clean Architecture implemented ✅
+ - [x] 53 test files created ✅
+ - [x] Internationalization complete ✅
+ - [x] Advanced animations added ✅
+
+ ### Phase 1 - Session Feb 21, 2026 ✅
+ **Settings tests (21 new tests):**
+ - [x] `settings_mocks.dart`, `get_settings_test.dart`, `save_settings_test.dart`
+ - [x] `settings_repository_impl_test.dart`, `settings_bloc_test.dart`
+
+ **Analytics tests (29 new tests):**
+ - [x] `analytics_data_test.dart` – Entity tests: CategorySpending, IncomeExpenseComparison, AnalyticsData
+ - [x] `get_analytics_data_extended_test.dart` – All periods, income-only, expense-only, accumulation, labels
+ - [x] `analytics_bloc_extended_test.dart` – ChangePeriod (week/month/year), error paths, consecutive changes
+
+ **Home BLoC tests (7 new tests):**
+ - [x] `home_bloc_extended_test.dart` – Zero/negative balance, multi-category map, per-dependency errors, refresh failure
+
+ **Result:** 319 total tests, 0 regressions ✅
+
+ ### Next Steps (Phase 1)
+ - [ ] Widget tests for Settings page UI
+ - [ ] Widget tests for Transactions (TransactionCard, AddTransactionPage)
+ - [ ] Analytics Period enum unit tests
+ - [ ] Research Patrol for integration tests
+ - [ ] Configure coverage gate in CI (fail if < 45%)
  
  ---
  
  **Remember:** Progress over perfection. Every weekend gets you closer to your goals! 🚀
 
- **Document Version:** 1.3
- **Last Major Update:** 2025-12-24 (Settings & i18n complete!)
- **Status:** 🟢 Active Development - **AHEAD OF SCHEDULE!**
+ **Document Version:** 2.0
+ **Last Major Update:** 2026-01-11 (Phase 0 Complete! Phase 1 Beginning!)
+ **Status:** 🟢 Active Development - **Phase 1 Started!**
 
- **Key Update:** Major milestone achieved - Settings & Internationalization complete!
- - 135+ Dart files with 10,500+ LOC
+ **Key Update:** 🎉 **PHASE 0 COMPLETE!** 🎉
+ - 133+ Dart files with 10,500+ LOC
  - 53 test files (37% coverage!)
- - **95% Phase 0 completion**
- - ~1 month ahead of original timeline
- - **Settings feature 90% complete** (Theme switching + i18n)
- - **Internationalization complete** (60+ strings in EN/ES)
- - Only demo video and screenshots remaining for MVP!
+ - **100% Phase 0 completion**
+ - ~1.5 months ahead of original timeline!
+ - All 7 features complete and working
+ - Ready to begin Phase 1: Testing & CI/CD

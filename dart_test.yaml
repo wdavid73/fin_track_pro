@@ -1,0 +1,9 @@
+tags:
+  # Tag usado por golden_toolkit para identificar y filtrar tests visuales.
+  # Registrarlo aquí elimina el warning "A tag was used that wasn't specified".
+  #
+  # Puedes ejecutar solo golden tests con:
+  #   fvm flutter test --tags golden
+  # O excluirlos con:
+  #   fvm flutter test --exclude-tags golden
+  golden: {}

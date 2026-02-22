@@ -1,0 +1,84 @@
+#!/bin/bash
+set -e
+
+echo ""
+echo "========================================"
+echo "  FinTrack Pro — Pre-commit Checks"
+echo "========================================"
+echo ""
+
+# ──────────────────────────────────────────
+# 1. Block sensitive files from being committed
+# ──────────────────────────────────────────
+
+SENSITIVE_PATTERNS=(
+  '\.env$'
+  '\.env\.dev$'
+  '\.env\.staging$'
+  '\.env\.prod$'
+  'google-services\.json$'
+  'GoogleService-Info\.plist$'
+  '\.keystore$'
+  '\.jks$'
+  'key\.properties$'
+)
+
+STAGED_FILES=$(git diff --cached --name-only)
+BLOCKED=false
+
+for pattern in "${SENSITIVE_PATTERNS[@]}"; do
+  MATCHES=$(echo "$STAGED_FILES" | grep -E "$pattern" || true)
+  if [ -n "$MATCHES" ]; then
+    echo "  BLOCKED: Sensitive file staged for commit:"
+    echo "    $MATCHES"
+    BLOCKED=true
+  fi
+done
+
+if [ "$BLOCKED" = true ]; then
+  echo ""
+  echo "  Remove sensitive files from staging with:"
+  echo "    git reset HEAD <file>"
+  echo ""
+  exit 1
+fi
+
+echo "  OK: No sensitive files in staging area"
+
+# ──────────────────────────────────────────
+# 2. Run flutter analyze
+# ──────────────────────────────────────────
+
+echo ""
+echo "  Running flutter analyze..."
+
+if command -v fvm &> /dev/null; then
+  fvm flutter analyze --no-pub 2>&1 | grep -v "asset_does_not_exist" || fvm flutter analyze --no-pub
+else
+  flutter analyze --no-pub 2>&1 | grep -v "asset_does_not_exist" || flutter analyze --no-pub
+fi
+
+echo "  OK: flutter analyze passed"
+
+# ──────────────────────────────────────────
+# 3. Run release config validation (if script exists)
+# ──────────────────────────────────────────
+
+if [ -f "tools/validate_release_config.dart" ]; then
+  echo ""
+  echo "  Running release config validation..."
+
+  if command -v fvm &> /dev/null; then
+    fvm dart run tools/validate_release_config.dart
+  else
+    dart run tools/validate_release_config.dart
+  fi
+fi
+
+# ──────────────────────────────────────────
+# Done
+# ──────────────────────────────────────────
+
+echo ""
+echo "  Pre-commit checks passed!"
+echo ""

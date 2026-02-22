@@ -1,6 +1,5 @@
 import 'package:fin_track_pro/features/transactions/domain/entities/transaction.dart';
-import 'package:hive/hive.dart';
-
+import 'package:hive_ce/hive_ce.dart';
 part 'transaction_model.g.dart';
 
 @HiveType(typeId: 1)

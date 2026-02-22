@@ -1,6 +1,5 @@
 import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
-import 'package:hive/hive.dart';
-
+import 'package:hive_ce/hive_ce.dart';
 part 'category_model.g.dart';
 
 @HiveType(typeId: 0)

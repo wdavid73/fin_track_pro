@@ -1,6 +1,6 @@
 name: fin_track_pro
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -12,18 +12,19 @@ dependencies:
   dartz: ^0.10.1
   dio: ^5.9.0
   equatable: ^2.0.7
-  fl_chart: ^0.69.0
+  fl_chart: ^1.1.1
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
-  flutter_dotenv: ^5.2.1
-  flutter_localization: ^0.3.3
+  flutter_dotenv: ^6.0.0
+  flutter_localizations:
+    sdk: flutter
   formz: ^0.8.0
   gap: ^3.0.1
   get_it: ^9.1.0
   go_router: ^17.0.0
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
+  hive_ce: ^2.19.3
+  hive_ce_flutter: ^2.3.4
   injectable: ^2.6.0
   intl: ^0.20.2
   logger: ^2.5.0
@@ -37,11 +38,15 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-  hive_generator: ^2.0.1
-  injectable_generator: ^2.6.2
+  golden_toolkit: ^0.15.0
+  hive_ce_generator: 1.10.0
+  injectable_generator: ">=2.9.0 <2.10.0"
   mocktail: ^1.0.4
+  patrol: ^4.1.1
   path_provider_platform_interface: ^2.1.2
   plugin_platform_interface: ^2.1.8
+  xml: ^6.5.0
+  yaml: ^3.1.2
 
 flutter:
   uses-material-design: true
@@ -49,6 +54,9 @@ flutter:
   # Internalization
   generate: true
 
+  # Environment files loaded via flutter_dotenv
+  # These files are optional - if missing, fallback values are used
+  # In CI/CD, warnings about missing files are expected and safe to ignore
   assets:
     - .env.dev
     - .env.staging

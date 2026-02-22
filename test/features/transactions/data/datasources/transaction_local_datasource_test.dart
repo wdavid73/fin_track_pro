@@ -2,7 +2,7 @@ import 'package:fin_track_pro/core/database/hive_service.dart';
 import 'package:fin_track_pro/features/transactions/data/datasources/transaction_local_datasource.dart';
 import 'package:fin_track_pro/features/transactions/data/models/transaction_model.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockHiveService extends Mock implements HiveService {}
@@ -151,59 +151,63 @@ void main() {
         expect(result.first.id, '9');
       });
 
-      test('should return empty list when offset is greater than list length',
-          () async {
-        // arrange
-        final tTransactions = List.generate(
-          5,
-          (index) => TransactionModel(
-            id: '$index',
-            amount: 100.0,
-            categoryId: 'cat1',
-            type: 'expense',
-            date: DateTime(2024, 1, 1).add(Duration(days: index)),
-            createdAt: DateTime(2024, 1, 1),
-            note: 'Test $index',
-          ),
-        );
-        when(() => mockBox.values).thenReturn(tTransactions);
+      test(
+        'should return empty list when offset is greater than list length',
+        () async {
+          // arrange
+          final tTransactions = List.generate(
+            5,
+            (index) => TransactionModel(
+              id: '$index',
+              amount: 100.0,
+              categoryId: 'cat1',
+              type: 'expense',
+              date: DateTime(2024, 1, 1).add(Duration(days: index)),
+              createdAt: DateTime(2024, 1, 1),
+              note: 'Test $index',
+            ),
+          );
+          when(() => mockBox.values).thenReturn(tTransactions);
 
-        // act
-        final result = await datasource.getPaginatedTransactions(
-          limit: 5,
-          offset: 10,
-        );
+          // act
+          final result = await datasource.getPaginatedTransactions(
+            limit: 5,
+            offset: 10,
+          );
 
-        // assert
-        expect(result, isEmpty);
-      });
+          // assert
+          expect(result, isEmpty);
+        },
+      );
 
-      test('should return remaining items when limit exceeds remaining items',
-          () async {
-        // arrange
-        final tTransactions = List.generate(
-          10,
-          (index) => TransactionModel(
-            id: '$index',
-            amount: 100.0,
-            categoryId: 'cat1',
-            type: 'expense',
-            date: DateTime(2024, 1, 1).add(Duration(days: index)),
-            createdAt: DateTime(2024, 1, 1),
-            note: 'Test $index',
-          ),
-        );
-        when(() => mockBox.values).thenReturn(tTransactions);
+      test(
+        'should return remaining items when limit exceeds remaining items',
+        () async {
+          // arrange
+          final tTransactions = List.generate(
+            10,
+            (index) => TransactionModel(
+              id: '$index',
+              amount: 100.0,
+              categoryId: 'cat1',
+              type: 'expense',
+              date: DateTime(2024, 1, 1).add(Duration(days: index)),
+              createdAt: DateTime(2024, 1, 1),
+              note: 'Test $index',
+            ),
+          );
+          when(() => mockBox.values).thenReturn(tTransactions);
 
-        // act
-        final result = await datasource.getPaginatedTransactions(
-          limit: 10,
-          offset: 5,
-        );
+          // act
+          final result = await datasource.getPaginatedTransactions(
+            limit: 10,
+            offset: 5,
+          );
 
-        // assert
-        expect(result.length, 5);
-      });
+          // assert
+          expect(result.length, 5);
+        },
+      );
     });
 
     group('getTransactionsByDateRange', () {
@@ -437,27 +441,29 @@ void main() {
         expect(result.any((t) => t.id == '3'), true);
       });
 
-      test('should return empty list when no transactions for category',
-          () async {
-        // arrange
-        final tTransactions = [
-          TransactionModel(
-            id: '1',
-            amount: 100.0,
-            categoryId: 'cat1',
-            type: 'expense',
-            date: DateTime(2024, 1, 1),
-            createdAt: DateTime(2024, 1, 1),
-          ),
-        ];
-        when(() => mockBox.values).thenReturn(tTransactions);
+      test(
+        'should return empty list when no transactions for category',
+        () async {
+          // arrange
+          final tTransactions = [
+            TransactionModel(
+              id: '1',
+              amount: 100.0,
+              categoryId: 'cat1',
+              type: 'expense',
+              date: DateTime(2024, 1, 1),
+              createdAt: DateTime(2024, 1, 1),
+            ),
+          ];
+          when(() => mockBox.values).thenReturn(tTransactions);
 
-        // act
-        final result = await datasource.getTransactionsByCategoryId('cat2');
+          // act
+          final result = await datasource.getTransactionsByCategoryId('cat2');
 
-        // assert
-        expect(result, isEmpty);
-      });
+          // assert
+          expect(result, isEmpty);
+        },
+      );
 
       test('should return sorted transactions by date descending', () async {
         // arrange

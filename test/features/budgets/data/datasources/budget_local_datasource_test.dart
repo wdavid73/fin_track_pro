@@ -1,7 +1,7 @@
 import 'package:fin_track_pro/features/budgets/data/datasources/budget_local_datasource.dart';
 import 'package:fin_track_pro/features/budgets/data/models/budget_model.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockBudgetBox extends Mock implements Box<BudgetModel> {}
