@@ -64,3 +64,5 @@ lib/app/injection_container.config.dart
 # build ouput
 
 
+
+android/app/google-services.json
