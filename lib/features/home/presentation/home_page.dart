@@ -12,6 +12,7 @@ import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -154,6 +155,17 @@ class HomePage extends StatelessWidget {
                   Transactions(
                     transactions: state.recentTransactions,
                     categories: state.categories,
+                    viewAll: GestureDetector(
+                      key: const Key('see_all_transactions'),
+                      onTap: () => context.push('/home/transactions'),
+                      child: Text(
+                        'View all',
+                        style: context.textTheme.bodyMedium?.copyWith(
+                          color: context.primaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                   ).fadeIn(),
                 ],
               ),

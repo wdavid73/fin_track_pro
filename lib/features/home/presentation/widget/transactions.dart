@@ -9,17 +9,18 @@ import 'package:fin_track_pro/core/extensions/context_extensions.dart';
 import 'package:fin_track_pro/theme/utils/resposive.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class Transactions extends StatelessWidget {
   final List<Transaction> transactions;
   final Map<String, Category> categories;
   final bool _isLoading;
+  final Widget viewAll;
 
   const Transactions({
     required this.transactions,
     required this.categories,
+    required this.viewAll,
     super.key,
   }) : _isLoading = false;
 
@@ -27,7 +28,8 @@ class Transactions extends StatelessWidget {
   const Transactions.loading({super.key})
     : transactions = const [],
       categories = const {},
-      _isLoading = true;
+      _isLoading = true,
+      viewAll = const SizedBox.shrink();
 
   @override
   Widget build(BuildContext context) {
@@ -51,16 +53,7 @@ class Transactions extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () => context.push('/home/transactions'),
-                  child: Text(
-                    'View all',
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.primaryColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+                viewAll,
               ],
             ),
           const Gap(16),

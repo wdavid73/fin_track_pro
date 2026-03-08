@@ -27,7 +27,7 @@
 |------|----------|---------|-------|
 | **Unit Tests** | 70% | Business logic, models, utilities | `flutter_test` |
 | **Widget Tests** | 25% | UI components, user interactions | `flutter_test`, `mocktail` |
-| **Integration Tests** | 5% | Critical user flows | `integration_test` |
+| **Integration Tests** | 5% | Critical user flows | `patrol`, `integration_test` |
 
 ## 🧩 Test Patterns by Layer
 
@@ -257,8 +257,116 @@ group('MoneyInputFormatter', () {
 ### Additional Tools
 
 - **golden_toolkit** - Visual regression testing (Phase 1)
-- **patrol** - Native integration testing (Phase 1)
+- **patrol 4.2.0** - Native integration testing ✅ Configurado (ver abajo)
 - **very_good_analysis** - Linting and static analysis
+
+---
+
+## 🤖 Integration Tests con Patrol
+
+### ¿Qué es Patrol?
+
+[Patrol](https://patrol.leancode.co/) es un framework de integration testing para Flutter que extiende `integration_test` con:
+- API ergonómica: `$.tap()`, `$.scrollUntilVisible()`, `$.pumpAndSettle()`
+- Soporte nativo de flavors, devices y dart-defines desde CLI
+- `PatrolJUnitRunner` + Android Test Orchestrator para aislar cada test
+- Futura automatización nativa (permisos, teclado del sistema) con `native_automation: true`
+
+### Smoke Tests actuales
+
+Ubicación: `integration_test/smoke_test.dart`
+
+| # | Test | Descripción |
+|---|------|-------------|
+| 1 | `puede navegar entre los 4 tabs del BottomNavigationBar` | Tab navigation completo |
+| 2 | `el FAB abre la pantalla de Add Transaction` | OpenContainer + AddTransactionPage |
+| 3 | `puede abrir el panel de filtros desde All Transactions` | Scroll + filtros `BottomSheet` |
+
+### Comando de ejecución
+
+```bash
+# Android (emulador o dispositivo real)
+patrol test --target integration_test/smoke_test.dart --flavor dev --device emulator-5554
+
+# Con selección de device interactiva
+patrol test --target integration_test/smoke_test.dart --flavor dev
+```
+
+### Versiones Fijadas
+
+> ⚠️ Las versiones de `patrol` (pubspec.yaml) y `patrol_cli` (global) **deben mantenerse sincronizadas**.
+> Consultar la [tabla de compatibilidad oficial](https://patrol.leancode.co/documentation/compatibility-table) antes de actualizar.
+
+| Paquete | Versión | Dónde |
+|---------|---------|-------|
+| `patrol` | `>=4.2.0 <4.3.0` | `pubspec.yaml` (dev_dependencies) |
+| `patrol_cli` | `4.2.0` | Global: `dart pub global activate patrol_cli 4.2.0` |
+| Kotlin | `2.1.21` | `android/settings.gradle.kts` |
+| AndroidX Orchestrator | `1.5.1` | `android/app/build.gradle.kts` |
+
+### Configuración Android (archivos clave)
+
+A diferencia de `integration_test` puro, Patrol requiere configuración adicional en Android:
+
+```
+android/app/
+├── build.gradle.kts                          # +PatrolJUnitRunner, +orchestrator
+└── src/androidTest/
+    ├── AndroidManifest.xml                   # Registra PatrolJUnitRunner
+    └── java/.../MainActivityTest.java        # @Parameterized runner
+```
+
+**`MainActivityTest.java`** (patrón oficial):
+```java
+@RunWith(Parameterized.class)
+public class MainActivityTest {
+    @Parameters(name = "{0}")
+    public static Object[] testCases() {
+        PatrolJUnitRunner instrumentation =
+            (PatrolJUnitRunner) InstrumentationRegistry.getInstrumentation();
+        instrumentation.setUp(MainActivity.class);
+        instrumentation.waitForPatrolAppService();
+        return instrumentation.listDartTests();
+    }
+
+    private final String dartTestName;
+    public MainActivityTest(String dartTestName) { this.dartTestName = dartTestName; }
+
+    @Test
+    public void runDartTest() {
+        PatrolJUnitRunner instrumentation =
+            (PatrolJUnitRunner) InstrumentationRegistry.getInstrumentation();
+        instrumentation.runDartTest(dartTestName);
+    }
+}
+```
+
+### `patrol.yaml` (configuración del proyecto)
+
+```yaml
+app_id_android: com.example.fin_track_pro.dev
+app_id_ios: com.example.finTrackPro.dev
+wait_for_connection_timeout: "120"
+native_automation: false
+
+targets:
+  - integration_test/smoke_test.dart
+```
+
+> `patrol.yaml` se usa como fallback de configuración. El `--target` debe pasarse explícitamente al CLI para evitar un bug en patrol_cli con paths de `pubspec.yaml`.
+
+### `pubspec.yaml` — sección `patrol`
+
+Esta sección es **obligatoria** para que patrol_cli resuelva el directorio de tests correctamente:
+
+```yaml
+patrol:
+  test_directory: integration_test
+```
+
+Sin esta sección, `patrol_cli` usa el directorio por defecto `patrol_test/` y genera imports con rutas absolutas inválidas.
+
+---
 
 ## 📝 Best Practices
 
@@ -542,8 +650,9 @@ When adding tests:
 
 ---
 
-**Last Updated:** 2026-02-22
+**Last Updated:** 2026-03-08
 **Coverage Target:** ≥75% (filtrada) — CI Gate: ≥60%
 **Cobertura Actual:** 79.2% / 453 tests ✅
+**Integration Tests:** 3 smoke tests (Patrol) ✅ Android
 **Status:** Objetivo alcanzado 🎉
 

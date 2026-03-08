@@ -1,0 +1,71 @@
+Verbose mode enabled. More logs will be printed.
+Received 1 test target(s)
+Received test target: /Volumes/Crucial/Desarrollo/fin_track_pro/integration_test/smoke_test.dart
+Generated entrypoint /Volumes/Crucial/Desarrollo/fin_track_pro/integration_test/test_bundle.dart with 1 bundled test(s)
+Received iOS flavor: dev
+Received 6 --dart-define(s) (0 custom, 6 internal)
+Received internal --dart-define: PATROL_WAIT=0
+Received internal --dart-define: PATROL_TEST_LABEL_ENABLED=true
+Received internal --dart-define: PATROL_TEST_DIRECTORY=integration_test
+Received internal --dart-define: INTEGRATION_TEST_SHOULD_REPORT_RESULTS_TO_NATIVE=false
+Received internal --dart-define: PATROL_TEST_SERVER_PORT=8081
+Received internal --dart-define: PATROL_APP_SERVER_PORT=8082
+• Building app with entrypoint test_bundle.dart for iOS simulator (debug)...
+$ flutter build ios --no-version-check --suppress-analytics --config-only --no-codesign --debug --simulator --flavor dev --target /Volumes/Crucial/Desarrollo/fin_track_pro/integration_test/test_bundle.dart --dart-define PATROL_WAIT=0 --dart-define PATROL_TEST_LABEL_ENABLED=true --dart-define PATROL_TEST_DIRECTORY=integration_test --dart-define INTEGRATION_TEST_SHOULD_REPORT_RESULTS_TO_NATIVE=false --dart-define PATROL_TEST_SERVER_PORT=8081 --dart-define PATROL_APP_SERVER_PORT=8082
+	Building com.fintrackpro.dev for simulator (ios)...
+$ xcodebuild build-for-testing -workspace Runner.xcworkspace -scheme dev -configuration Debug-dev -sdk iphonesimulator -destination generic/platform=iOS Simulator -quiet -derivedDataPath ../build/ios_integ OTHER_SWIFT_FLAGS=$(inherited) -D PATROL_ENABLED OTHER_CFLAGS=$(inherited) -D FULL_ISOLATION=0 -D CLEAR_PERMISSIONS=0
+	error: Sandbox: mkdir(87648) deny(1) file-write-create /Volumes/Crucial/Desarrollo/fin_track_pro/build/ios_integ/Build/Products/Debug-dev-iphonesimulator/RunnerUITests.xctest (in target 'RunnerUITests' from project 'Runner')
+	mkdir -p /Volumes/Crucial/Desarrollo/fin_track_pro/build/ios_integ/Build/Products/Debug-dev-iphonesimulator/RunnerUITests.xctest/Frameworks
+	mkdir: /Volumes/Crucial/Desarrollo/fin_track_pro/build/ios_integ/Build/Products/Debug-dev-iphonesimulator/RunnerUITests.xctest: Operation not permitted
+	realpath: illegal option -- m
+	usage: realpath [-q] [path ...]
+	:18: error: Unexpected failure
+	/Volumes/Crucial/Desarrollo/fin_track_pro/ios/Pods/Pods.xcodeproj: warning: The iOS Simulator deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 9.0, but the range of supported deployment target versions is 12.0 to 26.2.99. (in target 'CocoaAsyncSocket' from project 'Pods')
+	note: Run script build phase 'Thin Binary' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'Runner' from project 'Runner')
+	note: Run script build phase 'Run Script' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'Runner' from project 'Runner')
+	** TEST BUILD FAILED **
+	
+✗ Failed to build app with entrypoint test_bundle.dart for iOS simulator (xcodebuild exited with code 65) (19.5s)
+Error: xcodebuild exited with code 65
+#0      throwToolExit (package:patrol_cli/src/base/exceptions.dart:7:3)
+#1      IOSTestBackend.build.<anonymous closure> (package:patrol_cli/src/ios/ios_test_backend.dart:142:9)
+<asynchronous suspension>
+#2      DisposeScope.run (package:dispose_scope/src/dispose_scope.dart:46:7)
+<asynchronous suspension>
+#3      IOSTestBackend.build (package:patrol_cli/src/ios/ios_test_backend.dart:80:5)
+<asynchronous suspension>
+#4      BuildIOSCommand.run (package:patrol_cli/src/commands/build_ios.dart:204:7)
+<asynchronous suspension>
+#5      CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+<asynchronous suspension>
+#6      PatrolCommandRunner.runCommand (package:patrol_cli/src/runner/patrol_command_runner.dart:405:18)
+<asynchronous suspension>
+#7      PatrolCommandRunner.run (package:patrol_cli/src/runner/patrol_command_runner.dart:343:18)
+<asynchronous suspension>
+#8      patrolCommandRunner (package:patrol_cli/src/runner/patrol_command_runner.dart:80:20)
+<asynchronous suspension>
+#9      main (file:///Users/guicho/.pub-cache/hosted/pub.dev/patrol_cli-4.2.0/bin/main.dart:6:20)
+<asynchronous suspension>
+
+See the logs above to learn what happened. Also consider running with --verbose. If the logs still aren't useful, then it's a bug - please report it.
+Error: xcodebuild exited with code 65
+#0      throwToolExit (package:patrol_cli/src/base/exceptions.dart:7:3)
+#1      IOSTestBackend.build.<anonymous closure> (package:patrol_cli/src/ios/ios_test_backend.dart:142:9)
+<asynchronous suspension>
+#2      DisposeScope.run (package:dispose_scope/src/dispose_scope.dart:46:7)
+<asynchronous suspension>
+#3      IOSTestBackend.build (package:patrol_cli/src/ios/ios_test_backend.dart:80:5)
+<asynchronous suspension>
+#4      BuildIOSCommand.run (package:patrol_cli/src/commands/build_ios.dart:204:7)
+<asynchronous suspension>
+#5      CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+<asynchronous suspension>
+#6      PatrolCommandRunner.runCommand (package:patrol_cli/src/runner/patrol_command_runner.dart:405:18)
+<asynchronous suspension>
+#7      PatrolCommandRunner.run (package:patrol_cli/src/runner/patrol_command_runner.dart:343:18)
+<asynchronous suspension>
+#8      patrolCommandRunner (package:patrol_cli/src/runner/patrol_command_runner.dart:80:20)
+<asynchronous suspension>
+#9      main (file:///Users/guicho/.pub-cache/hosted/pub.dev/patrol_cli-4.2.0/bin/main.dart:6:20)
+<asynchronous suspension>
+

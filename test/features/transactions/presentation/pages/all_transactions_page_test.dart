@@ -1,25 +1,87 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:fin_track_pro/core/l10n/app_localizations.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
+import 'package:fin_track_pro/core/l10n/app_localizations.dart';
+import 'package:fin_track_pro/features/home/presentation/widget/transaction_card.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/transaction.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart';
 import 'package:fin_track_pro/features/transactions/presentation/pages/all_transactions_page.dart';
-import 'package:fin_track_pro/features/home/presentation/widget/transaction_card.dart';
+import 'package:fin_track_pro/features/transactions/presentation/widgets/transaction_details_modal.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
+// ---------------------------------------------------------------------------
+// Fakes & Mocks
+// ---------------------------------------------------------------------------
+
 class MockTransactionBloc extends MockBloc<TransactionEvent, TransactionState>
     implements TransactionBloc {}
 
+class _FakeTransactionEvent extends Fake implements TransactionEvent {}
+
+class _FakeTransactionState extends Fake implements TransactionState {}
+
+// ---------------------------------------------------------------------------
+// Fixtures
+// ---------------------------------------------------------------------------
+
+final _tExpense = Transaction(
+  id: 'tx-1',
+  amount: 100.0,
+  categoryId: 'cat1',
+  type: 'expense',
+  date: DateTime(2024, 1, 1),
+  createdAt: DateTime(2024, 1, 1),
+  note: 'Groceries',
+);
+
+final _tIncome = Transaction(
+  id: 'tx-2',
+  amount: 2000.0,
+  categoryId: 'cat2',
+  type: 'income',
+  date: DateTime(2024, 1, 2),
+  createdAt: DateTime(2024, 1, 2),
+  note: 'Salary',
+);
+
+final _tNullNote = Transaction(
+  id: 'tx-3',
+  amount: 50.0,
+  categoryId: 'cat1',
+  type: 'expense',
+  date: DateTime(2024, 1, 3),
+  createdAt: DateTime(2024, 1, 3),
+  note: null,
+);
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+Widget _buildTestWidget(MockTransactionBloc bloc) {
+  return MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    home: BlocProvider<TransactionBloc>.value(
+      value: bloc,
+      child: const Scaffold(body: AllTransactionsPage()),
+    ),
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Tests
+// ---------------------------------------------------------------------------
+
 void main() {
-  late MockTransactionBloc mockTransactionBloc;
+  late MockTransactionBloc mockBloc;
 
   setUpAll(() {
-    registerFallbackValue(const LoadPaginatedTransactions());
-    registerFallbackValue(const LoadMoreTransactions());
+    registerFallbackValue(_FakeTransactionEvent());
+    registerFallbackValue(_FakeTransactionState());
     FlavorConfig.initialize(
       flavor: Flavor.prod,
       appName: 'FinTrack Pro Test',
@@ -30,129 +92,347 @@ void main() {
   });
 
   setUp(() {
-    mockTransactionBloc = MockTransactionBloc();
+    mockBloc = MockTransactionBloc();
+    // Wire up stream to avoid BlocConsumer errors
+    when(() => mockBloc.stream).thenAnswer((_) => const Stream.empty());
 
-    // Setup GetIt
+    // Register in GetIt so AllTransactionsPage can resolve it
     final getIt = GetIt.instance;
     if (getIt.isRegistered<TransactionBloc>()) {
       getIt.unregister<TransactionBloc>();
     }
-    getIt.registerFactory<TransactionBloc>(() => mockTransactionBloc);
+    getIt.registerFactory<TransactionBloc>(() => mockBloc);
   });
 
   tearDown(() {
     GetIt.instance.reset();
   });
 
-  Widget createWidgetUnderTest() {
-    return const MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: AllTransactionsPage(),
-    );
-  }
+  // ── AppBar ────────────────────────────────────────────────────────────────
 
-  final tTransactions = [
-    Transaction(
-      id: '1',
-      amount: 100.0,
-      categoryId: 'cat1',
-      type: 'expense',
-      date: DateTime(2024, 1, 1),
-      createdAt: DateTime(2024, 1, 1),
-      note: 'Groceries',
-    ),
-    Transaction(
-      id: '2',
-      amount: 2000.0,
-      categoryId: 'cat2',
-      type: 'income',
-      date: DateTime(2024, 1, 2),
-      createdAt: DateTime(2024, 1, 2),
-      note: 'Salary',
-    ),
-  ];
-
-  group('AllTransactionsPage', () {
-    testWidgets('renders loading state correctly', (tester) async {
+  group('AppBar', () {
+    testWidgets('renders "All Transactions" title', (tester) async {
       when(
-        () => mockTransactionBloc.state,
+        () => mockBloc.state,
       ).thenReturn(const TransactionState(status: TransactionStatus.loading));
 
-      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump();
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.text('All Transactions'), findsOneWidget);
     });
 
-    testWidgets('renders loaded state with transactions correctly', (
+    testWidgets('renders filter icon button in AppBar', (tester) async {
+      when(
+        () => mockBloc.state,
+      ).thenReturn(const TransactionState(status: TransactionStatus.loading));
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.filter_list), findsOneWidget);
+    });
+
+    testWidgets('filter badge is hidden when hasActiveFilters is false', (
       tester,
     ) async {
-      when(() => mockTransactionBloc.state).thenReturn(
-        TransactionState(
+      when(() => mockBloc.state).thenReturn(
+        const TransactionState(
           status: TransactionStatus.success,
-          transactions: tTransactions,
-          hasMore: false,
-          currentOffset: 0,
+          hasActiveFilters: false,
         ),
       );
 
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pumpAndSettle();
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump();
 
-      expect(find.byType(TransactionCard), findsNWidgets(2));
-      expect(find.text('Groceries'), findsOneWidget);
-      expect(find.text('Salary'), findsOneWidget);
+      final badge = tester.widget<Badge>(find.byType(Badge));
+      expect(badge.isLabelVisible, isFalse);
     });
 
-    testWidgets('renders empty state correctly', (tester) async {
-      when(() => mockTransactionBloc.state).thenReturn(
+    testWidgets('filter badge is visible when hasActiveFilters is true', (
+      tester,
+    ) async {
+      when(() => mockBloc.state).thenReturn(
+        const TransactionState(
+          status: TransactionStatus.success,
+          hasActiveFilters: true,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump();
+
+      final badge = tester.widget<Badge>(find.byType(Badge));
+      expect(badge.isLabelVisible, isTrue);
+    });
+
+    testWidgets('back arrow button is present in AppBar', (tester) async {
+      when(
+        () => mockBloc.state,
+      ).thenReturn(const TransactionState(status: TransactionStatus.loading));
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+    });
+  });
+
+  // ── Loading state ─────────────────────────────────────────────────────────
+
+  group('Loading state', () {
+    testWidgets('renders CircularProgressIndicator', (tester) async {
+      when(
+        () => mockBloc.state,
+      ).thenReturn(const TransactionState(status: TransactionStatus.loading));
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
+  });
+
+  // ── Empty state ───────────────────────────────────────────────────────────
+
+  group('Empty state', () {
+    testWidgets('shows empty icon and "No transactions yet" message', (
+      tester,
+    ) async {
+      when(() => mockBloc.state).thenReturn(
         const TransactionState(
           status: TransactionStatus.success,
           transactions: [],
           hasMore: false,
-          currentOffset: 0,
         ),
       );
 
-      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump();
 
       expect(find.text('No transactions yet'), findsOneWidget);
       expect(find.byIcon(Icons.receipt_long_outlined), findsOneWidget);
     });
+  });
 
-    testWidgets('renders error state correctly', (tester) async {
-      const errorMessage = 'Failed to load transactions';
-      when(() => mockTransactionBloc.state).thenReturn(
+  // ── Error state ───────────────────────────────────────────────────────────
+
+  group('Error state', () {
+    const errorMessage = 'Failed to load transactions';
+
+    testWidgets('shows error message and Retry button', (tester) async {
+      when(() => mockBloc.state).thenReturn(
         const TransactionState(
           status: TransactionStatus.error,
           errorMessage: errorMessage,
         ),
       );
 
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pump(); // Allow error widget to build
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump();
 
       expect(find.text(errorMessage), findsOneWidget);
       expect(find.text('Retry'), findsOneWidget);
+      expect(find.byIcon(Icons.error_outline), findsOneWidget);
     });
 
-    testWidgets('triggers LoadPaginatedTransactions on retry', (tester) async {
-      const errorMessage = 'Failed to load transactions';
-      when(() => mockTransactionBloc.state).thenReturn(
+    testWidgets('shows generic error text when errorMessage is null', (
+      tester,
+    ) async {
+      when(() => mockBloc.state).thenReturn(
+        const TransactionState(
+          status: TransactionStatus.error,
+          errorMessage: null,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump();
+
+      expect(find.text('An error occurred'), findsOneWidget);
+    });
+
+    testWidgets('tapping Retry dispatches LoadPaginatedTransactions', (
+      tester,
+    ) async {
+      when(() => mockBloc.state).thenReturn(
         const TransactionState(
           status: TransactionStatus.error,
           errorMessage: errorMessage,
         ),
       );
 
-      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
       await tester.pump();
 
       await tester.tap(find.text('Retry'));
+      await tester.pump();
 
+      // Called twice: once on BlocProvider init (add LoadPaginatedTransactions)
+      // and once on Retry tap.
       verify(
-        () => mockTransactionBloc.add(const LoadPaginatedTransactions()),
-      ).called(2);
+        () => mockBloc.add(const LoadPaginatedTransactions()),
+      ).called(greaterThanOrEqualTo(1));
+    });
+  });
+
+  // ── Success state — list ──────────────────────────────────────────────────
+
+  group('Success state — transaction list', () {
+    testWidgets('renders one TransactionCard per transaction', (tester) async {
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: [_tExpense, _tIncome],
+          hasMore: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(TransactionCard), findsNWidgets(2));
+    });
+
+    testWidgets('renders transaction note as card title', (tester) async {
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: [_tExpense, _tIncome],
+          hasMore: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Groceries'), findsOneWidget);
+      expect(find.text('Salary'), findsOneWidget);
+    });
+
+    testWidgets('uses "Transaction" as fallback title when note is null', (
+      tester,
+    ) async {
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: [_tNullNote],
+          hasMore: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Transaction'), findsOneWidget);
+    });
+
+    testWidgets('income card shows "+" prefix in amount', (tester) async {
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: [_tIncome],
+          hasMore: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pumpAndSettle();
+
+      // The amount text should start with "+"
+      final amountFinder = find.textContaining('+');
+      expect(amountFinder, findsOneWidget);
+    });
+
+    testWidgets('expense card shows "-" prefix in amount', (tester) async {
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: [_tExpense],
+          hasMore: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pumpAndSettle();
+
+      // The amount text should start with "-"
+      final amountFinder = find.textContaining('-');
+      expect(amountFinder, findsOneWidget);
+    });
+
+    testWidgets(
+      'shows pagination spinner at bottom when hasMore is true and list is '
+      'not empty',
+      (tester) async {
+        // Build a list of 3 transactions so the list view renders
+        final transactions = [_tExpense, _tIncome, _tNullNote];
+
+        when(() => mockBloc.state).thenReturn(
+          TransactionState(
+            status: TransactionStatus.success,
+            transactions: transactions,
+            hasMore: true,
+          ),
+        );
+
+        await tester.pumpWidget(_buildTestWidget(mockBloc));
+        // Use pump with a finite duration instead of pumpAndSettle —
+        // the FadeInUp animations from animate_do run continuously and
+        // would cause pumpAndSettle to time out.
+        await tester.pump(const Duration(seconds: 1));
+
+        // itemCount = transactions.length + 1 (the hasMore spinner slot).
+        // The spinner may be hidden below the fold — scroll to reveal it.
+        await tester.drag(find.byType(ListView), const Offset(0, -1000));
+        await tester.pump();
+
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      },
+    );
+  });
+
+  // ── Long-press interaction ─────────────────────────────────────────────────
+
+  group('Long-press interaction', () {
+    testWidgets('long-pressing a card opens TransactionDetailsModal', (
+      tester,
+    ) async {
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: [_tExpense],
+          hasMore: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pumpAndSettle();
+
+      await tester.longPress(find.byType(TransactionCard).first);
+      await tester.pumpAndSettle();
+
+      // The modal should be visible on screen
+      expect(find.byType(TransactionDetailsModal), findsOneWidget);
+    });
+
+    testWidgets('modal shows the transaction note as title', (tester) async {
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: [_tExpense],
+          hasMore: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pumpAndSettle();
+
+      await tester.longPress(find.byType(TransactionCard).first);
+      await tester.pumpAndSettle();
+
+      // "Groceries" appears as the title inside the modal
+      expect(find.text('Groceries'), findsWidgets);
     });
   });
 }

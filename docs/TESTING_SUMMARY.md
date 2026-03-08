@@ -1,8 +1,8 @@
-# Unit Tests Summary
+# Tests Summary
 
 ## Overview
 
-Implemented comprehensive unit tests for the Transactions feature business logic. **All 28 tests passing** ✅
+Cobertura completa de lógica de negocio (Unit Tests) y flujos críticos de usuario (Integration Tests con Patrol). **453 unit/widget tests + 3 integration tests pasando** ✅
 
 ## Test Coverage
 
@@ -88,7 +88,7 @@ test/
 ## Test Execution
 
 ```bash
-# Run all tests
+# Run unit + widget tests
 flutter test
 
 # Run specific test file
@@ -96,97 +96,90 @@ flutter test test/features/transactions/domain/usecases/get_transactions_test.da
 
 # Run with coverage
 flutter test --coverage
+
+# Run integration tests (Patrol)
+patrol test --target integration_test/smoke_test.dart --flavor dev --device emulator-5554
 ```
 
-## Test Results
+## Testing Tools
 
-```
-00:05 +28: All tests passed!
-```
-
-**Total:** 28 tests
-**Passed:** 28 ✅
-**Failed:** 0
-**Duration:** ~5 seconds
-
-## What Was NOT Tested
-
-- ❌ UI/UX widgets (deferred)
-- ❌ Integration tests
-- ❌ E2E tests
-- ❌ Hive database operations (mocked)
-
-## Code Coverage
-
-Tests cover:
-- ✅ All use cases (100%)
-- ✅ Repository implementation (100%)
-- ✅ BLoC events and states (100%)
-- ✅ Error handling scenarios
-- ✅ Edge cases (empty lists, null values)
-
-## Key Testing Patterns
-
-### 1. Arrange-Act-Assert (AAA)
-```dart
-test('should get transactions from repository', () async {
-  // arrange
-  when(() => mockRepository.getTransactions())
-      .thenAnswer((_) async => tTransactions);
-
-  // act
-  final result = await useCase();
-
-  // assert
-  expect(result, tTransactions);
-  verify(() => mockRepository.getTransactions()).called(1);
-});
-```
-
-### 2. BLoC Testing with bloc_test
-```dart
-blocTest<TransactionBloc, TransactionState>(
-  'emits [Loading, Loaded] when LoadTransactions succeeds',
-  build: () {
-    when(() => mockGetTransactions())
-        .thenAnswer((_) async => tTransactions);
-    return bloc;
-  },
-  act: (bloc) => bloc.add(const LoadTransactions()),
-  expect: () => [
-    const TransactionLoading(),
-    TransactionLoaded(tTransactions),
-  ],
-);
-```
-
-### 3. Mocking with Mocktail
-```dart
-class MockTransactionRepository extends Mock 
-    implements TransactionRepository {}
-
-// Setup
-mockRepository = MockTransactionRepository();
-
-// Stub
-when(() => mockRepository.getTransactions())
-    .thenAnswer((_) async => transactions);
-
-// Verify
-verify(() => mockRepository.getTransactions()).called(1);
-```
-
-## Next Steps
-
-1. **UI/UX Implementation** - Build pages and widgets
-2. **Widget Tests** - Test UI components
-3. **Integration Tests** - Test feature end-to-end
-4. **Code Coverage Report** - Generate detailed coverage
-5. **CI/CD Integration** - Automate test execution
+- **mocktail** ^1.0.4 - Mocking framework
+- **bloc_test** ^10.0.0 - BLoC testing utilities
+- **flutter_test** - Flutter testing framework
+- **patrol** ^4.2.0 - Integration test framework
+- **patrol_cli** 4.2.0 - CLI para ejecutar patrol tests
 
 ## Conclusion
 
-✅ **Complete business logic test coverage**
-✅ **All tests passing**
-✅ **High confidence in implementation**
-✅ **Ready for UI development**
+✅ **79.2% cobertura unit/widget (453 tests)**
+✅ **3 smoke tests de integración (Patrol, Android)**
+✅ **0 fallos en unit tests**
+✅ **Infraestructura Android de Patrol completa**
+✅ **Cada `patrolTest()` se ejecuta como test JUnit independiente (ATO)**
+
+## Integration Tests con Patrol
+
+### Contexto y problemas resueltos
+
+Para hacer funcionar los tests de Patrol en Android se resolvieron **5 problemas en cadena**:
+
+| # | Problema | Causa | Fix aplicado |
+|---|----------|-------|--------------|
+| 1 | `patrol_test/Volumes/...` path inválido | `patrol_cli 4.1.0` bug: conviertía paths de `--target` a rutas absolutas | `dart pub global activate patrol_cli 4.2.0` |
+| 2 | `testFilePaths must not be empty` | `patrol_cli` default `testDirectory = patrol_test/` no coincidía con `integration_test/` | Agregar `patrol: test_directory: integration_test` en `pubspec.yaml` |
+| 3 | `Version incompatibility: patrol_cli 4.2.0 / patrol 4.x` | `patrol ^4.2.0` resolvía a `4.3.0`, incompatible con `patrol_cli 4.2.0` | Pinear `patrol: ">=4.2.0 <4.3.0"` en `pubspec.yaml` |
+| 4 | `cannot find symbol PatrolAppServiceClient` | Kotlin `2.2.20` (pre-release) incompatible con compilación mixta Java/Kotlin del módulo Android de patrol | Downgrade Kotlin a `2.1.21` en `android/settings.gradle.kts` |
+| 5 | `Total: 0 tests` (Patrol no descubría tests) | Faltaba `MainActivityTest.java`, `testInstrumentationRunner` y Android Test Orchestrator | Crear archivos de infraestructura Android (ver abajo) |
+
+### Archivos creados/modificados para Android
+
+```
+android/
+├── settings.gradle.kts             # Kotlin: 2.2.20 → 2.1.21
+└── app/
+    ├── build.gradle.kts            # +PatrolJUnitRunner, +ANDROIDX_TEST_ORCHESTRATOR, +orchestrator dep
+    └── src/androidTest/
+        ├── AndroidManifest.xml     # [NUEVO] Registra pl.leancode.patrol.PatrolJUnitRunner
+        └── java/.../MainActivityTest.java  # [NUEVO] @Parameterized runner
+pubspec.yaml                         # patrol: >=4.2.0 <4.3.0 + patrol: test_directory
+```
+
+### Smoke Tests — Resultados
+
+```
+✅ puede navegar entre los 4 tabs del BottomNavigationBar
+✅ el FAB abre la pantalla de Add Transaction
+✅ puede abrir el panel de filtros desde All Transactions
+
+📝 Total: 3 tests   Exit code: 0   ⏱️ Duración: 36s
+```
+
+### Comando de ejecución
+
+```bash
+patrol test --target integration_test/smoke_test.dart --flavor dev --device emulator-5554
+```
+
+> ⚠️ Requiere `patrol_cli 4.2.0` instalado globalmente:
+> ```bash
+> dart pub global activate patrol_cli 4.2.0
+> ```
+
+---
+
+## Test Results (Unit + Widget)
+
+```
+00:05 +453: All tests passed!
+```
+
+**Total Unit/Widget:** 453 tests
+**Passed:** 453 ✅
+**Failed:** 0
+**Duration:** ~5 seconds
+
+---
+
+## Test Execution
+
+```bash

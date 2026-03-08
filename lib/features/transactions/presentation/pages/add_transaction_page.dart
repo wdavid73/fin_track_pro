@@ -51,6 +51,7 @@ class AddTransactionPage extends StatelessWidget {
       },
       builder: (context, state) {
         return SafeArea(
+          key: const Key('add_transaction_page'),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

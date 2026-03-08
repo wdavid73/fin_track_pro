@@ -1,0 +1,50 @@
+Verbose mode enabled. More logs will be printed.
+Received 1 test target(s)
+Received test target: /Volumes/Crucial/Desarrollo/fin_track_pro/integration_test/smoke_test.dart
+Generated entrypoint /Volumes/Crucial/Desarrollo/fin_track_pro/integration_test/test_bundle.dart with 1 bundled test(s)
+Received iOS flavor: dev
+Received 6 --dart-define(s) (0 custom, 6 internal)
+Received internal --dart-define: PATROL_WAIT=0
+Received internal --dart-define: PATROL_TEST_LABEL_ENABLED=true
+Received internal --dart-define: PATROL_TEST_DIRECTORY=integration_test
+Received internal --dart-define: INTEGRATION_TEST_SHOULD_REPORT_RESULTS_TO_NATIVE=false
+Received internal --dart-define: PATROL_TEST_SERVER_PORT=8081
+Received internal --dart-define: PATROL_APP_SERVER_PORT=8082
+• Building app with entrypoint test_bundle.dart for iOS device (debug)...
+Error: Running on physical iOS devices is possible only in release mode
+#0      throwToolExit (package:patrol_cli/src/base/exceptions.dart:7:3)
+#1      IOSTestBackend.build.<anonymous closure> (package:patrol_cli/src/ios/ios_test_backend.dart:91:9)
+#2      DisposeScope.run (package:dispose_scope/src/dispose_scope.dart:46:18)
+#3      IOSTestBackend.build (package:patrol_cli/src/ios/ios_test_backend.dart:80:25)
+#4      BuildIOSCommand.run (package:patrol_cli/src/commands/build_ios.dart:204:29)
+<asynchronous suspension>
+#5      CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+<asynchronous suspension>
+#6      PatrolCommandRunner.runCommand (package:patrol_cli/src/runner/patrol_command_runner.dart:405:18)
+<asynchronous suspension>
+#7      PatrolCommandRunner.run (package:patrol_cli/src/runner/patrol_command_runner.dart:343:18)
+<asynchronous suspension>
+#8      patrolCommandRunner (package:patrol_cli/src/runner/patrol_command_runner.dart:80:20)
+<asynchronous suspension>
+#9      main (file:///Users/guicho/.pub-cache/hosted/pub.dev/patrol_cli-4.2.0/bin/main.dart:6:20)
+<asynchronous suspension>
+
+See the logs above to learn what happened. Also consider running with --verbose. If the logs still aren't useful, then it's a bug - please report it.
+Error: Running on physical iOS devices is possible only in release mode
+#0      throwToolExit (package:patrol_cli/src/base/exceptions.dart:7:3)
+#1      IOSTestBackend.build.<anonymous closure> (package:patrol_cli/src/ios/ios_test_backend.dart:91:9)
+#2      DisposeScope.run (package:dispose_scope/src/dispose_scope.dart:46:18)
+#3      IOSTestBackend.build (package:patrol_cli/src/ios/ios_test_backend.dart:80:25)
+#4      BuildIOSCommand.run (package:patrol_cli/src/commands/build_ios.dart:204:29)
+<asynchronous suspension>
+#5      CommandRunner.runCommand (package:args/command_runner.dart:212:13)
+<asynchronous suspension>
+#6      PatrolCommandRunner.runCommand (package:patrol_cli/src/runner/patrol_command_runner.dart:405:18)
+<asynchronous suspension>
+#7      PatrolCommandRunner.run (package:patrol_cli/src/runner/patrol_command_runner.dart:343:18)
+<asynchronous suspension>
+#8      patrolCommandRunner (package:patrol_cli/src/runner/patrol_command_runner.dart:80:20)
+<asynchronous suspension>
+#9      main (file:///Users/guicho/.pub-cache/hosted/pub.dev/patrol_cli-4.2.0/bin/main.dart:6:20)
+<asynchronous suspension>
+

@@ -18,6 +18,7 @@
 - [ADR-006: Material Design 3](#adr-006-material-design-3)
 - [ADR-007: Conventional Commits with Gitmoji](#adr-007-conventional-commits-with-gitmoji)
 - [ADR-008: Flutter Flavors for Environment Management](#adr-008-flutter-flavors-for-environment-management)
+- [ADR-009: Patrol para Integration Tests](#adr-009-patrol-para-integration-tests)
 
 ---
 
@@ -539,6 +540,122 @@ Implement **Flutter Flavors** (dev, staging, prod) from day 1.
 
 ---
 
+## ADR-009: Patrol para Integration Tests
+
+**Status:** ✅ Accepted
+**Date:** 2026-03-08
+**Decision Makers:** Wilson David Padilla
+**Phase:** 1
+
+### Context
+
+El proyecto necesitaba una solución de integration/E2E tests capaz de:
+- Probar flujos completos de usuario en la app real (no en un harness de widget test)
+- Ejecutar sobre dispositivos reales y emuladores Android/iOS
+- Integrarse con flavors de Flutter (`dev`, `staging`, `prod`)
+- Ser ejecutable desde CI/CD (GitHub Actions)
+- Soportar selectores de widgets por `Key`, tipo e ícono de forma más ergonómica que `integration_test` puro
+
+El paquete `integration_test` estándar de Flutter no permite interactuar con la plataforma nativa (permisos, backstack nativo, notificaciones) y requiere mucho boilerplate para configurar el runner en Android.
+
+### Decision
+
+Usar **Patrol** (`patrol ^4.2.0` + `patrol_cli 4.2.0`) como framework de integration tests.
+
+```
+patrol/
+  patrol_cli    → CLI para build y ejecución de tests
+  patrol        → Dart package con PatrolTester y helpers
+```
+
+Tests ubicados en `integration_test/` y ejecutados con:
+```bash
+patrol test --target integration_test/smoke_test.dart --flavor dev --device <device_id>
+```
+
+### Rationale
+
+**Comparación con alternativas:**
+
+| Aspecto | `integration_test` puro | `flutter_driver` (legacy) | **Patrol** |
+|---------|------------------------|--------------------------|------------|
+| Mantenimiento | Activo | Deprecado | Activo |
+| Interacción nativa | ❌ | Limitada | ✅ (permisos, teclado nativo) |
+| API ergonómica | Regular | Regular | ✅ (`$.tap()`, `$.scrollUntilVisible()`) |
+| Soporte de flavors | Manual | Manual | ✅ Nativo (`--flavor dev`) |
+| CI/CD | Complejo | Muy complejo | ✅ Con `patrol_cli` |
+| Test runner Android | AndroidJUnit manual | Propio | ✅ `PatrolJUnitRunner` |  
+| Modo nativo | — | — | Opcional (`native_automation`) |
+
+**Pros de Patrol:**
+- API clara y composable: `$.tap()`, `$.scrollUntilVisible()`, `$.pumpAndSettle()`
+- CLI que maneja build + install + ejecución en un solo comando
+- Soporte nativo de `--flavor`, `--device`, `--dart-define`
+- `PatrolJUnitRunner` + `@Parameterized` exponen cada `patrolTest()` como test case JUnit independiente
+- Compatible con Android Test Orchestrator para aislamiento de estado entre tests
+
+**Cons / Tradeoffs:**
+- Configuración Android más extensa que `integration_test` (ver Consecuencias)
+- Versiones deben mantenerse sincronizadas entre `patrol` (Dart) y `patrol_cli` (global)
+- La tabla de compatibilidad de versiones debe revisarse antes de `pub upgrade`
+
+### Configuración Android Requerida
+
+Patrol necesita los siguientes archivos que **no existen por defecto** en un proyecto Flutter:
+
+```
+android/
+└── app/
+    ├── build.gradle.kts          # Modificado: +testInstrumentationRunner, +testOptions, +orchestrator dep
+    └── src/
+        └── androidTest/
+            ├── AndroidManifest.xml              # Registra PatrolJUnitRunner
+            └── java/com/example/fin_track_pro/
+                └── MainActivityTest.java         # Patrón @Parameterized para descubrir Dart tests
+```
+
+**`build.gradle.kts` (cambios clave):**
+```kotlin
+defaultConfig {
+    testInstrumentationRunner = "pl.leancode.patrol.PatrolJUnitRunner"
+    testInstrumentationRunnerArguments["clearPackageData"] = "true"
+}
+testOptions {
+    execution = "ANDROIDX_TEST_ORCHESTRATOR"
+}
+dependencies {
+    androidTestUtil("androidx.test:orchestrator:1.5.1")
+}
+```
+
+**Problema de versiones encontrado:**
+- Kotlin `2.2.20` (pre-release) genera conflictos con la compilación mixta Java/Kotlin del módulo Android de patrol
+- **Fix:** Downgrade a `org.jetbrains.kotlin.android` `2.1.21` en `settings.gradle.kts`
+
+### Consequences
+
+**Positive:**
+- 3 smoke tests cubren los flujos críticos (navegación, FAB, filtros)
+- Cada `patrolTest()` es un test case JUnit independiente con resultado propio
+- Extensible: agregar `patrolTest()` al `smoke_test.dart` sin cambiar infraestructura
+- Preparado para native automation (permisos, etc.) solo habilitando `native_automation: true` en `patrol.yaml`
+
+**Negative:**
+- Requiere sincronizar versiones `patrol` ↔ `patrol_cli` manualmente (no hay constraint automático)
+- La configuración iOS requiere pasos adicionales en Xcode (aún pendiente)
+- Cada test arranca la app desde cero (bootstrap Hive + DI), lo que tarda ~5s por test
+
+**Mitigation:**
+- Fijar `patrol: ">=4.2.0 <4.3.0"` en `pubspec.yaml` evita actualizaciones inesperadas
+- `patrol.yaml` con `test_directory: integration_test` documenta la ubicación no-estándar
+- Ver `docs/TESTING_STRATEGY.md` para la sección de integration tests
+
+### Status
+
+✅ **Validated** — 3 smoke tests pasando en Android (emulator-5554), Exit code: 0, 36s
+
+---
+
 ## ADR Template
 
 Use this template for future ADRs:
@@ -592,6 +709,7 @@ Use this template for future ADRs:
 |---------|------|--------|---------|
 | 1.0 | 2025-12-06 | Wilson David Padilla | Initial ADR document created |
 | - | - | - | 8 ADRs documented (001-008) |
+| 1.1 | 2026-03-08 | Wilson David Padilla | ADR-009 Patrol integration tests |
 
 ---
 
@@ -653,8 +771,8 @@ Don't create ADRs for:
 
 ---
 
-**Document Version:** 1.0
-**Last Updated:** 2025-12-06
+**Document Version:** 1.1
+**Last Updated:** 2026-03-08
 **Status:** 🟢 Active
 
 **Remember:** ADRs are living documents. Update them as decisions evolve or get superseded! 📚

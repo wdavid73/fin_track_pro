@@ -86,6 +86,7 @@ class _TransactionFilterBottomSheetState
     };
 
     return Container(
+      key: const Key('transaction_filter_sheet'),
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),

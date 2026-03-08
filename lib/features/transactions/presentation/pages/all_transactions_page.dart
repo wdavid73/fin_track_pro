@@ -33,6 +33,7 @@ class AllTransactionsPage extends StatelessWidget {
             BlocBuilder<TransactionBloc, TransactionState>(
               builder: (context, state) {
                 return IconButton(
+                  key: const Key('filter_button'),
                   icon: Badge(
                     isLabelVisible: state.hasActiveFilters,
                     child: const Icon(Icons.filter_list),
