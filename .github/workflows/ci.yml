@@ -201,6 +201,15 @@ jobs:
       - name: Build Patrol APKs
         run: patrol build android --target integration_test/smoke_test.dart --flavor dev
 
+      - name: Verify APK outputs
+        run: |
+          echo "📦 Listing APK files..."
+          find build/app/outputs -name "*.apk" -type f 2>/dev/null || echo "No APKs found in build/app/outputs"
+          echo ""
+          echo "Expected paths:"
+          ls -la build/app/outputs/apk/dev/debug/ 2>/dev/null || echo "❌ dev/debug directory not found"
+          ls -la build/app/outputs/apk/androidTest/dev/debug/ 2>/dev/null || echo "❌ androidTest/dev/debug directory not found"
+
       # Autenticación en Google Cloud / Firebase
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
@@ -210,12 +219,12 @@ jobs:
       - name: Run tests on Firebase Test Lab
         run: |
           gcloud firebase test android run \
-            --project ${{ secrets.FIREBASE_PROJECT_ID }} \
-            --type instrumentation \
-            --app build/app/outputs/apk/dev/debug/app-dev-debug.apk \
-            --test build/app/outputs/apk/androidTest/dev/debug/app-dev-debug-androidTest.apk \
-            --timeout 5m \
+            --type=instrumentation \
+            --app=build/app/outputs/apk/dev/debug/app-dev-debug.apk \
+            --test=build/app/outputs/apk/androidTest/dev/debug/app-dev-debug-androidTest.apk \
+            --project=${{ secrets.FIREBASE_PROJECT_ID }} \
+            --timeout=5m \
             --use-orchestrator \
-            --environment-variables clearPackageData=true \
-            --device model=Pixel3,version=30,locale=es,orientation=portrait
+            --environment-variables=clearPackageData=true \
+            --device=model=Pixel3,version=30,locale=es,orientation=portrait
 
