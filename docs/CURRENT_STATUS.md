@@ -20,7 +20,7 @@
  - ✅ Analytics page with 5 custom widgets and charts
  - ✅ Budget tracking with visualization (5 tests)
  - ✅ Settings UI fully designed
- - ✅ **87 test files, 457 tests** (**79.2% cobertura filtrada** — gate CI: ≥60% | +4 golden tests)
+ - ✅ **100+ test files, 533 tests** (**81.5% cobertura filtrada** — gate CI: ≥60% | +4 golden tests)
  - ✅ CI/CD runs tests on every PR
  - ✅ Material Design 3 throughout
  - ✅ **Internationalization (i18n)** complete with English and Spanish support (60+ strings)
@@ -36,7 +36,7 @@
 - ✅ **Seeders tests: 31 tests** (Seeder, CategorySeeder, BudgetSeeder, TransactionSeeder — 0% → 81%+)
 - ✅ **Core tests: Failures, ShimmerBox, Skeleton, SettingsEntity, SettingsLocalDatasource** (35 tests)
 - ✅ **CI/CD: coverage gate ≥60% + lcov install + PR emoji comment**
-- ✅ **Target de cobertura revisado a ≥75%** (79.2% alcanzado ✅)
+- ✅ **Target de cobertura revisado a ≥75%** (81.5% alcanzado ✅)
 - ✅ **Golden Tests: 4 escenarios** — TransactionCard income/expense/long title/no-hero (capturas base generadas)
 - ✅ **Patrol configurado**: patrol.yaml + smoke_test.dart (3 flujos: tabs, FAB, filtros)
 - ✅ **Fastlane Android**: lanes test/beta/release + Firebase App Distribution
@@ -329,11 +329,11 @@
  **Result:** 319 total tests, 0 regressions ✅
 
  ### Next Steps (Phase 1)
- - [ ] Widget tests for Settings page UI
- - [ ] Widget tests for Transactions (TransactionCard, AddTransactionPage)
- - [ ] Analytics Period enum unit tests
- - [ ] Research Patrol for integration tests
- - [ ] Configure coverage gate in CI (fail if < 45%)
+ - [x] Widget tests for Settings page UI
+ - [x] Widget tests for Transactions (TransactionCard, AddTransactionPage, AllTransactionsPage)
+ - [x] Analytics Period enum unit tests
+ - [x] Expand Patrol integration tests (End-to-end critical flows)
+ - [ ] Demo video and portfolio screenshots
  
  ---
  

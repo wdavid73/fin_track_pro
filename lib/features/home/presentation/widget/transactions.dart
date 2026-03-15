@@ -1,3 +1,4 @@
+import 'package:fin_track_pro/core/extensions/localization_extension.dart';
 import 'package:fin_track_pro/core/utils/icon_helper.dart';
 import 'package:fin_track_pro/core/widgets/skeleton.dart';
 import 'package:fin_track_pro/core/widgets/shimmer_wrapper.dart';
@@ -48,7 +49,7 @@ class Transactions extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Recent Transactions',
+                  context.l10n.recentTransactions,
                   style: context.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

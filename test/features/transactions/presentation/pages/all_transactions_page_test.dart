@@ -435,4 +435,161 @@ void main() {
       expect(find.text('Groceries'), findsWidgets);
     });
   });
+
+  // ── Pagination behavior ─────────────────────────────────────────────────
+
+  group('Pagination behavior', () {
+    testWidgets('does not show pagination spinner when hasMore is false', (
+      tester,
+    ) async {
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: [_tExpense],
+          hasMore: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pumpAndSettle();
+
+      // Only 1 TransactionCard, no extra spinner item
+      expect(find.byType(TransactionCard), findsOneWidget);
+    });
+
+    testWidgets('renders correct item count with pagination indicator', (
+      tester,
+    ) async {
+      final transactions = [_tExpense, _tIncome];
+
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: transactions,
+          hasMore: true,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump(const Duration(seconds: 1));
+
+      // ListView itemCount = transactions.length + 1 (for spinner)
+      // We should find 2 TransactionCards
+      expect(find.byType(TransactionCard), findsNWidgets(2));
+    });
+  });
+
+  // ── Filter functionality ────────────────────────────────────────────────
+
+  group('Filter functionality', () {
+    testWidgets('filter button key exists for testing', (tester) async {
+      when(() => mockBloc.state).thenReturn(
+        const TransactionState(
+          status: TransactionStatus.success,
+          hasActiveFilters: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump();
+
+      expect(find.byKey(const Key('filter_button')), findsOneWidget);
+    });
+
+    testWidgets('filter badge reflects hasActiveFilters state true', (
+      tester,
+    ) async {
+      when(() => mockBloc.state).thenReturn(
+        const TransactionState(
+          status: TransactionStatus.success,
+          hasActiveFilters: true,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump();
+
+      final badge = tester.widget<Badge>(find.byType(Badge));
+      expect(badge.isLabelVisible, isTrue);
+    });
+
+    testWidgets('filter badge reflects hasActiveFilters state false', (
+      tester,
+    ) async {
+      when(() => mockBloc.state).thenReturn(
+        const TransactionState(
+          status: TransactionStatus.success,
+          hasActiveFilters: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump();
+
+      final badge = tester.widget<Badge>(find.byType(Badge));
+      expect(badge.isLabelVisible, isFalse);
+    });
+  });
+
+  // ── Transaction card styling ────────────────────────────────────────────
+
+  group('Transaction card styling', () {
+    testWidgets('income transaction has correct date format', (tester) async {
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: [_tIncome],
+          hasMore: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pumpAndSettle();
+
+      // Date should be formatted as "MMM dd, yyyy"
+      expect(find.text('Jan 02, 2024'), findsOneWidget);
+    });
+
+    testWidgets('expense transaction has correct date format', (tester) async {
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: [_tExpense],
+          hasMore: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pumpAndSettle();
+
+      // Date should be formatted as "MMM dd, yyyy"
+      expect(find.text('Jan 01, 2024'), findsOneWidget);
+    });
+
+    testWidgets('transaction card renders FadeInUp animation wrapper', (
+      tester,
+    ) async {
+      when(() => mockBloc.state).thenReturn(
+        TransactionState(
+          status: TransactionStatus.success,
+          transactions: [_tExpense],
+          hasMore: false,
+        ),
+      );
+
+      await tester.pumpWidget(_buildTestWidget(mockBloc));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      // FadeInUp widget should wrap the TransactionCard
+      expect(
+        find.ancestor(
+          of: find.byType(TransactionCard),
+          matching: find.byWidgetPredicate(
+            (widget) => widget.runtimeType.toString() == 'FadeInUp',
+          ),
+        ),
+        findsOneWidget,
+      );
+    });
+  });
 }

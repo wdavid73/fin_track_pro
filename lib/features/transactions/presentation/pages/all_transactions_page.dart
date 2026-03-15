@@ -20,6 +20,7 @@ class AllTransactionsPage extends StatelessWidget {
     return BlocProvider.value(
       value: getIt<TransactionBloc>()..add(const LoadPaginatedTransactions()),
       child: Scaffold(
+        key: const Key('all_transactions_page'),
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),

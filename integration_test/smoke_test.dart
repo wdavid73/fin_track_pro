@@ -8,6 +8,8 @@
 // Requisito: simulador/emulador activo con la app instalada en flavor dev.
 
 import 'package:fin_track_pro/core/config/flavor_config.dart';
+import 'package:fin_track_pro/features/home/presentation/widget/transaction_card.dart';
+import 'package:fin_track_pro/features/transactions/presentation/widgets/category_chip.dart';
 import 'package:fin_track_pro/main.dart' as app;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -114,7 +116,123 @@ void main() {
       await $.pumpAndSettle();
 
       // Sigue en AllTransactionsPage
-      expect(find.text('All Transactions'), findsOneWidget);
+      expect(find.byKey(const Key('all_transactions_page')), findsOneWidget);
     }
   });
+
+  // ──────────────────────────────────────────
+  // Test 4: Crear transacción E2E completo
+  // ──────────────────────────────────────────
+  patrolTest(
+    'puede crear una transacción y verificarla en Home y All Transactions',
+    ($) async {
+      // ────────────────────────────────────────────────────────────────
+      // Fase 1: Bootstrap y verificar estado inicial
+      // ────────────────────────────────────────────────────────────────
+      await bootstrap();
+      await $.pumpAndSettle();
+
+      // Verificamos que estamos en Home
+      expect(find.byKey(const Key('home_page')), findsOneWidget);
+
+      // ────────────────────────────────────────────────────────────────
+      // Fase 2: Abrir modal de Add Transaction via FAB
+      // ────────────────────────────────────────────────────────────────
+      await $.tap(find.byIcon(Icons.add));
+
+      // OpenContainer animation: 400ms + buffer
+      await $.tester.pump(const Duration(milliseconds: 500));
+      await $.pumpAndSettle();
+
+      // AddTransactionPage debe estar visible
+      expect(find.byKey(const Key('add_transaction_page')), findsOneWidget);
+
+      // ────────────────────────────────────────────────────────────────
+      // Fase 3: Esperar carga de categorías
+      // ────────────────────────────────────────────────────────────────
+      await $.pumpAndSettle(timeout: const Duration(seconds: 5));
+
+      // Verificar que las categorías cargaron (no loading indicator)
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+
+      // ────────────────────────────────────────────────────────────────
+      // Fase 4: Llenar formulario con datos únicos
+      // ────────────────────────────────────────────────────────────────
+      final uniqueDescription = 'E2E_${DateTime.now().millisecondsSinceEpoch}';
+
+      // 4a. Ingresar monto (primer TextField)
+      final amountField = find.byType(TextField).first;
+      await $.tap(amountField);
+      await $.tester.enterText(amountField, '123');
+      await $.pumpAndSettle();
+
+      // 4b. Seleccionar primera categoría disponible (cierra el teclado)
+      final categoryChip = find.byType(CategoryChip).first;
+      await $.tap(categoryChip);
+      await $.pumpAndSettle();
+
+      // 4c. Scroll para hacer visible el campo de descripción
+      final descriptionField = find.byType(TextField).last;
+      await $.scrollUntilVisible(
+        finder: descriptionField,
+        view: find.byType(SingleChildScrollView).first,
+        delta: 100,
+      );
+      await $.pumpAndSettle();
+
+      // Ingresar descripción única
+      await $.tap(descriptionField);
+      await $.tester.enterText(descriptionField, uniqueDescription);
+      await $.pumpAndSettle();
+
+      // ────────────────────────────────────────────────────────────────
+      // Fase 5: Guardar transacción (la fecha por defecto es hoy)
+      // ────────────────────────────────────────────────────────────────
+      // El botón de guardar está fuera del SingleChildScrollView,
+      // en un Padding fijo en la parte inferior, por lo que siempre es visible.
+      final saveButton = find.byKey(const Key('save_transaction_button'));
+
+      // Esperar a que el formulario se valide y el botón esté habilitado
+      await $.pumpAndSettle(timeout: const Duration(seconds: 2));
+
+      await $.tap(saveButton);
+      await $.pumpAndSettle(timeout: const Duration(seconds: 3));
+
+      // ────────────────────────────────────────────────────────────────
+      // Fase 6: Verificar modal cerrado y volver a Home
+      // ────────────────────────────────────────────────────────────────
+      expect(find.byKey(const Key('add_transaction_page')), findsNothing);
+      expect(find.byKey(const Key('home_page')), findsOneWidget);
+
+      // ────────────────────────────────────────────────────────────────
+      // Fase 7: Verificar transacción en Home (Recent Transactions)
+      // ────────────────────────────────────────────────────────────────
+      // Nota: En Home se muestra el nombre de la categoría, no la descripción.
+      // Verificamos que hay al menos una transacción visible.
+      await $.pumpAndSettle(timeout: const Duration(seconds: 3));
+      expect(find.byType(TransactionCard), findsWidgets);
+
+      // ────────────────────────────────────────────────────────────────
+      // Fase 8: Navegar a All Transactions
+      // ────────────────────────────────────────────────────────────────
+      final seeAllFinder = find.byKey(const Key('see_all_transactions'));
+
+      // Scroll hasta que el botón sea visible
+      await $.scrollUntilVisible(
+        finder: seeAllFinder,
+        view: find.byType(SingleChildScrollView).first,
+        delta: 100,
+      );
+      await $.pumpAndSettle();
+
+      await $.tap(seeAllFinder);
+      await $.pumpAndSettle(timeout: const Duration(seconds: 5));
+
+      // ────────────────────────────────────────────────────────────────
+      // Fase 9: Verificar transacción en All Transactions
+      // ────────────────────────────────────────────────────────────────
+      expect(find.byKey(const Key('all_transactions_page')), findsOneWidget);
+      expect(find.text(uniqueDescription), findsOneWidget);
+    },
+  );
 }

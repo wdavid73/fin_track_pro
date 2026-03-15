@@ -270,4 +270,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get noDataAvailable => 'No hay datos disponibles';
+
+  @override
+  String get recentTransactions => 'Transacciones recientes';
 }

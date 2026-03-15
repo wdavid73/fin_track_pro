@@ -27,7 +27,15 @@ class HomePage extends StatelessWidget {
         ),
         BlocProvider.value(value: getIt<TransactionBloc>()),
       ],
-      child: Scaffold(
+      child: BlocListener<TransactionBloc, TransactionState>(
+        listenWhen: (previous, current) =>
+            previous.status != TransactionStatus.success &&
+            current.status == TransactionStatus.success,
+        listener: (context, state) {
+          // Refresh HomeBloc when transactions are updated
+          context.read<HomeBloc>().add(const RefreshHomeData());
+        },
+        child: Scaffold(
         key: const Key('home_page'),
         appBar: _appBar(context),
         body: SafeArea(child: _body()),
@@ -56,6 +64,7 @@ class HomePage extends StatelessWidget {
             );
           },
         ),
+      ),
       ),
     );
   }
@@ -159,7 +168,7 @@ class HomePage extends StatelessWidget {
                       key: const Key('see_all_transactions'),
                       onTap: () => context.push('/home/transactions'),
                       child: Text(
-                        'View all',
+                        context.l10n.viewAll,
                         style: context.textTheme.bodyMedium?.copyWith(
                           color: context.primaryColor,
                           fontWeight: FontWeight.w600,

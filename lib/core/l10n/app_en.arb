@@ -347,5 +347,9 @@
   "noDataAvailable": "No data available",
   "@noDataAvailable": {
     "description": "No data available"
+  },
+  "recentTransactions": "Recent Transactions",
+  "@recentTransactions": {
+    "description": "Recent Transactions"
   }
 }

@@ -150,6 +150,7 @@ class AddTransactionPage extends StatelessWidget {
 
                       // Date Selector
                       DateSelector(
+                        key: const Key('date_selector'),
                         selectedDate: state.selectedDate,
                         onDateSelected: (date) {
                           context.read<AddTransactionCubit>().updateDate(date);
@@ -177,6 +178,7 @@ class AddTransactionPage extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: ElevatedButton(
+                        key: const Key('save_transaction_button'),
                         onPressed: state.isFormValid && !state.isSubmitting
                             ? () => context
                                   .read<AddTransactionCubit>()

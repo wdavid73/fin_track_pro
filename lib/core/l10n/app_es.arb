@@ -86,5 +86,6 @@
   "incomeVsExpense": "Ingresos vs Gastos",
   "thisMonth": "Este Mes",
   "logout": "Cerrar sesión",
-  "noDataAvailable": "No hay datos disponibles"
+  "noDataAvailable": "No hay datos disponibles",
+  "recentTransactions": "Transacciones recientes"
 }
