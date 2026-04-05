@@ -625,6 +625,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recent Transactions'**
   String get recentTransactions;
+
+  /// 3 Months
+  ///
+  /// In en, this message translates to:
+  /// **'3 Months'**
+  String get threeMonths;
+
+  /// Spending Trend
+  ///
+  /// In en, this message translates to:
+  /// **'Spending Trend'**
+  String get spendingTrend;
+
+  /// Avg/day
+  ///
+  /// In en, this message translates to:
+  /// **'Avg/day'**
+  String get avgPerDay;
+
+  /// Top expense
+  ///
+  /// In en, this message translates to:
+  /// **'Top expense'**
+  String get topExpense;
+
+  /// Last Month
+  ///
+  /// In en, this message translates to:
+  /// **'Last Month'**
+  String get lastMonth;
+
+  /// This Year
+  ///
+  /// In en, this message translates to:
+  /// **'This Year'**
+  String get thisYear;
+
+  /// Budget
+  ///
+  /// In en, this message translates to:
+  /// **'Budget'**
+  String get budget;
+
+  /// No budgets configured
+  ///
+  /// In en, this message translates to:
+  /// **'No budgets configured'**
+  String get noBudgetsConfigured;
+
+  /// Total Budget
+  ///
+  /// In en, this message translates to:
+  /// **'Total Budget'**
+  String get totalBudget;
+
+  /// Over budget
+  ///
+  /// In en, this message translates to:
+  /// **'Over budget'**
+  String get overBudget;
+
+  /// On track
+  ///
+  /// In en, this message translates to:
+  /// **'On track'**
+  String get onTrack;
+
+  /// Over by {amount}
+  ///
+  /// In en, this message translates to:
+  /// **'Over by {amount}'**
+  String overBudgetBy(String amount);
+
+  /// Available: {amount}
+  ///
+  /// In en, this message translates to:
+  /// **'Available: {amount}'**
+  String available(String amount);
+
+  /// {spent} of {total}
+  ///
+  /// In en, this message translates to:
+  /// **'{spent} of {total}'**
+  String spentOf(String spent, String total);
+
+  /// Welcome
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get welcome;
+
+  /// Hide
+  ///
+  /// In en, this message translates to:
+  /// **'Hide'**
+  String get hide;
+
+  /// Transaction saved
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction saved'**
+  String get transactionSaved;
+
+  /// Note
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get note;
+
+  /// Date
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get date;
+
+  /// No categories
+  ///
+  /// In en, this message translates to:
+  /// **'No categories'**
+  String get noCategories;
+
+  /// No transactions
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions'**
+  String get noTransactions;
+
+  /// Transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction'**
+  String get transactionFallback;
+
+  /// No category
+  ///
+  /// In en, this message translates to:
+  /// **'No category'**
+  String get noCategory;
+
+  /// Filter by Category
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by Category'**
+  String get filterByCategory;
 }
 
 class _AppLocalizationsDelegate

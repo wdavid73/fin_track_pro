@@ -273,4 +273,82 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get recentTransactions => 'Transacciones recientes';
+
+  @override
+  String get threeMonths => '3 Meses';
+
+  @override
+  String get spendingTrend => 'Tendencia de Gastos';
+
+  @override
+  String get avgPerDay => 'Promedio/día';
+
+  @override
+  String get topExpense => 'Mayor gasto';
+
+  @override
+  String get lastMonth => 'Último mes';
+
+  @override
+  String get thisYear => 'Este año';
+
+  @override
+  String get budget => 'Presupuesto';
+
+  @override
+  String get noBudgetsConfigured => 'Sin presupuestos configurados';
+
+  @override
+  String get totalBudget => 'Total Presupuesto';
+
+  @override
+  String get overBudget => 'Excedido';
+
+  @override
+  String get onTrack => 'En control';
+
+  @override
+  String overBudgetBy(String amount) {
+    return 'Excediste $amount';
+  }
+
+  @override
+  String available(String amount) {
+    return 'Disponible: $amount';
+  }
+
+  @override
+  String spentOf(String spent, String total) {
+    return '$spent de $total';
+  }
+
+  @override
+  String get welcome => 'Bienvenido';
+
+  @override
+  String get hide => 'Ocultar';
+
+  @override
+  String get transactionSaved => 'Transacción guardada';
+
+  @override
+  String get note => 'Nota';
+
+  @override
+  String get date => 'Fecha';
+
+  @override
+  String get noCategories => 'Sin categorías';
+
+  @override
+  String get noTransactions => 'Sin transacciones';
+
+  @override
+  String get transactionFallback => 'Transacción';
+
+  @override
+  String get noCategory => 'Sin categoría';
+
+  @override
+  String get filterByCategory => 'Filtrar por Categoría';
 }

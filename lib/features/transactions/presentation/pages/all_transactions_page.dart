@@ -1,251 +1,583 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/core/core.dart';
-import 'package:fin_track_pro/features/categories/domain/usecases/get_categories_use_case.dart';
-import 'package:fin_track_pro/features/home/presentation/widget/transaction_card.dart';
-import 'package:fin_track_pro/features/transactions/presentation/widgets/transaction_details_modal.dart';
-import 'package:fin_track_pro/features/transactions/presentation/widgets/transaction_filter_bottom_sheet.dart';
-import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart';
+import 'package:fin_track_pro/features/categories/domain/entities/category.dart';
+import 'package:fin_track_pro/features/categories/presentation/bloc/category_bloc/category_bloc.dart';
+import 'package:fin_track_pro/features/transactions/presentation/pages/add_transaction_modal.dart';
+import 'package:fin_track_pro/core/utils/category_helper.dart';
+import 'package:fin_track_pro/features/transactions/domain/entities/transaction.dart';
+import 'package:fin_track_pro/features/transactions/presentation/bloc/transaction_bloc/transaction_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fin_track_pro/theme/theme_constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 class AllTransactionsPage extends StatelessWidget {
   const AllTransactionsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: getIt<TransactionBloc>()..add(const LoadPaginatedTransactions()),
-      child: Scaffold(
-        key: const Key('all_transactions_page'),
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.pop(),
-          ),
-          title: Text(
-            context.l10n.allTransactions,
-            style: context.textTheme.titleLarge,
-          ),
-          actions: [
-            BlocBuilder<TransactionBloc, TransactionState>(
-              builder: (context, state) {
-                return IconButton(
-                  key: const Key('filter_button'),
-                  icon: Badge(
-                    isLabelVisible: state.hasActiveFilters,
-                    child: const Icon(Icons.filter_list),
-                  ),
-                  onPressed: () async {
-                    final categories = await getIt<GetCategoriesUseCase>()();
-                    if (context.mounted) {
-                      showTransactionFilterBottomSheet(
-                        context: context,
-                        selectedType: state.typeFilter,
-                        selectedCategoryId: state.categoryFilter,
-                        startDate: state.startDateFilter,
-                        endDate: state.endDateFilter,
-                        searchQuery: state.searchQuery,
-                        categories: categories,
-                        onApplyFilters:
-                            (
-                              type,
-                              categoryId,
-                              startDate,
-                              endDate,
-                              searchQuery,
-                            ) {
-                              context.read<TransactionBloc>().add(
-                                FilterTransactions(
-                                  type: type,
-                                  categoryId: categoryId,
-                                  startDate: startDate,
-                                  endDate: endDate,
-                                  searchQuery: searchQuery,
-                                ),
-                              );
-                            },
-                        onClearFilters: () {
-                          context.read<TransactionBloc>().add(
-                            const ClearFilters(),
-                          );
-                        },
-                      );
-                    }
-                  },
-                );
-              },
-            ),
-          ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(
+          value: getIt<TransactionBloc>()
+            ..add(const LoadPaginatedTransactions()),
         ),
-        body: const _TransactionsList(),
-      ),
+        BlocProvider(
+          create: (_) => getIt<CategoryBloc>()..add(LoadCategoriesEvent()),
+        ),
+      ],
+      child: const _TransactionsBody(),
     );
   }
 }
 
-class _TransactionsList extends StatefulWidget {
-  const _TransactionsList();
+class _TransactionsBody extends StatefulWidget {
+  const _TransactionsBody();
 
   @override
-  State<_TransactionsList> createState() => _TransactionsListState();
+  State<_TransactionsBody> createState() => _TransactionsBodyState();
 }
 
-class _TransactionsListState extends State<_TransactionsList> {
-  final ScrollController _scrollController = ScrollController();
-  bool _isLoadingMore = false;
+class _TransactionsBodyState extends State<_TransactionsBody> {
+  int _filterIndex = 0;
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
   void _onScroll() {
-    if (_isLoadingMore) return;
-
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    final delta = 200.0; // Trigger load when 200px from bottom
-
-    if (maxScroll - currentScroll <= delta) {
-      final state = context.read<TransactionBloc>().state;
-      if (state.hasMore && state.status == TransactionStatus.success) {
-        setState(() => _isLoadingMore = true);
-        context.read<TransactionBloc>().add(const LoadMoreTransactions());
-      }
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<TransactionBloc>().add(const LoadMoreTransactions());
     }
+  }
+
+  List<String> _buildFilters(BuildContext context) => [
+    context.l10n.all,
+    context.l10n.expense,
+    context.l10n.income,
+  ];
+
+  void _applyTypeFilter(int index) {
+    setState(() => _filterIndex = index);
+    final typeMap = {1: 'expense', 2: 'income'};
+    context.read<TransactionBloc>().add(
+      FilterTransactions(type: typeMap[index]),
+    );
+  }
+
+  void _showCategoryFilter(BuildContext context, List<Category> categories) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (_) => BlocProvider.value(
+        value: context.read<TransactionBloc>(),
+        child: _CategoryFilterModal(categories: categories),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<TransactionBloc, TransactionState>(
-      listener: (context, state) {
-        if (state.status == TransactionStatus.success) {
-          setState(() => _isLoadingMore = false);
-        }
-      },
-      builder: (context, state) {
-        if (state.status == TransactionStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return Scaffold(
+      backgroundColor: context.colorScheme.surface,
+      appBar: AppBar(
+        backgroundColor: context.colorScheme.surface,
+        elevation: 0,
+        titleSpacing: 20,
+        title: Text(context.l10n.allTransactions, style: context.textTheme.headlineSmall!),
+        actions: [
+          BlocBuilder<CategoryBloc, CategoryState>(
+            builder: (context, catState) {
+              return IconButton(
+                icon: Icon(
+                  Icons.filter_list_rounded,
+                  color: context.colorScheme.onSurface,
+                ),
+                onPressed: () =>
+                    _showCategoryFilter(context, catState.categories),
+              );
+            },
+          ),
+          const Gap(8),
+        ],
+      ),
+      body: BlocBuilder<TransactionBloc, TransactionState>(
+        builder: (context, state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 8,
+                ),
+                child: _FilterChips(
+                  filters: _buildFilters(context),
+                  selectedIndex: _filterIndex,
+                  onChanged: _applyTypeFilter,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                child: _SummaryRow(transactions: state.transactions),
+              ),
+              Expanded(child: _buildList(context, state)),
+            ],
+          );
+        },
+      ),
+      floatingActionButton: _AddFab(
+        onTap: () => showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (_) => const AddTransactionModal(),
+        ),
+      ),
+    );
+  }
 
-        if (state.status == TransactionStatus.error) {
-          return Center(
+  Widget _buildList(BuildContext context, TransactionState state) {
+    if (state.status == TransactionStatus.loading &&
+        state.transactions.isEmpty) {
+      return ListView.builder(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+        itemCount: 8,
+        itemBuilder: (context, _) => Padding(
+          padding: const EdgeInsets.only(bottom: 12.0),
+          child: Row(
+            children: [
+              const ShimmerCircle(size: 44),
+              const Gap(12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const ShimmerBox(height: 14, width: 120, borderRadius: 4),
+                    const Gap(4),
+                    const ShimmerBox(height: 12, width: 80, borderRadius: 4),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (state.transactions.isEmpty &&
+        state.status == TransactionStatus.success) {
+      return Center(
+        child: Text(context.l10n.noTransactions, style: context.textTheme.bodyMedium!),
+      );
+    }
+
+    return BlocBuilder<CategoryBloc, CategoryState>(
+      builder: (context, catState) {
+        final catMap = {for (final c in catState.categories) c.id: c};
+        return ListView.builder(
+          controller: _scrollController,
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+          itemCount: state.transactions.length,
+          itemBuilder: (context, index) {
+            final tx = state.transactions[index];
+            final cat = catMap[tx.categoryId];
+            return _TransactionRow(
+              emoji: CategoryHelper.categoryEmoji(cat?.icon ?? ''),
+              title: cat?.name ?? (tx.note ?? context.l10n.transactionFallback),
+              date: CategoryHelper.formatDate(tx.date),
+              amount: tx.amount,
+              isIncome: tx.type == 'income',
+              category: cat?.name ?? context.l10n.noCategory,
+            );
+          },
+        );
+      },
+    );
+  }
+
+}
+
+class _FilterChips extends StatelessWidget {
+  const _FilterChips({
+    required this.filters,
+    required this.selectedIndex,
+    required this.onChanged,
+  });
+
+  final List<String> filters;
+  final int selectedIndex;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: List.generate(filters.length, (i) {
+        final isSelected = i == selectedIndex;
+        return Padding(
+          padding: EdgeInsets.only(right: i < filters.length - 1 ? 8 : 0),
+          child: GestureDetector(
+            onTap: () => onChanged(i),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? context.colorScheme.primary
+                    : context.colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: Text(
+                filters[i],
+                style: TextStyle(
+                  color: isSelected
+                      ? Colors.white
+                      : context.colorScheme.onSurface,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class _SummaryRow extends StatelessWidget {
+  const _SummaryRow({required this.transactions});
+
+  final List<Transaction> transactions;
+
+  @override
+  Widget build(BuildContext context) {
+    final income = transactions
+        .where((t) => t.type == 'income')
+        .fold(0.0, (s, t) => s + t.amount);
+    final expense = transactions
+        .where((t) => t.type == 'expense')
+        .fold(0.0, (s, t) => s + t.amount);
+    return Row(
+      children: [
+        _SummaryChip(
+          label: context.l10n.totalIncome,
+          value: income.toCurrency(),
+          color: context.colorScheme.secondary,
+        ),
+        const Gap(8),
+        _SummaryChip(
+          label: context.l10n.totalExpenses,
+          value: expense.toCurrency(),
+          color: context.colorScheme.error,
+        ),
+      ],
+    );
+  }
+}
+
+class _SummaryChip extends StatelessWidget {
+  const _SummaryChip({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  final String label;
+  final String value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: context.colorScheme.surface,
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: context.textTheme.labelLarge!),
+            Text(
+              value,
+              style: context.textTheme.titleMedium!.copyWith(color: color),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TransactionRow extends StatelessWidget {
+  const _TransactionRow({
+    required this.emoji,
+    required this.title,
+    required this.date,
+    required this.amount,
+    required this.isIncome,
+    required this.category,
+  });
+
+  final String emoji;
+  final String title;
+  final String date;
+  final double amount;
+  final bool isIncome;
+  final String category;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: context.colorScheme.surfaceContainerHigh,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(emoji, style: const TextStyle(fontSize: 20)),
+            ),
+          ),
+          const Gap(12),
+          Expanded(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.error_outline, size: 48, color: context.errorColor),
-                const Gap(16),
-                Text(state.errorMessage ?? 'An error occurred'),
-                const Gap(16),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<TransactionBloc>().add(
-                      const LoadPaginatedTransactions(),
-                    );
-                  },
-                  child: const Text('Retry'),
+                Text(title, style: context.textTheme.titleMedium!),
+                Text(date, style: context.textTheme.labelLarge!),
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '${isIncome ? '+' : '-'}${amount.toCurrency()}',
+                style: context.textTheme.titleMedium!.copyWith(
+                  color: isIncome
+                      ? context.colorScheme.tertiary
+                      : context.colorScheme.onSurface,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(category, style: context.textTheme.labelMedium!),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AddFab extends StatelessWidget {
+  const _AddFab({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          color: context.colorScheme.secondary,
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(
+              color: context.colorScheme.onSurface.withValues(alpha: 0.06),
+              blurRadius: 24,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: const Icon(Icons.add, color: Colors.white, size: 28),
+      ),
+    );
+  }
+}
+
+// --- Category Filter Modal ---
+class _CategoryFilterModal extends StatefulWidget {
+  const _CategoryFilterModal({required this.categories});
+
+  final List<Category> categories;
+
+  @override
+  State<_CategoryFilterModal> createState() => _CategoryFilterModalState();
+}
+
+class _CategoryFilterModalState extends State<_CategoryFilterModal> {
+  final _selected = <String>{};
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      decoration: BoxDecoration(
+        color: context.colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24.0)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              margin: const EdgeInsets.only(top: 12, bottom: 8),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: context.colorScheme.outlineVariant,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+            child: Text(
+              context.l10n.filterByCategory,
+              style: context.textTheme.headlineSmall!,
+            ),
+          ),
+          if (widget.categories.isEmpty)
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                context.l10n.noCategories,
+                style: context.textTheme.bodyMedium!,
+              ),
+            )
+          else
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: widget.categories.map((cat) {
+                  final isSelected = _selected.contains(cat.id);
+                  final label =
+                      '${CategoryHelper.categoryEmoji(cat.icon)} ${cat.name}';
+                  return GestureDetector(
+                    onTap: () => setState(() {
+                      isSelected
+                          ? _selected.remove(cat.id)
+                          : _selected.add(cat.id);
+                    }),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? context.colorScheme.primary
+                            : context.colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Text(
+                        label,
+                        style: TextStyle(
+                          color: isSelected
+                              ? Colors.white
+                              : context.colorScheme.onSurface,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          const Gap(32.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      setState(() => _selected.clear());
+                      context.read<TransactionBloc>().add(const ClearFilters());
+                      Navigator.of(context).pop();
+                    },
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        color: context.colorScheme.outlineVariant,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Text(
+                      context.l10n.clearAll,
+                      style: TextStyle(color: context.colorScheme.onSurface),
+                    ),
+                  ),
+                ),
+                const Gap(12),
+                Expanded(
+                  child: Container(
+                    height: 48,
+                    decoration: BoxDecoration(
+                      gradient: ThemeConstants.primaryGradient,
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        if (_selected.isNotEmpty) {
+                          context.read<TransactionBloc>().add(
+                            FilterTransactions(categoryId: _selected.first),
+                          );
+                        }
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        context.l10n.applyFilters,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-          );
-        }
-
-        if (state.status == TransactionStatus.success) {
-          if (state.transactions.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.receipt_long_outlined,
-                    size: 48,
-                    color: context.colorScheme.onSurfaceVariant,
-                  ),
-                  const Gap(16),
-                  Text(
-                    'No transactions yet',
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return ListView.builder(
-            controller: _scrollController,
-            padding: const EdgeInsets.all(16),
-            itemCount: state.transactions.length + (state.hasMore ? 1 : 0),
-            itemBuilder: (context, index) {
-              // Show loading indicator at the bottom
-              if (index == state.transactions.length) {
-                return const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
-
-              final transaction = state.transactions[index];
-              final isIncome = transaction.type == 'income';
-              final heroTag = 'transaction_icon_${transaction.id}';
-
-              // For now, we'll use default icons since we don't have category data
-              // In a real implementation, you'd want to fetch categories too
-              final categoryIcon = isIncome
-                  ? Icons.arrow_downward
-                  : Icons.arrow_upward;
-              final categoryColor = isIncome
-                  ? context.secondaryColor
-                  : context.errorColor;
-
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: FadeInUp(
-                  duration: const Duration(milliseconds: 300),
-                  delay: Duration(milliseconds: index * 50),
-                  child: TransactionCard(
-                    heroTag: heroTag,
-                    amount: transaction.amount,
-                    icon: categoryIcon,
-                    iconBackgroundColor: categoryColor.withValues(alpha: 0.1),
-                    iconColor: categoryColor,
-                    title: transaction.note ?? 'Transaction',
-                    date: DateFormat('MMM dd, yyyy').format(transaction.date),
-                    amountColor: categoryColor,
-                    isIncome: isIncome,
-                    onLongPress: () {
-                      showTransactionDetailsModal(
-                        context: context,
-                        transaction: transaction,
-                        icon: categoryIcon,
-                        iconColor: categoryColor,
-                        iconBackgroundColor: categoryColor.withValues(
-                          alpha: 0.1,
-                        ),
-                        heroTag: heroTag,
-                      );
-                    },
-                  ),
-                ),
-              );
-            },
-          );
-        }
-
-        return const SizedBox.shrink();
-      },
+          ),
+          const Gap(32.0),
+        ],
+      ),
     );
   }
 }

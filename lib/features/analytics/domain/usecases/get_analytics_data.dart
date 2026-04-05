@@ -156,6 +156,36 @@ class GetAnalyticsData {
         }
         break;
 
+      case AnalyticsPeriod.quarter:
+        // Create 3 months comparison (last 3 full months)
+        for (int i = 2; i >= 0; i--) {
+          final month = DateTime(start.year, start.month + i, 1);
+          final monthTransactions = transactions.where((t) {
+            final tDate = t.date;
+            return tDate.year == month.year && tDate.month == month.month;
+          }).toList();
+
+          double income = 0;
+          double expense = 0;
+
+          for (final t in monthTransactions) {
+            if (t.type == 'income') {
+              income += t.amount;
+            } else if (t.type == 'expense') {
+              expense += t.amount;
+            }
+          }
+
+          comparisons.add(
+            IncomeExpenseComparison(
+              label: _getMonthLabel(month.month),
+              income: income,
+              expense: expense,
+            ),
+          );
+        }
+        break;
+
       case AnalyticsPeriod.year:
         // Create 12 months comparison
         for (int i = 0; i < 12; i++) {

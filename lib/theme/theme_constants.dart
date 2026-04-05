@@ -60,6 +60,22 @@ class ThemeConstants {
   );
 
   // ============================================================================
+  // GRADIENTS
+  // ============================================================================
+
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [ColorTheme.primaryColor, Color(0xFF6FA8F5)],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+
+  static const LinearGradient heroCardGradient = LinearGradient(
+    colors: [Color(0xFF1A56C4), ColorTheme.primaryColor],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  // ============================================================================
   // DIALOG THEME
   // ============================================================================
 
@@ -99,8 +115,6 @@ class ThemeConstants {
   static const baseBottomNavigationBarTheme = BottomNavigationBarThemeData();
 
   /// Dark theme BottomNavigationBar configuration
-  static final baseBottomNavigationBarThemeDark =
-      baseBottomNavigationBarTheme.copyWith(
-    backgroundColor: ColorTheme.surfaceColor,
-  );
+  static final baseBottomNavigationBarThemeDark = baseBottomNavigationBarTheme
+      .copyWith(backgroundColor: ColorTheme.surfaceColor);
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 enum AnalyticsPeriod {
   week,
   month,
+  quarter,
   year;
 
   /// Returns a human-readable label for the period
@@ -13,6 +14,8 @@ enum AnalyticsPeriod {
         return 'Week';
       case AnalyticsPeriod.month:
         return 'Month';
+      case AnalyticsPeriod.quarter:
+        return '3 Months';
       case AnalyticsPeriod.year:
         return 'Year';
     }
@@ -38,6 +41,13 @@ enum AnalyticsPeriod {
         // Get the start of the current month
         final start = DateTime(now.year, now.month, 1);
         final end = DateTime(now.year, now.month + 1, 1);
+        return DateTimeRange(start: start, end: end);
+
+      case AnalyticsPeriod.quarter:
+        // Last 90 days
+        final start = DateTime(now.year, now.month, now.day)
+            .subtract(const Duration(days: 90));
+        final end = DateTime(now.year, now.month, now.day + 1);
         return DateTimeRange(start: start, end: end);
 
       case AnalyticsPeriod.year:

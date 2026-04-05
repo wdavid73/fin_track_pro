@@ -351,5 +351,123 @@
   "recentTransactions": "Recent Transactions",
   "@recentTransactions": {
     "description": "Recent Transactions"
+  },
+  "threeMonths": "3 Months",
+  "@threeMonths": {
+    "description": "3 Months"
+  },
+  "spendingTrend": "Spending Trend",
+  "@spendingTrend": {
+    "description": "Spending Trend"
+  },
+  "avgPerDay": "Avg/day",
+  "@avgPerDay": {
+    "description": "Avg/day"
+  },
+  "topExpense": "Top expense",
+  "@topExpense": {
+    "description": "Top expense"
+  },
+  "lastMonth": "Last Month",
+  "@lastMonth": {
+    "description": "Last Month"
+  },
+  "thisYear": "This Year",
+  "@thisYear": {
+    "description": "This Year"
+  },
+  "budget": "Budget",
+  "@budget": {
+    "description": "Budget"
+  },
+  "noBudgetsConfigured": "No budgets configured",
+  "@noBudgetsConfigured": {
+    "description": "No budgets configured"
+  },
+  "totalBudget": "Total Budget",
+  "@totalBudget": {
+    "description": "Total Budget"
+  },
+  "overBudget": "Over budget",
+  "@overBudget": {
+    "description": "Over budget"
+  },
+  "onTrack": "On track",
+  "@onTrack": {
+    "description": "On track"
+  },
+  "overBudgetBy": "Over by {amount}",
+  "@overBudgetBy": {
+    "description": "Over by {amount}",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$100"
+      }
+    }
+  },
+  "available": "Available: {amount}",
+  "@available": {
+    "description": "Available: {amount}",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$100"
+      }
+    }
+  },
+  "spentOf": "{spent} of {total}",
+  "@spentOf": {
+    "description": "{spent} of {total}",
+    "placeholders": {
+      "spent": {
+        "type": "String",
+        "example": "$50"
+      },
+      "total": {
+        "type": "String",
+        "example": "$100"
+      }
+    }
+  },
+  "welcome": "Welcome",
+  "@welcome": {
+    "description": "Welcome"
+  },
+  "hide": "Hide",
+  "@hide": {
+    "description": "Hide"
+  },
+  "transactionSaved": "Transaction saved",
+  "@transactionSaved": {
+    "description": "Transaction saved"
+  },
+  "note": "Note",
+  "@note": {
+    "description": "Note"
+  },
+  "date": "Date",
+  "@date": {
+    "description": "Date"
+  },
+  "noCategories": "No categories",
+  "@noCategories": {
+    "description": "No categories"
+  },
+  "noTransactions": "No transactions",
+  "@noTransactions": {
+    "description": "No transactions"
+  },
+  "transactionFallback": "Transaction",
+  "@transactionFallback": {
+    "description": "Transaction"
+  },
+  "noCategory": "No category",
+  "@noCategory": {
+    "description": "No category"
+  },
+  "filterByCategory": "Filter by Category",
+  "@filterByCategory": {
+    "description": "Filter by Category"
   }
 }

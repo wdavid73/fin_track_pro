@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -26,8 +25,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
 class LocalFileComparatorWithThreshold extends LocalFileComparator {
   final double threshold;
 
-  LocalFileComparatorWithThreshold(Uri testFile, this.threshold)
-    : super(testFile);
+  LocalFileComparatorWithThreshold(super.testFile, this.threshold);
 
   @override
   Future<bool> compare(Uint8List imageBytes, Uri golden) async {

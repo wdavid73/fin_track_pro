@@ -14,13 +14,16 @@ class TimePeriodSelector extends StatelessWidget {
   });
 
   Alignment _alignmentForPeriod(AnalyticsPeriod period) {
+    // 4 equidistant positions from -1 (left) to 1 (right)
     switch (period) {
       case AnalyticsPeriod.week:
-        return Alignment.centerLeft;
+        return const Alignment(-1.0, 0);
       case AnalyticsPeriod.month:
-        return Alignment.center;
+        return const Alignment(-1 / 3, 0);
+      case AnalyticsPeriod.quarter:
+        return const Alignment(1 / 3, 0);
       case AnalyticsPeriod.year:
-        return Alignment.centerRight;
+        return const Alignment(1.0, 0);
     }
   }
 
