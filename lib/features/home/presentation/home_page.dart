@@ -1,9 +1,11 @@
 import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/config/router/routes.dart';
 import 'package:fin_track_pro/core/core.dart';
-import 'package:fin_track_pro/features/home/presentation/bloc/home_bloc.dart';
 import 'package:fin_track_pro/core/utils/category_helper.dart';
+import 'package:fin_track_pro/features/budgets/presentation/widgets/budget_bar_chart.dart';
+import 'package:fin_track_pro/features/home/presentation/bloc/home_bloc.dart';
 import 'package:fin_track_pro/features/home/presentation/widget/stat_card.dart';
+import 'package:fin_track_pro/features/transactions/domain/entities/budget_data.dart';
 import 'package:fin_track_pro/features/transactions/presentation/pages/add_transaction_modal.dart';
 import 'package:fin_track_pro/theme/theme_constants.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/transaction_bloc/transaction_bloc.dart';
@@ -145,6 +147,17 @@ class _HomeBody extends StatelessWidget {
         _BalanceHeroCard(balance: state.totalBalance),
         const Gap(24.0),
         _QuickStatsRow(income: income, expenses: expenses),
+        if (state.budgetData != null &&
+            state.budgetData!.categories.isNotEmpty) ...[
+          const Gap(16.0),
+          _SectionHeader(
+            title: context.l10n.budgetOverview,
+            actionLabel: context.l10n.viewAll,
+            onAction: () => context.go(RouteConstants.budget),
+          ),
+          const Gap(16.0),
+          _BudgetBarsRow(budgetData: state.budgetData!),
+        ],
         const Gap(16.00),
         _SectionHeader(
           title: context.l10n.recentTransactions,
@@ -443,6 +456,70 @@ class _TransactionTile extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+// --- Budget Bars Row ---
+class _BudgetBarsRow extends StatelessWidget {
+  const _BudgetBarsRow({required this.budgetData});
+
+  final BudgetData budgetData;
+
+  @override
+  Widget build(BuildContext context) {
+    final overBudget = budgetData.categories.where((c) => c.spent > c.budget).toList();
+    final normal = budgetData.categories.where((c) => c.spent >= c.budget * 0.6 && c.spent <= c.budget).toList();
+    final underLow = budgetData.categories.where((c) => c.spent < c.budget * 0.6).toList();
+
+    final selectedBudgets = <CategoryBudget>[];
+    // 1. Mostrar casos visuales: exceeded, normal, underlow
+    if (overBudget.isNotEmpty) selectedBudgets.add(overBudget.removeAt(0));
+    if (normal.isNotEmpty) selectedBudgets.add(normal.removeAt(0));
+    if (underLow.isNotEmpty) selectedBudgets.add(underLow.removeAt(0));
+
+    // 2. Los otros dos por debajo del umbral del total (underLow o normal)
+    final remainingPool = [...underLow, ...normal];
+    for (final budget in remainingPool) {
+      if (selectedBudgets.length >= 5) break;
+      if (!selectedBudgets.contains(budget)) {
+        selectedBudgets.add(budget);
+      }
+    }
+
+    // Fallback if there are less than 5
+    for (final budget in budgetData.categories) {
+      if (selectedBudgets.length >= 5) break;
+      if (!selectedBudgets.contains(budget)) {
+        selectedBudgets.add(budget);
+      }
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: selectedBudgets.map((cb) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: BudgetBarChart(
+              data: BudgetBarData(
+                label: CategoryHelper.categoryEmoji(cb.category.icon),
+                currentAmount: cb.spent,
+                totalBudget: cb.budget,
+                baseColor: Color(cb.category.color),
+              ),
+              width: 72,
+              height: 160,
+              onViewTotalValue: () => context.go(
+                RouteConstants.budgetDetail,
+                extra: cb,
+              ),
+              // TODO: wire onAddToBudget and onQuickTransaction when those flows exist
+            ),
+          );
+        }).toList(),
       ),
     );
   }

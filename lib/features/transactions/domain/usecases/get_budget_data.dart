@@ -60,14 +60,13 @@ class GetBudgetData {
       }
     }
 
-    // Sort by spent amount (descending) and take top 3
+    // Sort by spent amount (descending)
     categoryBudgets.sort((a, b) => b.spent.compareTo(a.spent));
-    final topCategories = categoryBudgets.take(3).toList();
 
     return BudgetData(
       totalSpent: totalSpent,
       totalBudget: totalBudget,
-      categories: topCategories,
+      categories: categoryBudgets,
     );
   }
 }

@@ -40,15 +40,15 @@ class BudgetSeeder extends Seeder {
 
     // Budget amounts per category name (matching the hardcoded values)
     final Map<String, double> budgetAmounts = {
-      'Alimentación': 2000000.0,
-      'Compras': 1000000.0,
-      'Entretenimiento': 800000.0,
-      'Transporte': 600000.0,
-      'Vivienda': 2500000.0,
-      'Salud': 500000.0,
-      'Educación': 1200000.0,
+      'Alimentación': 1500000.0,
+      'Compras': 800000.0,
+      'Entretenimiento': 600000.0,
+      'Transporte': 500000.0,
+      'Vivienda': 2000000.0,
+      'Salud': 400000.0,
+      'Educación': 800000.0,
       'Servicios': 400000.0,
-      'Otros Gastos': 500000.0,
+      'Otros Gastos': 400000.0,
     };
 
     final budgets = <BudgetModel>[];

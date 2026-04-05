@@ -55,6 +55,7 @@ class TransactionSeeder extends Seeder {
 
     final transactions = <TransactionModel>[];
     final now = DateTime.now();
+    int _catIndex = 0;
 
     // Create transactions for the last 30 days
     for (int i = 0; i < 30; i++) {
@@ -63,8 +64,8 @@ class TransactionSeeder extends Seeder {
       // Add 1-3 expenses per day
       final expenseCount = 1 + _random.nextInt(3);
       for (int j = 0; j < expenseCount; j++) {
-        final category =
-            expenseCategories[_random.nextInt(expenseCategories.length)];
+        final category = expenseCategories[_catIndex % expenseCategories.length];
+        _catIndex++;
         transactions.add(
           TransactionModel(
             id: _uuid.v4(),
@@ -136,24 +137,23 @@ class TransactionSeeder extends Seeder {
   double _generateExpenseAmount(String categoryName) {
     switch (categoryName) {
       case 'Alimentación':
-        return 20000.0 + _random.nextDouble() * 130000.0; // 20,000 - 150,000
-      case 'Transporte':
-        return 5000.0 + _random.nextDouble() * 45000.0; // 5,000 - 50,000
-      case 'Vivienda':
-        return 100000.0 + _random.nextDouble() * 400000.0; // 100,000 - 500,000
-      case 'Entretenimiento':
-        return 30000.0 + _random.nextDouble() * 270000.0; // 30,000 - 300,000
-      case 'Salud':
-        return 50000.0 + _random.nextDouble() * 450000.0; // 50,000 - 500,000
-      case 'Educación':
-        return 100000.0 +
-            _random.nextDouble() * 900000.0; // 100,000 - 1,000,000
+        return 160000.0 + _random.nextDouble() * 20000.0; // Normal case (~80%)
       case 'Compras':
-        return 50000.0 + _random.nextDouble() * 450000.0; // 50,000 - 500,000
+        return 120000.0 + _random.nextDouble() * 20000.0; // Over budget (~110%)
+      case 'Entretenimiento':
+        return 35000.0 + _random.nextDouble() * 10000.0; // Under low (~40%)
+      case 'Transporte':
+        return 50000.0 + _random.nextDouble() * 15000.0; // Normal (~80%)
+      case 'Vivienda':
+        return 100000.0 + _random.nextDouble() * 30000.0; // Under low (<60%)
+      case 'Salud':
+        return 15000.0 + _random.nextDouble() * 10000.0; // Under low (<60%)
+      case 'Educación':
+        return 70000.0 + _random.nextDouble() * 20000.0; // Normal (~70%)
       case 'Servicios':
-        return 50000.0 + _random.nextDouble() * 250000.0; // 50,000 - 300,000
+        return 45000.0 + _random.nextDouble() * 15000.0; // Normal (~80%)
       default:
-        return 20000.0 + _random.nextDouble() * 80000.0; // 20,000 - 100,000
+        return 20000.0 + _random.nextDouble() * 15000.0; // Default under
     }
   }
 
