@@ -77,7 +77,11 @@ class _BudgetBodyState extends State<_BudgetBody> {
               color: context.colorScheme.surface,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(Icons.add, color: context.colorScheme.primary, size: 20),
+            child: Icon(
+              Icons.add,
+              color: context.colorScheme.primary,
+              size: 20,
+            ),
           ),
         ],
       ),
@@ -154,9 +158,9 @@ class _BudgetBodyState extends State<_BudgetBody> {
         const Gap(24.0),
         ...List.generate(
           5,
-          (_) => Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: const ShimmerBox(height: 80, borderRadius: 24.0),
+          (_) => const Padding(
+            padding: EdgeInsets.only(bottom: 16.0),
+            child: ShimmerBox(height: 80, borderRadius: 24.0),
           ),
         ),
       ],
@@ -175,7 +179,11 @@ class _BudgetBodyState extends State<_BudgetBody> {
               size: 48,
             ),
             const Gap(16),
-            Text(message, style: context.textTheme.bodyMedium!, textAlign: TextAlign.center),
+            Text(
+              message,
+              style: context.textTheme.bodyMedium!,
+              textAlign: TextAlign.center,
+            ),
             const Gap(16),
             TextButton(
               onPressed: () =>
@@ -190,7 +198,6 @@ class _BudgetBodyState extends State<_BudgetBody> {
       ),
     );
   }
-
 }
 
 // --- Period Selector ---
@@ -231,7 +238,9 @@ class _PeriodSelector extends StatelessWidget {
                 child: Text(
                   periods[i],
                   style: TextStyle(
-                    color: isSelected ? Colors.white : context.colorScheme.onSurface,
+                    color: isSelected
+                        ? Colors.white
+                        : context.colorScheme.onSurface,
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
                   ),
@@ -376,7 +385,10 @@ class _BudgetCategoryCard extends StatelessWidget {
                     children: [
                       Text(categoryName, style: context.textTheme.titleMedium!),
                       Text(
-                        context.l10n.spentOf(spent.toCurrencyInt(), total.toCurrencyInt()),
+                        context.l10n.spentOf(
+                          spent.toCurrencyInt(),
+                          total.toCurrencyInt(),
+                        ),
                         style: context.textTheme.labelLarge!,
                       ),
                     ],
