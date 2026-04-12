@@ -20,7 +20,7 @@ platform :android do
   # ─── Lane: Test ──────────────────────────────────────────────────────────────
   desc "🧪 Run all unit tests with coverage"
   lane :test do
-    sh("fvm flutter test --coverage")
+    sh("flutter test --coverage")
     sh("lcov --remove coverage/lcov.info '**/*.g.dart' '**/*.freezed.dart' '**/app_localizations*.dart' --output-file coverage/lcov.info --ignore-errors unused,unused")
   end
 
@@ -30,7 +30,7 @@ platform :android do
     build_number = sh("git rev-list --count HEAD").strip
 
     # APK debug: no requiere keystore ni cuenta de desarrollador
-    sh("fvm flutter build apk --flavor dev -t lib/flavors/main_dev.dart --debug --build-number #{build_number}")
+    sh("flutter build apk --flavor dev -t lib/flavors/main_dev.dart --debug --build-number #{build_number}")
 
     firebase_app_distribution(
       app: ENV["FIREBASE_ANDROID_APP_ID"],

@@ -19,4 +19,5 @@ export 'widgets/formatters/money_input_formatter.dart';
 export 'widgets/shimmer_box.dart';
 export 'widgets/shimmer_wrapper.dart';
 export 'widgets/skeleton.dart';
+export 'widgets/visibility_toggle_button.dart';
 export 'extensions/extensions.dart';

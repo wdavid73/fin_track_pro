@@ -1,54 +1,70 @@
+// --- Hero Balance Card ---
 import 'package:fin_track_pro/core/core.dart';
+import 'package:fin_track_pro/theme/theme_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 
-class BalanceSummary extends StatelessWidget {
+class BalanceHeroCard extends StatefulWidget {
+  const BalanceHeroCard({required this.balance, super.key});
+
   final double balance;
-  final bool _isLoading;
 
-  const BalanceSummary({required this.balance, super.key}) : _isLoading = false;
+  @override
+  State<BalanceHeroCard> createState() => BalanceHeroCardState();
+}
 
-  /// Loading state constructor
-  const BalanceSummary.loading({super.key}) : balance = 0, _isLoading = true;
+class BalanceHeroCardState extends State<BalanceHeroCard> {
+  bool _isVisible = true;
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
-    final balanceColor = balance >= 0
-        ? context.secondaryColor
-        : context.errorColor;
-
-    return SizedBox(
+    return Container(
       width: double.infinity,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+      padding: const EdgeInsets.all(32.0),
+      decoration: BoxDecoration(
+        gradient: ThemeConstants.heroCardGradient,
+        borderRadius: BorderRadius.circular(24.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.l10n.totalBalance,
+            style: context.textTheme.bodyMedium!.copyWith(
+              color: Colors.white70,
+            ),
+          ),
+          const Gap(8),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            transitionBuilder: (child, animation) =>
+                FadeTransition(opacity: animation, child: child),
+            child: Align(
+              key: ValueKey(_isVisible),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                _isVisible ? widget.balance.toCurrency() : '\$••••••',
+                style: context.textTheme.headlineLarge!.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: -1,
+                ),
+              ),
+            ),
+          ),
+          const Gap(24.0),
+          Row(
             children: [
-              if (_isLoading)
-                const Skeleton(width: 120, height: 16).shimmer(isLoading: true)
-              else
-                Text(
-                  context.l10n.totalBalance,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              const Gap(8),
-              if (_isLoading)
-                const Skeleton(width: 200, height: 38).shimmer(isLoading: true)
-              else
-                Text(
-                  formatter.format(balance),
-                  style: context.textTheme.displaySmall?.copyWith(
-                    color: balanceColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              const Spacer(),
+              VisibilityToggleButton(
+                isVisible: _isVisible,
+                onToggle: () => setState(() => _isVisible = !_isVisible),
+                visibleLabel: context.l10n.hide,
+                hiddenLabel: context.l10n.show,
+              ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
