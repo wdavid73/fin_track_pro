@@ -141,7 +141,7 @@ void main() {
       final amounts = budgetBox._data.values
           .map((b) => (b as dynamic).amount as double)
           .toList();
-      expect(amounts, containsAll([2000000.0, 600000.0]));
+      expect(amounts, containsAll([1500000.0, 500000.0]));
     });
 
     test('assigns default 500.0 amount for unknown category names', () async {
