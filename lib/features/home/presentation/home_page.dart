@@ -9,7 +9,6 @@ import 'package:fin_track_pro/features/transactions/domain/entities/budget_data.
 import 'package:fin_track_pro/features/transactions/presentation/pages/add_transaction_modal.dart';
 import 'package:fin_track_pro/theme/theme_constants.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/transaction_bloc/transaction_bloc.dart';
-import 'package:fin_track_pro/theme/utils/resposive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -65,7 +64,7 @@ class _HomeBody extends StatelessWidget {
           );
         },
       ),
-      // floatingActionButton: _HomeFab(onTap: () => _showAddTransaction(context)),
+      floatingActionButton: _HomeFab(onTap: () => _showAddTransaction(context)),
     );
   }
 
@@ -407,7 +406,8 @@ class _BudgetBarsRowState extends State<_BudgetBarsRow> {
   static const double _barHeight = 140;
   static const double _barPadding = 12;
   static const double _itemWidth = _barWidth + _barPadding;
-  static const double _stackHeight = _barHeight + _barHeight * 0.5; // barHeight + maxOverflow
+  static const double _stackHeight =
+      _barHeight + _barHeight * 0.5; // barHeight + maxOverflow
 
   late List<CategoryBudget> _selectedBudgets;
 
@@ -428,11 +428,15 @@ class _BudgetBarsRowState extends State<_BudgetBarsRow> {
   }
 
   List<CategoryBudget> _selectAndSort(BudgetData data) {
-    final overBudget = data.categories.where((c) => c.spent > c.budget).toList();
+    final overBudget = data.categories
+        .where((c) => c.spent > c.budget)
+        .toList();
     final normal = data.categories
         .where((c) => c.spent >= c.budget * 0.6 && c.spent <= c.budget)
         .toList();
-    final underLow = data.categories.where((c) => c.spent < c.budget * 0.6).toList();
+    final underLow = data.categories
+        .where((c) => c.spent < c.budget * 0.6)
+        .toList();
 
     final selected = <CategoryBudget>[];
     // 1. Mostrar casos visuales: exceeded, normal, underlow
