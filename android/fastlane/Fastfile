@@ -39,7 +39,7 @@ platform :android do
       app: ENV["FIREBASE_ANDROID_APP_ID"],
       firebase_cli_token: ENV["FIREBASE_APP_DIST_TOKEN"],
       apk_path: "../build/app/outputs/flutter-apk/app-dev-debug.apk",
-      groups: "internal-testers",
+      # groups: "internal-testers",  # Descomentar cuando el grupo exista en Firebase Console → App Distribution → Testers & Groups
       release_notes: sh("git log -1 --pretty=format:'%s'").strip,
     )
   end
