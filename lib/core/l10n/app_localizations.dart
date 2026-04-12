@@ -722,6 +722,12 @@ abstract class AppLocalizations {
   /// **'Hide'**
   String get hide;
 
+  /// Show
+  ///
+  /// In en, this message translates to:
+  /// **'Show'**
+  String get show;
+
   /// Transaction saved
   ///
   /// In en, this message translates to:

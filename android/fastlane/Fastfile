@@ -20,7 +20,7 @@ platform :android do
   # ─── Lane: Test ──────────────────────────────────────────────────────────────
   desc "🧪 Run all unit tests with coverage"
   lane :test do
-    sh("fvm flutter test --coverage")
+    sh("flutter test --coverage")
     sh("lcov --remove coverage/lcov.info '**/*.g.dart' '**/*.freezed.dart' '**/app_localizations*.dart' --output-file coverage/lcov.info --ignore-errors unused,unused")
   end
 

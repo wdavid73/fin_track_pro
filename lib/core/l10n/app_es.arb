@@ -104,6 +104,7 @@
   "spentOf": "{spent} de {total}",
   "welcome": "Bienvenido",
   "hide": "Ocultar",
+  "show": "Mostrar",
   "transactionSaved": "Transacción guardada",
   "note": "Nota",
   "date": "Fecha",

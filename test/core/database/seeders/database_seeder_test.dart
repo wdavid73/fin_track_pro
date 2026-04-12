@@ -3,6 +3,7 @@ import 'package:fin_track_pro/core/database/seeders/category_seeder.dart';
 import 'package:fin_track_pro/core/database/seeders/database_seeder.dart';
 import 'package:fin_track_pro/core/database/seeders/transaction_seeder.dart';
 import 'package:fin_track_pro/core/utils/logger_service.dart';
+import 'package:fin_track_pro/core/config/flavor_config.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -20,6 +21,16 @@ void main() {
   late MockBudgetSeeder mockBudgetSeeder;
   late MockTransactionSeeder mockTransactionSeeder;
   late MockLoggerService mockLoggerService;
+
+  setUpAll(() {
+    FlavorConfig.initialize(
+      flavor: Flavor.dev,
+      appName: 'Test',
+      bundleId: 'com.test',
+      enableLogging: false,
+      showDebugBanner: false,
+    );
+  });
 
   setUp(() {
     mockCategorySeeder = MockCategorySeeder();

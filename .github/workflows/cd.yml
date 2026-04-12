@@ -6,6 +6,9 @@ on:
     branches:
       - main
       - 'release/*'
+  pull_request:
+    branches:
+      - deploy-android
   workflow_dispatch:
     inputs:
       platform:
@@ -118,6 +121,7 @@ jobs:
     needs: [quality, golden-tests]
     if: >
       github.event_name == 'push' ||
+      github.event_name == 'pull_request' ||
       (github.event_name == 'workflow_dispatch' &&
        (inputs.platform == 'android' || inputs.platform == 'all'))
     steps:
@@ -166,7 +170,7 @@ jobs:
         working-directory: android
         env:
           FIREBASE_APP_DIST_TOKEN: ${{ secrets.FIREBASE_APP_DIST_TOKEN }}
-          FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID_DEV }}
         run: bundle exec fastlane beta
 
   # ──────────────────────────────────────
@@ -225,7 +229,7 @@ jobs:
         working-directory: ios
         env:
           FIREBASE_APP_DIST_TOKEN: ${{ secrets.FIREBASE_APP_DIST_TOKEN }}
-          FIREBASE_IOS_APP_ID: ${{ secrets.FIREBASE_IOS_APP_ID }}
+          FIREBASE_IOS_APP_ID: ${{ secrets.FIREBASE_IOS_APP_ID_DEV }}
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}

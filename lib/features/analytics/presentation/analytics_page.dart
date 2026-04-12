@@ -168,11 +168,17 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
           topCatLabel: topCatLabel,
         ),
         const Gap(4.00),
-        Text(context.l10n.spendingTrend, style: context.textTheme.headlineSmall!),
+        Text(
+          context.l10n.spendingTrend,
+          style: context.textTheme.headlineSmall!,
+        ),
         const Gap(24.0),
         _SpendingBarChart(barData: barValues, labels: barLabels),
         const Gap(4.00),
-        Text(context.l10n.spendingByCategory, style: context.textTheme.headlineSmall!),
+        Text(
+          context.l10n.spendingByCategory,
+          style: context.textTheme.headlineSmall!,
+        ),
         const Gap(24.0),
         if (categoryShares.isNotEmpty) ...[
           _PieChartSection(
@@ -186,7 +192,10 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 24),
-              child: Text(context.l10n.noSpendingDataAvailable, style: context.textTheme.bodyMedium!),
+              child: Text(
+                context.l10n.noSpendingDataAvailable,
+                style: context.textTheme.bodyMedium!,
+              ),
             ),
           ),
       ],
@@ -197,18 +206,16 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
+        const Row(
           children: [
-            Expanded(
-              child: const ShimmerBox(height: 100, borderRadius: 12.0),
-            ),
-            const Gap(8),
+            Expanded(child: ShimmerBox(height: 100, borderRadius: 12.0)),
+            Gap(8),
             Expanded(
               child: Column(
                 children: [
-                  const ShimmerBox(height: 44, borderRadius: 12.0),
-                  const Gap(8),
-                  const ShimmerBox(height: 44, borderRadius: 12.0),
+                  ShimmerBox(height: 44, borderRadius: 12.0),
+                  Gap(8),
+                  ShimmerBox(height: 44, borderRadius: 12.0),
                 ],
               ),
             ),
@@ -225,9 +232,9 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
         const Gap(32.0),
         ...List.generate(
           4,
-          (_) => Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: const ShimmerBox(height: 40, borderRadius: 12.0),
+          (_) => const Padding(
+            padding: EdgeInsets.only(bottom: 12.0),
+            child: ShimmerBox(height: 40, borderRadius: 12.0),
           ),
         ),
       ],
@@ -246,7 +253,11 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
               size: 48,
             ),
             const Gap(16),
-            Text(message, style: context.textTheme.bodyMedium!, textAlign: TextAlign.center),
+            Text(
+              message,
+              style: context.textTheme.bodyMedium!,
+              textAlign: TextAlign.center,
+            ),
             const Gap(16),
             TextButton(
               onPressed: () => context.read<AnalyticsBloc>().add(
@@ -262,7 +273,6 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
       ),
     );
   }
-
 }
 
 // --- Range Selector ---
@@ -295,7 +305,9 @@ class _RangeSelector extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 margin: const EdgeInsets.all(3),
                 decoration: BoxDecoration(
-                  color: isSelected ? context.colorScheme.primary : Colors.transparent,
+                  color: isSelected
+                      ? context.colorScheme.primary
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Center(
@@ -386,7 +398,10 @@ class _SummaryCards extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(context.l10n.avgPerDay, style: context.textTheme.labelLarge!),
+                          Text(
+                            context.l10n.avgPerDay,
+                            style: context.textTheme.labelLarge!,
+                          ),
                           Text(
                             avgPerDay.toCurrency(),
                             style: context.textTheme.titleMedium!,
@@ -412,8 +427,14 @@ class _SummaryCards extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(context.l10n.topExpense, style: context.textTheme.labelLarge!),
-                          Text(topCatLabel, style: context.textTheme.titleMedium!),
+                          Text(
+                            context.l10n.topExpense,
+                            style: context.textTheme.labelLarge!,
+                          ),
+                          Text(
+                            topCatLabel,
+                            style: context.textTheme.titleMedium!,
+                          ),
                         ],
                       ),
                     ),
@@ -444,7 +465,12 @@ class _SpendingBarChart extends StatelessWidget {
           color: context.colorScheme.surface,
           borderRadius: BorderRadius.circular(24.0),
         ),
-        child: Center(child: Text(context.l10n.noDataAvailable, style: context.textTheme.bodyMedium!)),
+        child: Center(
+          child: Text(
+            context.l10n.noDataAvailable,
+            style: context.textTheme.bodyMedium!,
+          ),
+        ),
       );
     }
 
@@ -475,7 +501,10 @@ class _SpendingBarChart extends StatelessWidget {
                   }
                   return Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: Text(labels[i], style: context.textTheme.labelLarge!),
+                    child: Text(
+                      labels[i],
+                      style: context.textTheme.labelLarge!,
+                    ),
                   );
                 },
               ),
@@ -509,7 +538,9 @@ class _SpendingBarChart extends StatelessWidget {
                       : LinearGradient(
                           colors: [
                             context.colorScheme.primary.withValues(alpha: 0.3),
-                            context.colorScheme.primaryContainer.withValues(alpha: 0.3),
+                            context.colorScheme.primaryContainer.withValues(
+                              alpha: 0.3,
+                            ),
                           ],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
@@ -683,7 +714,8 @@ class _CategoryBreakdownRow extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: item.percent / 100,
                     minHeight: 5,
-                    backgroundColor: context.colorScheme.surfaceContainerHighest,
+                    backgroundColor:
+                        context.colorScheme.surfaceContainerHighest,
                     valueColor: AlwaysStoppedAnimation<Color>(item.color),
                   ),
                 ),

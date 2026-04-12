@@ -97,7 +97,10 @@ class _TransactionsBodyState extends State<_TransactionsBody> {
         backgroundColor: context.colorScheme.surface,
         elevation: 0,
         titleSpacing: 20,
-        title: Text(context.l10n.allTransactions, style: context.textTheme.headlineSmall!),
+        title: Text(
+          context.l10n.allTransactions,
+          style: context.textTheme.headlineSmall!,
+        ),
         actions: [
           BlocBuilder<CategoryBloc, CategoryState>(
             builder: (context, catState) {
@@ -156,19 +159,19 @@ class _TransactionsBodyState extends State<_TransactionsBody> {
       return ListView.builder(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
         itemCount: 8,
-        itemBuilder: (context, _) => Padding(
-          padding: const EdgeInsets.only(bottom: 12.0),
+        itemBuilder: (context, _) => const Padding(
+          padding: EdgeInsets.only(bottom: 12.0),
           child: Row(
             children: [
-              const ShimmerCircle(size: 44),
-              const Gap(12),
+              ShimmerCircle(size: 44),
+              Gap(12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const ShimmerBox(height: 14, width: 120, borderRadius: 4),
-                    const Gap(4),
-                    const ShimmerBox(height: 12, width: 80, borderRadius: 4),
+                    ShimmerBox(height: 14, width: 120, borderRadius: 4),
+                    Gap(4),
+                    ShimmerBox(height: 12, width: 80, borderRadius: 4),
                   ],
                 ),
               ),
@@ -181,7 +184,10 @@ class _TransactionsBodyState extends State<_TransactionsBody> {
     if (state.transactions.isEmpty &&
         state.status == TransactionStatus.success) {
       return Center(
-        child: Text(context.l10n.noTransactions, style: context.textTheme.bodyMedium!),
+        child: Text(
+          context.l10n.noTransactions,
+          style: context.textTheme.bodyMedium!,
+        ),
       );
     }
 
@@ -208,7 +214,6 @@ class _TransactionsBodyState extends State<_TransactionsBody> {
       },
     );
   }
-
 }
 
 class _FilterChips extends StatelessWidget {

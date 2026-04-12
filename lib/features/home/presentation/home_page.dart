@@ -14,6 +14,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import 'widget/balance_summary.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -144,9 +146,10 @@ class _HomeBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _BalanceHeroCard(balance: state.totalBalance),
+        BalanceHeroCard(balance: state.totalBalance),
         const Gap(24.0),
         _QuickStatsRow(income: income, expenses: expenses),
+
         if (state.budgetData != null &&
             state.budgetData!.categories.isNotEmpty) ...[
           const Gap(16.0),
@@ -251,79 +254,6 @@ class _HomeBody extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-// --- Hero Balance Card ---
-class _BalanceHeroCard extends StatelessWidget {
-  const _BalanceHeroCard({required this.balance});
-
-  final double balance;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(32.0),
-      decoration: BoxDecoration(
-        gradient: ThemeConstants.heroCardGradient,
-        borderRadius: BorderRadius.circular(24.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.l10n.totalBalance,
-            style: context.textTheme.bodyMedium!.copyWith(
-              color: Colors.white70,
-            ),
-          ),
-          const Gap(8),
-          Text(
-            balance.toCurrency(),
-            style: const TextStyle(
-              fontSize: 42,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              letterSpacing: -1,
-            ),
-          ),
-          const Gap(24.0),
-          Row(
-            children: [
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.visibility_outlined,
-                      color: Colors.white70,
-                      size: 14,
-                    ),
-                    const Gap(4),
-                    Text(
-                      context.l10n.hide,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
@@ -462,64 +392,120 @@ class _TransactionTile extends StatelessWidget {
 }
 
 // --- Budget Bars Row ---
-class _BudgetBarsRow extends StatelessWidget {
+class _BudgetBarsRow extends StatefulWidget {
   const _BudgetBarsRow({required this.budgetData});
 
   final BudgetData budgetData;
 
   @override
-  Widget build(BuildContext context) {
-    final overBudget = budgetData.categories.where((c) => c.spent > c.budget).toList();
-    final normal = budgetData.categories.where((c) => c.spent >= c.budget * 0.6 && c.spent <= c.budget).toList();
-    final underLow = budgetData.categories.where((c) => c.spent < c.budget * 0.6).toList();
+  State<_BudgetBarsRow> createState() => _BudgetBarsRowState();
+}
 
-    final selectedBudgets = <CategoryBudget>[];
+class _BudgetBarsRowState extends State<_BudgetBarsRow> {
+  static const double _barWidth = 72;
+  static const double _barHeight = 140;
+  static const double _barPadding = 12;
+  static const double _itemWidth = _barWidth + _barPadding;
+  static const double _stackHeight =
+      _barHeight + _barHeight * 0.5; // barHeight + maxOverflow
+
+  late List<CategoryBudget> _selectedBudgets;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedBudgets = _selectAndSort(widget.budgetData);
+  }
+
+  @override
+  void didUpdateWidget(_BudgetBarsRow oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.budgetData != widget.budgetData) {
+      setState(() {
+        _selectedBudgets = _selectAndSort(widget.budgetData);
+      });
+    }
+  }
+
+  List<CategoryBudget> _selectAndSort(BudgetData data) {
+    final overBudget = data.categories
+        .where((c) => c.spent > c.budget)
+        .toList();
+    final normal = data.categories
+        .where((c) => c.spent >= c.budget * 0.6 && c.spent <= c.budget)
+        .toList();
+    final underLow = data.categories
+        .where((c) => c.spent < c.budget * 0.6)
+        .toList();
+
+    final selected = <CategoryBudget>[];
     // 1. Mostrar casos visuales: exceeded, normal, underlow
-    if (overBudget.isNotEmpty) selectedBudgets.add(overBudget.removeAt(0));
-    if (normal.isNotEmpty) selectedBudgets.add(normal.removeAt(0));
-    if (underLow.isNotEmpty) selectedBudgets.add(underLow.removeAt(0));
+    if (overBudget.isNotEmpty) selected.add(overBudget.removeAt(0));
+    if (normal.isNotEmpty) selected.add(normal.removeAt(0));
+    if (underLow.isNotEmpty) selected.add(underLow.removeAt(0));
 
     // 2. Los otros dos por debajo del umbral del total (underLow o normal)
     final remainingPool = [...underLow, ...normal];
     for (final budget in remainingPool) {
-      if (selectedBudgets.length >= 5) break;
-      if (!selectedBudgets.contains(budget)) {
-        selectedBudgets.add(budget);
-      }
+      if (selected.length >= 5) break;
+      if (!selected.contains(budget)) selected.add(budget);
     }
 
     // Fallback if there are less than 5
-    for (final budget in budgetData.categories) {
-      if (selectedBudgets.length >= 5) break;
-      if (!selectedBudgets.contains(budget)) {
-        selectedBudgets.add(budget);
-      }
+    for (final budget in data.categories) {
+      if (selected.length >= 5) break;
+      if (!selected.contains(budget)) selected.add(budget);
     }
+
+    // Sort highest percentage first
+    selected.sort((a, b) {
+      final pA = a.budget > 0 ? a.spent / a.budget : 0.0;
+      final pB = b.budget > 0 ? b.spent / b.budget : 0.0;
+      return pB.compareTo(pA);
+    });
+
+    return selected;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final totalWidth = _selectedBudgets.length * _itemWidth;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: selectedBudgets.map((cb) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 12.0),
-            child: BudgetBarChart(
-              data: BudgetBarData(
-                label: CategoryHelper.categoryEmoji(cb.category.icon),
-                currentAmount: cb.spent,
-                totalBudget: cb.budget,
-                baseColor: Color(cb.category.color),
+      child: SizedBox(
+        width: totalWidth,
+        height: _stackHeight,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: _selectedBudgets.asMap().entries.map((entry) {
+            final index = entry.key;
+            final cb = entry.value;
+
+            return AnimatedPositioned(
+              key: ValueKey(cb.category.name),
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOutCubic,
+              left: index * _itemWidth,
+              bottom: 0,
+              width: _barWidth,
+              height: _stackHeight,
+              child: BudgetBarChart(
+                data: BudgetBarData(
+                  label: CategoryHelper.categoryEmoji(cb.category.icon),
+                  currentAmount: cb.spent,
+                  totalBudget: cb.budget,
+                  baseColor: Color(cb.category.color),
+                ),
+                barWidth: _barWidth,
+                barHeight: _barHeight,
+                onViewTotalValue: () =>
+                    context.go(RouteConstants.budgetDetail, extra: cb),
+                // TODO: wire onAddToBudget and onQuickTransaction when those flows exist
               ),
-              width: 72,
-              height: 160,
-              onViewTotalValue: () => context.go(
-                RouteConstants.budgetDetail,
-                extra: cb,
-              ),
-              // TODO: wire onAddToBudget and onQuickTransaction when those flows exist
-            ),
-          );
-        }).toList(),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

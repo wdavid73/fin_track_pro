@@ -328,6 +328,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hide => 'Hide';
 
   @override
+  String get show => 'Show';
+
+  @override
   String get transactionSaved => 'Transaction saved';
 
   @override

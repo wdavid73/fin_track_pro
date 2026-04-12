@@ -34,10 +34,12 @@ class StatCard extends StatelessWidget {
         ],
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: 40,
-            height: 40,
+            width: 30,
+            height: 30,
             decoration: BoxDecoration(color: iconBg, shape: BoxShape.circle),
             child: Icon(icon, color: iconColor, size: 20),
           ),
@@ -46,8 +48,8 @@ class StatCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: context.textTheme.labelLarge!),
-                Text(value, style: context.textTheme.titleMedium!),
+                Text(label, style: context.textTheme.titleMedium!),
+                Text(value, style: context.textTheme.labelLarge!),
               ],
             ),
           ),

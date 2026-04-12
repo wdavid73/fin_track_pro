@@ -13,7 +13,7 @@ class BudgetBarData {
     required this.baseColor,
   });
 
-  /// Emoji character displayed at the top of the bar, e.g. '🍽️'.
+  /// Emoji character displayed below the bar, e.g. '🍽️'.
   final String label;
   final double currentAmount;
   final double totalBudget;
@@ -24,16 +24,21 @@ class BudgetBarData {
 
   double get clampedFraction => (percentage / 100).clamp(0.0, 1.0);
 
+  /// Fraction that can exceed 1.0 for over-budget display (capped at 1.5).
+  double get displayFraction =>
+      totalBudget > 0 ? (currentAmount / totalBudget).clamp(0.0, 1.5) : 0;
+
   bool get isUnderLow => percentage < 60;
   bool get isNormal => percentage >= 60 && percentage <= 100;
   bool get isOverBudget => percentage > 100;
+
+  /// Whether to show the dashed border (≥ 60%).
+  bool get showDashedBorder => percentage >= 60;
 }
 
 // ---------------------------------------------------------------------------
 // Internal helpers
 // ---------------------------------------------------------------------------
-
-enum _BarBorderState { underLow, normal, overBudget }
 
 class _TooltipOption {
   const _TooltipOption({
@@ -47,12 +52,6 @@ class _TooltipOption {
   final VoidCallback onSelected;
 }
 
-_BarBorderState _stateFromData(BudgetBarData data) {
-  if (data.isOverBudget) return _BarBorderState.overBudget;
-  if (data.isNormal) return _BarBorderState.normal;
-  return _BarBorderState.underLow;
-}
-
 // ---------------------------------------------------------------------------
 // Public widget
 // ---------------------------------------------------------------------------
@@ -61,8 +60,8 @@ class BudgetBarChart extends StatefulWidget {
   const BudgetBarChart({
     super.key,
     required this.data,
-    this.width = 72,
-    this.height = 180,
+    this.barWidth = 72,
+    this.barHeight = 140,
     this.isLoading = false,
     this.onAddToBudget,
     this.onViewTotalValue,
@@ -70,8 +69,11 @@ class BudgetBarChart extends StatefulWidget {
   });
 
   final BudgetBarData data;
-  final double width;
-  final double height;
+  final double barWidth;
+
+  /// Height of the dashed container = 100% budget.
+  final double barHeight;
+
   final bool isLoading;
   final VoidCallback? onAddToBudget;
   final VoidCallback? onViewTotalValue;
@@ -83,68 +85,43 @@ class BudgetBarChart extends StatefulWidget {
 
 class _BudgetBarChartState extends State<BudgetBarChart>
     with TickerProviderStateMixin {
-  // ---- Animation controllers ----
   late AnimationController _fillController;
-  late AnimationController _borderController;
   late AnimationController _tooltipController;
-
   late Animation<double> _fillAnimation;
 
-  // ---- Border crossfade state ----
-  late _BarBorderState _currentBorderState;
-  late _BarBorderState _previousBorderState;
-
-  // ---- Overlay ----
   OverlayEntry? _overlayEntry;
   final GlobalKey _barKey = GlobalKey();
   final ValueNotifier<int> _hoverNotifier = ValueNotifier<int>(0);
 
-  // Saved after _showOverlay; used in onLongPressMoveUpdate
   double _tooltipTopY = 0;
   double _tooltipItemHeight = 56;
   double _tooltipPaddingTop = 8;
 
-  // ---- Tooltip options (built once in initState) ----
   late final List<_TooltipOption> _tooltipOptions;
 
-  // ---- Convenience ----
   BudgetBarData get data => widget.data;
+
+  // Max overflow above the container: 50% of barHeight
+  double get _maxOverflow => widget.barHeight * 0.5;
 
   @override
   void initState() {
     super.initState();
 
-    _currentBorderState = _stateFromData(data);
-    _previousBorderState = _currentBorderState;
-
-    // Fill animation: 0 → clampedFraction
     _fillController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 900),
     );
-    _fillAnimation = Tween<double>(
-      begin: 0,
-      end: data.clampedFraction,
-    ).animate(CurvedAnimation(
-      parent: _fillController,
-      curve: Curves.easeOutCubic,
-    ));
-
-    // Border crossfade animation
-    _borderController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-      value: 1.0, // starts fully at current state
+    _fillAnimation = Tween<double>(begin: 0, end: data.displayFraction).animate(
+      CurvedAnimation(parent: _fillController, curve: Curves.easeOutCubic),
     );
 
-    // Tooltip item highlight animation
     _tooltipController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
 
     _tooltipOptions = [
-      // TODO(l10n): add keys 'addToBudget', 'viewTotalValue', 'quickTransaction'
       _TooltipOption(
         label: 'Add to Budget',
         icon: Icons.add_circle_outline,
@@ -170,30 +147,20 @@ class _BudgetBarChartState extends State<BudgetBarChart>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.data != widget.data) {
-      // Re-run fill animation with new target
-      _fillAnimation = Tween<double>(
-        begin: 0,
-        end: data.clampedFraction,
-      ).animate(CurvedAnimation(
-        parent: _fillController,
-        curve: Curves.easeOutCubic,
-      ));
+      _fillAnimation = Tween<double>(begin: 0, end: data.displayFraction)
+          .animate(
+            CurvedAnimation(
+              parent: _fillController,
+              curve: Curves.easeOutCubic,
+            ),
+          );
       _fillController.forward(from: 0);
-
-      // Crossfade border if state changed
-      final newState = _stateFromData(data);
-      if (newState != _currentBorderState) {
-        _previousBorderState = _currentBorderState;
-        _currentBorderState = newState;
-        _borderController.forward(from: 0);
-      }
     }
   }
 
   @override
   void dispose() {
     _fillController.dispose();
-    _borderController.dispose();
     _tooltipController.dispose();
     _hoverNotifier.dispose();
     _removeOverlay();
@@ -218,14 +185,12 @@ class _BudgetBarChartState extends State<BudgetBarChart>
     final safeTop = MediaQuery.of(context).padding.top;
     final safeBottom = MediaQuery.of(context).padding.bottom;
 
-    // Horizontal: prefer left, then right, then centered
     double left = barOffset.dx - tooltipWidth - 8;
     if (left < 8) left = barOffset.dx + barSize.width + 8;
     if (left + tooltipWidth > screen.width - 8) {
       left = (screen.width - tooltipWidth) / 2;
     }
 
-    // Vertical: center on touch, clamped to screen edges
     final double top = (globalPosition.dy - tooltipHeight / 2).clamp(
       safeTop + 8,
       screen.height - tooltipHeight - safeBottom - 8,
@@ -239,7 +204,6 @@ class _BudgetBarChartState extends State<BudgetBarChart>
     _overlayEntry = OverlayEntry(
       builder: (ctx) => Stack(
         children: [
-          // Dismiss layer
           Positioned.fill(
             child: GestureDetector(
               onTap: _removeOverlay,
@@ -282,18 +246,17 @@ class _BudgetBarChartState extends State<BudgetBarChart>
     _overlayEntry = null;
   }
 
-  // ---- Gesture handlers ----
-
   void _onLongPressStart(LongPressStartDetails details) {
     _showOverlay(context, details.globalPosition);
   }
 
   void _onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
     if (_overlayEntry == null) return;
-    final relY =
-        details.globalPosition.dy - _tooltipTopY - _tooltipPaddingTop;
-    final index =
-        (relY / _tooltipItemHeight).floor().clamp(0, _tooltipOptions.length - 1);
+    final relY = details.globalPosition.dy - _tooltipTopY - _tooltipPaddingTop;
+    final index = (relY / _tooltipItemHeight).floor().clamp(
+      0,
+      _tooltipOptions.length - 1,
+    );
     if (index != _hoverNotifier.value) {
       _hoverNotifier.value = index;
       _tooltipController.forward(from: 0);
@@ -306,9 +269,9 @@ class _BudgetBarChartState extends State<BudgetBarChart>
     if (mounted) _tooltipOptions[i].onSelected();
   }
 
-  // ---- Color helper ----
+  // ---- Colors ----
 
-  Color _percentageColor(BuildContext context) {
+  Color _percentageTextColor(BuildContext context) {
     if (data.isOverBudget) return context.colorScheme.error;
     if (data.isNormal) return data.baseColor;
     return context.colorScheme.onSurfaceVariant;
@@ -320,8 +283,8 @@ class _BudgetBarChartState extends State<BudgetBarChart>
   Widget build(BuildContext context) {
     if (widget.isLoading) {
       return ShimmerBox(
-        width: widget.width,
-        height: widget.height,
+        width: widget.barWidth,
+        height: widget.barHeight + _maxOverflow,
         borderRadius: 16,
       );
     }
@@ -336,98 +299,99 @@ class _BudgetBarChartState extends State<BudgetBarChart>
       onLongPressMoveUpdate: _onLongPressMoveUpdate,
       onLongPressEnd: _onLongPressEnd,
       child: SizedBox(
-        width: widget.width,
-        height: widget.height,
+        width: widget.barWidth,
+        height: widget.barHeight + _maxOverflow,
         child: Stack(
-          fit: StackFit.expand,
+          clipBehavior: Clip.none,
           children: [
-            // [0] Background
-            Container(
-              decoration: BoxDecoration(
-                color: context.colorScheme.surfaceContainerHighest
-                    .withValues(alpha: 0.4),
+            // [0] Background — subtle fill inside the container
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: widget.barHeight,
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-
-            // [1] Animated fill from bottom
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: AnimatedBuilder(
-                animation: _fillAnimation,
-                builder: (context, _) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      heightFactor: _fillAnimation.value,
-                      child: Container(
-                        width: double.infinity,
-                        height: widget.height,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                              data.baseColor.withValues(alpha: 0.35),
-                              data.baseColor.withValues(alpha: 0.70),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // [2] Over-budget error tint
-            if (data.isOverBudget)
-              Container(
-                decoration: BoxDecoration(
-                  color: context.colorScheme.error.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(16),
+                child: ColoredBox(
+                  color: context.colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.12,
+                  ),
                 ),
               ),
+            ),
 
-            // [3] Text content
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+            // [1] Fill — grows from bottom, overflows above
+            //     container when over budget (fraction > 1.0).
+            AnimatedBuilder(
+              animation: _fillAnimation,
+              builder: (context, _) {
+                final fraction = _fillAnimation.value;
+                final fillHeight = widget.barHeight * fraction;
+
+                return Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: fillHeight,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: ColoredBox(
+                      color: data.baseColor.withValues(alpha: 0.28),
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            // [2] Dashed border (= 100% budget). On top of fill
+            //     so it's visible even when fill overflows.
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: widget.barHeight,
+              child: AnimatedOpacity(
+                opacity: data.showDashedBorder ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                child: CustomPaint(
+                  painter: _DashedBorderPainter(
+                    color: data.baseColor.withValues(alpha: 0.40),
+                    strokeWidth: 1.5,
+                    borderRadius: 16,
+                    dashLength: 5,
+                    gapLength: 4,
+                  ),
+                ),
+              ),
+            ),
+
+            // [3] Labels — pinned to bottom inside the container
+            Positioned(
+              bottom: 8,
+              left: 0,
+              right: 0,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(data.label, style: const TextStyle(fontSize: 20)),
+                  Text(data.label, style: const TextStyle(fontSize: 18)),
+                  const SizedBox(height: 2),
                   Text(
                     data.currentAmount.toCompactCurrency(),
-                    style: context.textTheme.labelLarge?.copyWith(
+                    style: context.textTheme.labelMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: context.colorScheme.onSurface,
                     ),
                     textAlign: TextAlign.center,
                   ),
+                  const SizedBox(height: 2),
                   Text(
                     '${data.percentage.toStringAsFixed(0)}%',
-                    style: context.textTheme.labelLarge?.copyWith(
-                      color: _percentageColor(context),
+                    style: context.textTheme.labelSmall?.copyWith(
+                      color: _percentageTextColor(context),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
-              ),
-            ),
-
-            // [4] Border painter with crossfade
-            AnimatedBuilder(
-              animation: _borderController,
-              builder: (context, _) => CustomPaint(
-                painter: _BarBorderPainter(
-                  currentState: _currentBorderState,
-                  previousState: _previousBorderState,
-                  crossfadeProgress: _borderController.value,
-                  baseColor: data.baseColor,
-                  errorColor: context.colorScheme.error,
-                  neutralColor: context.colorScheme.onSurfaceVariant,
-                ),
               ),
             ),
           ],
@@ -438,38 +402,36 @@ class _BudgetBarChartState extends State<BudgetBarChart>
 
   Widget _buildZeroState(BuildContext context) {
     return SizedBox(
-      width: widget.width,
-      height: widget.height,
+      width: widget.barWidth,
+      height: widget.barHeight + _maxOverflow,
       child: Stack(
-        fit: StackFit.expand,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: context.colorScheme.surfaceContainerHighest
-                  .withValues(alpha: 0.4),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: widget.barHeight,
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
+              child: ColoredBox(
+                color: context.colorScheme.surfaceContainerHighest.withValues(
+                  alpha: 0.12,
+                ),
+              ),
             ),
           ),
-          CustomPaint(
-            painter: _BarBorderPainter(
-              currentState: _BarBorderState.underLow,
-              previousState: _BarBorderState.underLow,
-              crossfadeProgress: 1.0,
-              baseColor: data.baseColor,
-              errorColor: context.colorScheme.error,
-              neutralColor: context.colorScheme.onSurfaceVariant,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+          Positioned(
+            bottom: 8,
+            left: 0,
+            right: 0,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(data.label, style: const TextStyle(fontSize: 20)),
-                const SizedBox.shrink(),
+                Text(data.label, style: const TextStyle(fontSize: 18)),
+                const SizedBox(height: 2),
                 Text(
                   '—',
-                  style: context.textTheme.labelLarge?.copyWith(
+                  style: context.textTheme.labelMedium?.copyWith(
                     color: context.colorScheme.onSurfaceVariant,
                   ),
                 ),
@@ -483,80 +445,42 @@ class _BudgetBarChartState extends State<BudgetBarChart>
 }
 
 // ---------------------------------------------------------------------------
-// CustomPainter — dashed/solid border with crossfade
+// Dashed rounded-rect border painter
 // ---------------------------------------------------------------------------
 
-class _BarBorderPainter extends CustomPainter {
-  const _BarBorderPainter({
-    required this.currentState,
-    required this.previousState,
-    required this.crossfadeProgress,
-    required this.baseColor,
-    required this.errorColor,
-    required this.neutralColor,
+class _DashedBorderPainter extends CustomPainter {
+  const _DashedBorderPainter({
+    required this.color,
+    required this.strokeWidth,
+    required this.borderRadius,
+    required this.dashLength,
+    required this.gapLength,
   });
 
-  final _BarBorderState currentState;
-  final _BarBorderState previousState;
-  final double crossfadeProgress;
-  final Color baseColor;
-  final Color errorColor;
-  final Color neutralColor;
+  final Color color;
+  final double strokeWidth;
+  final double borderRadius;
+  final double dashLength;
+  final double gapLength;
 
   @override
   void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+
+    final inset = strokeWidth / 2;
     final rrect = RRect.fromRectAndRadius(
-      Rect.fromLTWH(1, 1, size.width - 2, size.height - 2),
-      const Radius.circular(16),
+      Rect.fromLTWH(
+        inset,
+        inset,
+        size.width - strokeWidth,
+        size.height - strokeWidth,
+      ),
+      Radius.circular(borderRadius),
     );
 
-    if (crossfadeProgress < 1.0 && currentState != previousState) {
-      _drawState(canvas, rrect, previousState, 1.0 - crossfadeProgress);
-    }
-    _drawState(
-      canvas,
-      rrect,
-      currentState,
-      currentState == previousState ? 1.0 : crossfadeProgress,
-    );
-  }
-
-  void _drawState(
-    Canvas canvas,
-    RRect rrect,
-    _BarBorderState state,
-    double opacity,
-  ) {
-    final paint = Paint()..style = PaintingStyle.stroke;
-
-    switch (state) {
-      case _BarBorderState.underLow:
-        paint
-          ..strokeWidth = 1.5
-          ..color = neutralColor.withValues(alpha: opacity);
-        _drawDashedRRect(canvas, paint, rrect, dashLength: 6, gapLength: 4);
-
-      case _BarBorderState.normal:
-        paint
-          ..strokeWidth = 2.0
-          ..color = baseColor.withValues(alpha: opacity);
-        canvas.drawRRect(rrect, paint);
-
-      case _BarBorderState.overBudget:
-        paint
-          ..strokeWidth = 3.0
-          ..color = errorColor.withValues(alpha: opacity);
-        _drawDashedRRect(canvas, paint, rrect, dashLength: 8, gapLength: 3);
-    }
-  }
-
-  void _drawDashedRRect(
-    Canvas canvas,
-    Paint paint,
-    RRect rrect, {
-    required double dashLength,
-    required double gapLength,
-  }) {
     final path = Path()..addRRect(rrect);
     for (final metric in path.computeMetrics()) {
       double distance = 0;
@@ -569,11 +493,10 @@ class _BarBorderPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_BarBorderPainter old) =>
-      old.crossfadeProgress != crossfadeProgress ||
-      old.currentState != currentState ||
-      old.previousState != previousState ||
-      old.baseColor != baseColor;
+  bool shouldRepaint(_DashedBorderPainter old) =>
+      old.color != color ||
+      old.strokeWidth != strokeWidth ||
+      old.borderRadius != borderRadius;
 }
 
 // ---------------------------------------------------------------------------
@@ -654,8 +577,7 @@ class _TooltipOptionRow extends StatelessWidget {
             Text(
               option.label,
               style: context.textTheme.bodyMedium?.copyWith(
-                fontWeight:
-                    isHovered ? FontWeight.w600 : FontWeight.normal,
+                fontWeight: isHovered ? FontWeight.w600 : FontWeight.normal,
                 color: isHovered
                     ? context.colorScheme.onSurface
                     : context.colorScheme.onSurfaceVariant,

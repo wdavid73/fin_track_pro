@@ -1,9 +1,5 @@
+import 'package:fin_track_pro/core/core.dart';
 import 'package:injectable/injectable.dart';
-import 'package:fin_track_pro/core/database/seeders/seeder.dart';
-import 'package:fin_track_pro/core/database/seeders/category_seeder.dart';
-import 'package:fin_track_pro/core/database/seeders/budget_seeder.dart';
-import 'package:fin_track_pro/core/database/seeders/transaction_seeder.dart';
-import 'package:fin_track_pro/core/utils/logger_service.dart';
 
 /// Main database seeder orchestrator
 ///
@@ -28,17 +24,56 @@ class DatabaseSeeder {
   /// This method executes all registered seeders in the correct order
   /// to ensure dependencies are met (e.g., categories before transactions)
   Future<void> seedAll() async {
-    _logger.info('🌱 Starting database seeding...', tag: 'DatabaseSeeder');
+    if (FlavorConfig.instance.isDev) {
+      _logger.info('🌱 Starting database seeding...', tag: 'DatabaseSeeder');
 
-    final seeders = <Seeder>[
-      _categorySeeder,
-      _budgetSeeder, // Must run after categories
-      _transactionSeeder,
-    ];
+      final seeders = <Seeder>[
+        _categorySeeder,
+        _budgetSeeder, // Must run after categories
+        _transactionSeeder,
+      ];
 
-    for (final seeder in seeders) {
+      for (final seeder in seeders) {
+        try {
+          await seeder.seed();
+        } catch (e, stackTrace) {
+          _logger.error(
+            'Error seeding ${seeder.name}',
+            tag: 'DatabaseSeeder',
+            error: e,
+            stackTrace: stackTrace,
+          );
+        }
+      }
+
+      _logger.info('✅ Database seeding completed!', tag: 'DatabaseSeeder');
+    } else {
+      _logger.info(
+        'Database seeding skipped (not in dev mode)',
+        tag: 'DatabaseSeeder',
+      );
+    }
+  }
+
+  /// Run a specific seeder by name
+  Future<void> seedOne(String seederName) async {
+    if (FlavorConfig.instance.isDev) {
+      final seederMap = {
+        'CategorySeeder': _categorySeeder,
+        'BudgetSeeder': _budgetSeeder,
+        'TransactionSeeder': _transactionSeeder,
+      };
+
+      final seeder = seederMap[seederName];
+      if (seeder == null) {
+        _logger.warning('Seeder not found: $seederName', tag: 'DatabaseSeeder');
+        return;
+      }
+
+      _logger.info('🌱 Running $seederName...', tag: 'DatabaseSeeder');
       try {
         await seeder.seed();
+        _logger.info('✅ $seederName completed!', tag: 'DatabaseSeeder');
       } catch (e, stackTrace) {
         _logger.error(
           'Error seeding ${seeder.name}',
@@ -47,35 +82,10 @@ class DatabaseSeeder {
           stackTrace: stackTrace,
         );
       }
-    }
-
-    _logger.info('✅ Database seeding completed!', tag: 'DatabaseSeeder');
-  }
-
-  /// Run a specific seeder by name
-  Future<void> seedOne(String seederName) async {
-    final seederMap = {
-      'CategorySeeder': _categorySeeder,
-      'BudgetSeeder': _budgetSeeder,
-      'TransactionSeeder': _transactionSeeder,
-    };
-
-    final seeder = seederMap[seederName];
-    if (seeder == null) {
-      _logger.warning('Seeder not found: $seederName', tag: 'DatabaseSeeder');
-      return;
-    }
-
-    _logger.info('🌱 Running $seederName...', tag: 'DatabaseSeeder');
-    try {
-      await seeder.seed();
-      _logger.info('✅ $seederName completed!', tag: 'DatabaseSeeder');
-    } catch (e, stackTrace) {
-      _logger.error(
-        'Error seeding ${seeder.name}',
+    } else {
+      _logger.info(
+        'Database seeding skipped (not in dev mode)',
         tag: 'DatabaseSeeder',
-        error: e,
-        stackTrace: stackTrace,
       );
     }
   }
