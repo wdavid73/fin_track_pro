@@ -353,4 +353,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filterByCategory => 'Filter by Category';
+
+  @override
+  String get newBudget => 'New Budget';
+
+  @override
+  String get editBudget => 'Edit Budget';
+
+  @override
+  String get budgetAmount => 'Budget Amount';
+
+  @override
+  String get period => 'Period';
+
+  @override
+  String get monthly => 'Monthly';
+
+  @override
+  String get weekly => 'Weekly';
+
+  @override
+  String get yearly => 'Yearly';
+
+  @override
+  String get selectACategory => 'Select a category';
+
+  @override
+  String get enterAmount => 'Enter amount';
+
+  @override
+  String get pleaseSelectCategory => 'Please select a category';
+
+  @override
+  String get pleaseEnterAmount => 'Please enter an amount';
+
+  @override
+  String get pleaseEnterValidAmount => 'Please enter a valid amount';
+
+  @override
+  String get deleteBudget => 'Delete Budget';
+
+  @override
+  String get areYouSureDeleteBudget =>
+      'Are you sure you want to delete this budget?';
+
+  @override
+  String get budgetDeleted => 'Budget deleted';
+
+  @override
+  String get budgetSaved => 'Budget saved';
+
+  @override
+  String get budgetUpdated => 'Budget updated';
+
+  @override
+  String get detailTransactions => 'Transactions';
+
+  @override
+  String detailMovements(int count) {
+    return '$count movements';
+  }
+
+  @override
+  String get detailNoTransactions => 'No transactions';
+
+  @override
+  String get detailUsed => 'used';
+
+  @override
+  String detailBudgeted(String total) {
+    return 'of $total budgeted';
+  }
+
+  @override
+  String detailExceededBy(String amount) {
+    return '$amount exceeded';
+  }
+
+  @override
+  String detailAvailable(String amount) {
+    return '$amount available';
+  }
+
+  @override
+  String get detailAvgPerDay => 'Avg/day';
+
+  @override
+  String get detailDaysRemaining => 'Days remaining';
 }

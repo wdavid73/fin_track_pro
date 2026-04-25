@@ -354,4 +354,91 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get filterByCategory => 'Filtrar por Categoría';
+
+  @override
+  String get newBudget => 'Nuevo Presupuesto';
+
+  @override
+  String get editBudget => 'Editar Presupuesto';
+
+  @override
+  String get budgetAmount => 'Monto del Presupuesto';
+
+  @override
+  String get period => 'Período';
+
+  @override
+  String get monthly => 'Mensual';
+
+  @override
+  String get weekly => 'Semanal';
+
+  @override
+  String get yearly => 'Anual';
+
+  @override
+  String get selectACategory => 'Selecciona una categoría';
+
+  @override
+  String get enterAmount => 'Ingresa el monto';
+
+  @override
+  String get pleaseSelectCategory => 'Por favor selecciona una categoría';
+
+  @override
+  String get pleaseEnterAmount => 'Por favor ingresa un monto';
+
+  @override
+  String get pleaseEnterValidAmount => 'Por favor ingresa un monto válido';
+
+  @override
+  String get deleteBudget => 'Eliminar Presupuesto';
+
+  @override
+  String get areYouSureDeleteBudget =>
+      '¿Estás seguro de que quieres eliminar este presupuesto?';
+
+  @override
+  String get budgetDeleted => 'Presupuesto eliminado';
+
+  @override
+  String get budgetSaved => 'Presupuesto guardado';
+
+  @override
+  String get budgetUpdated => 'Presupuesto actualizado';
+
+  @override
+  String get detailTransactions => 'Transacciones';
+
+  @override
+  String detailMovements(int count) {
+    return '$count movimientos';
+  }
+
+  @override
+  String get detailNoTransactions => 'Sin transacciones';
+
+  @override
+  String get detailUsed => 'usado';
+
+  @override
+  String detailBudgeted(String total) {
+    return 'de $total presupuestado';
+  }
+
+  @override
+  String detailExceededBy(String amount) {
+    return '$amount excedido';
+  }
+
+  @override
+  String detailAvailable(String amount) {
+    return '$amount disponible';
+  }
+
+  @override
+  String get detailAvgPerDay => 'Promedio/día';
+
+  @override
+  String get detailDaysRemaining => 'Días restantes';
 }

@@ -35,7 +35,7 @@ class AddTransactionPage extends StatefulWidget {
 }
 
 class _AddTransactionPageState extends State<AddTransactionPage> {
-  final _amountController = TextEditingController(text: '0.00');
+  final _amountController = TextEditingController(text: '0');
   final _noteController = TextEditingController();
 
   @override
@@ -212,9 +212,8 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
               Expanded(
                 child: TextField(
                   controller: _amountController,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [MoneyInputFormatter()],
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
@@ -225,7 +224,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.zero,
                   ),
-                  onChanged: (v) => cubit.updateAmount(double.tryParse(v)),
+                  onChanged: (v) => cubit.updateAmount(double.tryParse(v.replaceAll('.', ''))),
                 ),
               ),
             ],

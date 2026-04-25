@@ -473,5 +473,133 @@
   "filterByCategory": "Filter by Category",
   "@filterByCategory": {
     "description": "Filter by Category"
+  },
+  "newBudget": "New Budget",
+  "@newBudget": {
+    "description": "New Budget form title"
+  },
+  "editBudget": "Edit Budget",
+  "@editBudget": {
+    "description": "Edit Budget form title"
+  },
+  "budgetAmount": "Budget Amount",
+  "@budgetAmount": {
+    "description": "Budget amount field label"
+  },
+  "period": "Period",
+  "@period": {
+    "description": "Budget period selector label"
+  },
+  "monthly": "Monthly",
+  "@monthly": {
+    "description": "Monthly budget period"
+  },
+  "weekly": "Weekly",
+  "@weekly": {
+    "description": "Weekly budget period"
+  },
+  "yearly": "Yearly",
+  "@yearly": {
+    "description": "Yearly budget period"
+  },
+  "selectACategory": "Select a category",
+  "@selectACategory": {
+    "description": "Hint for category selector in budget form"
+  },
+  "enterAmount": "Enter amount",
+  "@enterAmount": {
+    "description": "Hint for amount field"
+  },
+  "pleaseSelectCategory": "Please select a category",
+  "@pleaseSelectCategory": {
+    "description": "Validation: please select a category"
+  },
+  "pleaseEnterAmount": "Please enter an amount",
+  "@pleaseEnterAmount": {
+    "description": "Validation: please enter an amount"
+  },
+  "pleaseEnterValidAmount": "Please enter a valid amount",
+  "@pleaseEnterValidAmount": {
+    "description": "Validation: amount must be a number > 0"
+  },
+  "deleteBudget": "Delete Budget",
+  "@deleteBudget": {
+    "description": "Delete Budget dialog title"
+  },
+  "areYouSureDeleteBudget": "Are you sure you want to delete this budget?",
+  "@areYouSureDeleteBudget": {
+    "description": "Confirmation message for deleting a budget"
+  },
+  "budgetDeleted": "Budget deleted",
+  "@budgetDeleted": {
+    "description": "Success snackbar after deleting a budget"
+  },
+  "budgetSaved": "Budget saved",
+  "@budgetSaved": {
+    "description": "Success snackbar after saving a budget"
+  },
+  "budgetUpdated": "Budget updated",
+  "@budgetUpdated": {
+    "description": "Success snackbar after updating a budget"
+  },
+  "detailTransactions": "Transactions",
+  "@detailTransactions": {
+    "description": "Section title in budget detail"
+  },
+  "detailMovements": "{count} movements",
+  "@detailMovements": {
+    "description": "Number of movements in budget detail",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "detailNoTransactions": "No transactions",
+  "@detailNoTransactions": {
+    "description": "Empty state in budget detail"
+  },
+  "detailUsed": "used",
+  "@detailUsed": {
+    "description": "Label under ring progress percentage"
+  },
+  "detailBudgeted": "of {total} budgeted",
+  "@detailBudgeted": {
+    "description": "Sub-label under spent amount in budget detail",
+    "placeholders": {
+      "total": {
+        "type": "String",
+        "example": "$500"
+      }
+    }
+  },
+  "detailExceededBy": "{amount} exceeded",
+  "@detailExceededBy": {
+    "description": "Over-budget badge in detail",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$50"
+      }
+    }
+  },
+  "detailAvailable": "{amount} available",
+  "@detailAvailable": {
+    "description": "Available badge in budget detail",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$200"
+      }
+    }
+  },
+  "detailAvgPerDay": "Avg/day",
+  "@detailAvgPerDay": {
+    "description": "Stats box label in budget detail"
+  },
+  "detailDaysRemaining": "Days remaining",
+  "@detailDaysRemaining": {
+    "description": "Stats box label in budget detail"
   }
 }

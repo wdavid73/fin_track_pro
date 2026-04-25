@@ -1,5 +1,10 @@
 import 'package:fin_track_pro/app/injection_container.dart';
+import 'package:fin_track_pro/core/core.dart';
 import 'package:fin_track_pro/core/utils/category_helper.dart';
+import 'package:fin_track_pro/features/budgets/domain/entities/budget.dart';
+import 'package:fin_track_pro/features/budgets/presentation/bloc/budget_bloc/budget_bloc.dart';
+import 'package:fin_track_pro/features/budgets/presentation/budget_form_page.dart';
+import 'package:fin_track_pro/features/categories/presentation/bloc/category_bloc/category_bloc.dart';
 import 'package:fin_track_pro/features/transactions/domain/entities/budget_data.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/transaction_bloc/transaction_bloc.dart';
 import 'package:flutter/material.dart';
@@ -11,20 +16,59 @@ class BudgetDetailPage extends StatelessWidget {
 
   final CategoryBudget budget;
 
+  void _openEditForm(BuildContext context) {
+    final budgetBloc = getIt<BudgetBloc>();
+    final categories = getIt<CategoryBloc>().state.categories;
+    final budgetState = budgetBloc.state;
+    Budget? existing;
+
+    List<Budget> budgets = const [];
+    if (budgetState is BudgetLoaded) {
+      budgets = budgetState.budgets;
+    } else if (budgetState is BudgetActionSuccess) {
+      budgets = budgetState.budgets;
+    }
+    try {
+      existing = budgets.firstWhere((b) => b.categoryId == budget.category.id);
+    } catch (_) {
+      existing = null;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => BlocProvider.value(
+        value: budgetBloc,
+        child: BudgetFormPage(
+          budget: existing,
+          categories: categories,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: getIt<TransactionBloc>()
         ..add(FilterTransactions(categoryId: budget.category.id)),
-      child: _BudgetDetailBody(budget: budget),
+      child: _BudgetDetailBody(
+        budget: budget,
+        onEdit: () => _openEditForm(context),
+      ),
     );
   }
 }
 
 class _BudgetDetailBody extends StatelessWidget {
-  const _BudgetDetailBody({required this.budget});
+  const _BudgetDetailBody({
+    required this.budget,
+    required this.onEdit,
+  });
 
   final CategoryBudget budget;
+  final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +91,17 @@ class _BudgetDetailBody extends StatelessWidget {
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(budget.category.name, style: Theme.of(context).textTheme.headlineSmall!),
+        title: Text(
+          budget.category.name,
+          style: Theme.of(context).textTheme.headlineSmall!,
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.edit_outlined, color: Theme.of(context).colorScheme.onSurface),
-            onPressed: () {},
+            icon: Icon(
+              Icons.edit_outlined,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            onPressed: onEdit,
           ),
         ],
       ),
@@ -90,14 +140,16 @@ class _BudgetDetailBody extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Transacciones',
+                          context.l10n.detailTransactions,
                           style: Theme.of(context).textTheme.headlineSmall!,
                         ),
                         Text(
-                          '${txs.length} movimientos',
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                          context.l10n.detailMovements(txs.length),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
                         ),
                       ],
                     ),
@@ -109,7 +161,7 @@ class _BudgetDetailBody extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 32),
                           child: Text(
-                            'Sin transacciones',
+                            context.l10n.detailNoTransactions,
                             style: Theme.of(context).textTheme.bodyMedium!,
                           ),
                         ),
@@ -199,7 +251,10 @@ class _RingProgressCard extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
-                    Text('usado', style: Theme.of(context).textTheme.labelLarge!),
+                    Text(
+                      context.l10n.detailUsed,
+                      style: Theme.of(context).textTheme.labelLarge!,
+                    ),
                   ],
                 ),
               ],
@@ -214,7 +269,10 @@ class _RingProgressCard extends StatelessWidget {
                   children: [
                     Text(emoji, style: const TextStyle(fontSize: 28)),
                     const Gap(8),
-                    Text(categoryName, style: Theme.of(context).textTheme.headlineSmall!),
+                    Text(
+                      categoryName,
+                      style: Theme.of(context).textTheme.headlineSmall!,
+                    ),
                   ],
                 ),
                 const Gap(16.0),
@@ -228,7 +286,7 @@ class _RingProgressCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'de \$${total.toStringAsFixed(0)} presupuestado',
+                  context.l10n.detailBudgeted(total.toStringAsFixed(0)),
                   style: Theme.of(context).textTheme.bodyMedium!,
                 ),
                 const Gap(16.0),
@@ -245,8 +303,10 @@ class _RingProgressCard extends StatelessWidget {
                   ),
                   child: Text(
                     isOverBudget
-                        ? '\$${(spent - total).toStringAsFixed(0)} excedido'
-                        : '\$${remaining.toStringAsFixed(0)} disponible',
+                        ? context.l10n.detailExceededBy(
+                            '\$${(spent - total).toStringAsFixed(0)}')
+                        : context.l10n.detailAvailable(
+                            '\$${remaining.toStringAsFixed(0)}'),
                     style: TextStyle(
                       color: isOverBudget
                           ? Theme.of(context).colorScheme.secondary
@@ -284,7 +344,7 @@ class _StatsRow extends StatelessWidget {
       children: [
         Expanded(
           child: _StatBox(
-            label: 'Promedio/día',
+            label: context.l10n.detailAvgPerDay,
             value: '\$${avgPerDay.toStringAsFixed(1)}',
             icon: Icons.today_outlined,
           ),
@@ -292,7 +352,7 @@ class _StatsRow extends StatelessWidget {
         const Gap(8),
         Expanded(
           child: _StatBox(
-            label: 'Transacciones',
+            label: context.l10n.transactions,
             value: '$txCount',
             icon: Icons.receipt_outlined,
           ),
@@ -300,7 +360,7 @@ class _StatsRow extends StatelessWidget {
         const Gap(8),
         Expanded(
           child: _StatBox(
-            label: 'Días restantes',
+            label: context.l10n.detailDaysRemaining,
             value: '$daysRemaining',
             icon: Icons.calendar_month_outlined,
           ),
@@ -334,7 +394,11 @@ class _StatBox extends StatelessWidget {
           Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
           const Gap(4),
           Text(value, style: Theme.of(context).textTheme.titleMedium!),
-          Text(label, style: Theme.of(context).textTheme.labelMedium!, textAlign: TextAlign.center),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelMedium!,
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -381,7 +445,10 @@ class _DetailTxRow extends StatelessWidget {
               ],
             ),
           ),
-          Text('-\$${amount.toStringAsFixed(2)}', style: Theme.of(context).textTheme.titleMedium!),
+          Text(
+            '-\$${amount.toStringAsFixed(2)}',
+            style: Theme.of(context).textTheme.titleMedium!,
+          ),
         ],
       ),
     );

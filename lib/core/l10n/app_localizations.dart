@@ -775,6 +775,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Filter by Category'**
   String get filterByCategory;
+
+  /// New Budget form title
+  ///
+  /// In en, this message translates to:
+  /// **'New Budget'**
+  String get newBudget;
+
+  /// Edit Budget form title
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Budget'**
+  String get editBudget;
+
+  /// Budget amount field label
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Amount'**
+  String get budgetAmount;
+
+  /// Budget period selector label
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get period;
+
+  /// Monthly budget period
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get monthly;
+
+  /// Weekly budget period
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get weekly;
+
+  /// Yearly budget period
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get yearly;
+
+  /// Hint for category selector in budget form
+  ///
+  /// In en, this message translates to:
+  /// **'Select a category'**
+  String get selectACategory;
+
+  /// Hint for amount field
+  ///
+  /// In en, this message translates to:
+  /// **'Enter amount'**
+  String get enterAmount;
+
+  /// Validation: please select a category
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a category'**
+  String get pleaseSelectCategory;
+
+  /// Validation: please enter an amount
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter an amount'**
+  String get pleaseEnterAmount;
+
+  /// Validation: amount must be a number > 0
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid amount'**
+  String get pleaseEnterValidAmount;
+
+  /// Delete Budget dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Budget'**
+  String get deleteBudget;
+
+  /// Confirmation message for deleting a budget
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this budget?'**
+  String get areYouSureDeleteBudget;
+
+  /// Success snackbar after deleting a budget
+  ///
+  /// In en, this message translates to:
+  /// **'Budget deleted'**
+  String get budgetDeleted;
+
+  /// Success snackbar after saving a budget
+  ///
+  /// In en, this message translates to:
+  /// **'Budget saved'**
+  String get budgetSaved;
+
+  /// Success snackbar after updating a budget
+  ///
+  /// In en, this message translates to:
+  /// **'Budget updated'**
+  String get budgetUpdated;
+
+  /// Section title in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get detailTransactions;
+
+  /// Number of movements in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'{count} movements'**
+  String detailMovements(int count);
+
+  /// Empty state in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions'**
+  String get detailNoTransactions;
+
+  /// Label under ring progress percentage
+  ///
+  /// In en, this message translates to:
+  /// **'used'**
+  String get detailUsed;
+
+  /// Sub-label under spent amount in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'of {total} budgeted'**
+  String detailBudgeted(String total);
+
+  /// Over-budget badge in detail
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} exceeded'**
+  String detailExceededBy(String amount);
+
+  /// Available badge in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} available'**
+  String detailAvailable(String amount);
+
+  /// Stats box label in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'Avg/day'**
+  String get detailAvgPerDay;
+
+  /// Stats box label in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'Days remaining'**
+  String get detailDaysRemaining;
 }
 
 class _AppLocalizationsDelegate

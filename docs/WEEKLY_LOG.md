@@ -26,15 +26,15 @@
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Weekends Completed | 9 (sessions) | 131 |
-| Hours Invested | ~78-85h | 1,040 |
-| Current Phase | Phase 1 (~33%) | Phase 4 |
-| Test Coverage | **79.2%** (filtrado) — Gate: ≥60% | ≥75% |
-| Features Complete | 7/7 Phase 0 | All |
+| Weekends Completed | 10 (sessions) | 131 |
+| Hours Invested | ~82-90h | 1,040 |
+| Current Phase | **Phase 2** (Architecture & Firebase) | Phase 4 |
+| Test Coverage | **81.5%** (filtrado) — Gate: ≥60% | ≥75% |
+| Features Complete | 7/7 Phase 0 · Phase 2 en curso | All |
 | Articles Published | 0 | 8+ |
 | Videos Created | 0 | 6+ |
 
-**Last Updated:** 2026-02-22
+**Last Updated:** 2026-04-18
 
 ---
 
