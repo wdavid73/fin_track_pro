@@ -4,17 +4,17 @@ import 'package:fin_track_pro/theme/theme_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class BalanceHeroCard extends StatefulWidget {
-  const BalanceHeroCard({required this.balance, super.key});
+class BalanceHeroCard extends StatelessWidget {
+  const BalanceHeroCard({
+    required this.balance,
+    required this.isVisible,
+    required this.onToggle,
+    super.key,
+  });
 
   final double balance;
-
-  @override
-  State<BalanceHeroCard> createState() => BalanceHeroCardState();
-}
-
-class BalanceHeroCardState extends State<BalanceHeroCard> {
-  bool _isVisible = true;
+  final bool isVisible;
+  final VoidCallback onToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +40,10 @@ class BalanceHeroCardState extends State<BalanceHeroCard> {
             transitionBuilder: (child, animation) =>
                 FadeTransition(opacity: animation, child: child),
             child: Align(
-              key: ValueKey(_isVisible),
+              key: ValueKey(isVisible),
               alignment: Alignment.centerLeft,
               child: Text(
-                _isVisible ? widget.balance.toCurrency() : '\$••••••',
+                isVisible ? balance.toCurrency() : '\$••••••',
                 style: context.textTheme.headlineLarge!.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -57,8 +57,8 @@ class BalanceHeroCardState extends State<BalanceHeroCard> {
             children: [
               const Spacer(),
               VisibilityToggleButton(
-                isVisible: _isVisible,
-                onToggle: () => setState(() => _isVisible = !_isVisible),
+                isVisible: isVisible,
+                onToggle: onToggle,
                 visibleLabel: context.l10n.hide,
                 hiddenLabel: context.l10n.show,
               ),

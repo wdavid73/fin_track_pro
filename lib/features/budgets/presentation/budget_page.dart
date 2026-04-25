@@ -73,32 +73,34 @@ class _BudgetBodyState extends State<_BudgetBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.colorScheme.surface,
-      body: BlocConsumer<BudgetBloc, BudgetState>(
-        listener: (context, state) {
-          if (state is BudgetActionSuccess) {
-            context.read<HomeBloc>().add(const LoadHomeData());
-          }
-          if (state is BudgetError) {
-            AppSnackbar().error(context, state.message);
-          }
-        },
-        builder: (context, budgetState) {
-          return BlocBuilder<HomeBloc, HomeState>(
-            builder: (context, homeState) {
-              return CustomScrollView(
-                slivers: [
-                  _buildAppBar(context),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: _buildContent(context, budgetState, homeState),
+      body: SafeArea(
+        child: BlocConsumer<BudgetBloc, BudgetState>(
+          listener: (context, state) {
+            if (state is BudgetActionSuccess) {
+              context.read<HomeBloc>().add(const LoadHomeData());
+            }
+            if (state is BudgetError) {
+              AppSnackbar().error(context, state.message);
+            }
+          },
+          builder: (context, budgetState) {
+            return BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, homeState) {
+                return CustomScrollView(
+                  slivers: [
+                    _buildAppBar(context),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: _buildContent(context, budgetState, homeState),
+                      ),
                     ),
-                  ),
-                ],
-              );
-            },
-          );
-        },
+                  ],
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -179,12 +181,12 @@ class _BudgetBodyState extends State<_BudgetBody> {
         ),
         const Gap(32.0),
         _TotalBudgetCard(spent: totalSpent, total: totalBudget),
-        const Gap(4.00),
+        const Gap(24.00),
         Text(context.l10n.categories, style: context.textTheme.headlineSmall!),
         const Gap(24.0),
         if (categories.isEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32),
+            padding: const EdgeInsets.symmetric(vertical: 24),
             child: Center(
               child: Column(
                 children: [
@@ -433,31 +435,29 @@ class _TotalBudgetCard extends StatelessWidget {
             children: [
               Text(
                 context.l10n.totalBudget,
-                style: const TextStyle(color: Colors.white70, fontSize: 13),
+                style: context.textTheme.labelLarge!.copyWith(
+                  color: context.colorScheme.surface,
+                ),
               ),
               Text(
                 isOverBudget ? context.l10n.overBudget : context.l10n.onTrack,
-                style: TextStyle(
+                style: context.textTheme.labelLarge!.copyWith(
                   color: isOverBudget
-                      ? const Color(0xFFFFB4A4)
-                      : Colors.greenAccent,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+                      ? context.colorScheme.error
+                      : context.colorScheme.secondary,
                 ),
               ),
             ],
           ),
-          const Gap(6),
+          const Gap(8),
           Text(
-            '${spent.toCurrencyInt()} / ${total.toCurrencyInt()}',
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+            '${spent.toCurrency(decimalDigits: 0)} / ${total.toCurrency(decimalDigits: 0)}',
+            style: context.textTheme.headlineSmall!.copyWith(
+              color: context.colorScheme.surface,
               letterSpacing: -0.5,
             ),
           ),
-          const Gap(24.0),
+          const Gap(12.0),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
@@ -465,7 +465,9 @@ class _TotalBudgetCard extends StatelessWidget {
               minHeight: 8,
               backgroundColor: Colors.white.withValues(alpha: 0.2),
               valueColor: AlwaysStoppedAnimation<Color>(
-                isOverBudget ? const Color(0xFFFFB4A4) : Colors.greenAccent,
+                isOverBudget
+                    ? context.colorScheme.error
+                    : context.colorScheme.secondary,
               ),
             ),
           ),
@@ -474,7 +476,9 @@ class _TotalBudgetCard extends StatelessWidget {
             isOverBudget
                 ? context.l10n.overBudgetBy((spent - total).toCurrencyInt())
                 : context.l10n.available(remaining.toCurrencyInt()),
-            style: const TextStyle(color: Colors.white70, fontSize: 12),
+            style: context.textTheme.bodyMedium!.copyWith(
+              color: context.colorScheme.surface,
+            ),
           ),
         ],
       ),
@@ -508,8 +512,19 @@ class _BudgetCategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final progress = total > 0 ? (spent / total).clamp(0.0, 1.0) : 0.0;
-    final isOverBudget = spent > total;
+    final rawProgress = total > 0 ? spent / total : 0.0;
+    final progress = rawProgress.clamp(0.0, 1.0);
+    final isOverBudget = rawProgress >= 1.0;
+    final excess = spent - total;
+
+    final Color progressColor;
+    if (rawProgress >= 1.0) {
+      progressColor = context.colorScheme.error;
+    } else if (rawProgress >= 0.6) {
+      progressColor = Colors.orange;
+    } else {
+      progressColor = Colors.green;
+    }
 
     return GestureDetector(
       onTap: onTap,
@@ -519,6 +534,13 @@ class _BudgetCategoryCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: context.colorScheme.surface,
           borderRadius: BorderRadius.circular(24.0),
+          boxShadow: [
+            BoxShadow(
+              color: context.colorScheme.onSurface.withValues(alpha: 0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -553,9 +575,11 @@ class _BudgetCategoryCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${(progress * 100).toInt()}%',
+                  isOverBudget
+                      ? '+${excess.toCurrencyInt()}'
+                      : '${(rawProgress * 100).toInt()}%',
                   style: TextStyle(
-                    color: isOverBudget ? context.colorScheme.secondary : color,
+                    color: progressColor,
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
                   ),
@@ -611,9 +635,7 @@ class _BudgetCategoryCard extends StatelessWidget {
                 value: progress,
                 minHeight: 6,
                 backgroundColor: context.colorScheme.surfaceContainerHighest,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  isOverBudget ? context.colorScheme.secondary : color,
-                ),
+                valueColor: AlwaysStoppedAnimation<Color>(progressColor),
               ),
             ),
           ],

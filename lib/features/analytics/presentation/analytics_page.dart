@@ -5,6 +5,7 @@ import 'package:fin_track_pro/features/analytics/domain/entities/analytics_perio
 import 'package:fin_track_pro/features/analytics/presentation/bloc/analytics_bloc.dart';
 import 'package:fin_track_pro/core/utils/category_helper.dart';
 import 'package:fin_track_pro/theme/theme_constants.dart';
+import 'package:fin_track_pro/theme/utils/resposive.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -172,9 +173,9 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
           context.l10n.spendingTrend,
           style: context.textTheme.headlineSmall!,
         ),
-        const Gap(24.0),
+        const Gap(26.0),
         _SpendingBarChart(barData: barValues, labels: barLabels),
-        const Gap(4.00),
+        const Gap(16.00),
         Text(
           context.l10n.spendingByCategory,
           style: context.textTheme.headlineSmall!,
@@ -186,7 +187,7 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
             touchedIndex: _touchedPieIndex,
             onTouch: (i) => setState(() => _touchedPieIndex = i),
           ),
-          const Gap(32.0),
+          const Gap(38.0),
           ...categoryShares.map((c) => _CategoryBreakdownRow(item: c)),
         ] else
           Center(
@@ -348,6 +349,7 @@ class _SummaryCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: Container(
@@ -361,26 +363,22 @@ class _SummaryCards extends StatelessWidget {
               children: [
                 Text(
                   context.l10n.totalExpenses,
-                  style: TextStyle(
+                  style: context.textTheme.bodyMedium!.copyWith(
                     color: Colors.white.withValues(alpha: 0.7),
-                    fontSize: 12,
                   ),
                 ),
                 const Gap(6),
                 Text(
                   totalExpenses.toCurrency(),
-                  style: const TextStyle(
+                  style: context.textTheme.headlineMedium!.copyWith(
                     color: Colors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -0.5,
                   ),
                 ),
               ],
             ),
           ),
         ),
-        const Gap(8),
+        const Gap(16),
         Expanded(
           child: Column(
             children: [
@@ -421,7 +419,7 @@ class _SummaryCards extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Text('🏆', style: TextStyle(fontSize: 18)),
+                    const Text('🔥', style: TextStyle(fontSize: 18)),
                     const Gap(8),
                     Expanded(
                       child: Column(
@@ -586,14 +584,16 @@ class _PieChartSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 200,
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(18.0),
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
         borderRadius: BorderRadius.circular(24.0),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
+          SizedBox(
+            width: context.wp(30),
             child: PieChart(
               PieChartData(
                 pieTouchData: PieTouchData(
@@ -628,7 +628,7 @@ class _PieChartSection extends StatelessWidget {
               ),
             ),
           ),
-          const Gap(24.0),
+
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,

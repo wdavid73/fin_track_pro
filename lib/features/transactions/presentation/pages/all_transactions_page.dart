@@ -135,7 +135,10 @@ class _TransactionsBodyState extends State<_TransactionsBody> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-                child: _SummaryRow(transactions: state.transactions),
+                child: _SummaryRow(
+                  transactions: state.transactions,
+                  filterIndex: _filterIndex,
+                ),
               ),
               Expanded(child: _buildList(context, state)),
             ],
@@ -264,9 +267,10 @@ class _FilterChips extends StatelessWidget {
 }
 
 class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({required this.transactions});
+  const _SummaryRow({required this.transactions, required this.filterIndex});
 
   final List<Transaction> transactions;
+  final int filterIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -276,19 +280,24 @@ class _SummaryRow extends StatelessWidget {
     final expense = transactions
         .where((t) => t.type == 'expense')
         .fold(0.0, (s, t) => s + t.amount);
+    final showIncome = filterIndex == 0 || filterIndex == 2;
+    final showExpense = filterIndex == 0 || filterIndex == 1;
     return Row(
       children: [
-        _SummaryChip(
-          label: context.l10n.totalIncome,
-          value: income.toCurrency(),
-          color: context.colorScheme.secondary,
-        ),
-        const Gap(8),
-        _SummaryChip(
-          label: context.l10n.totalExpenses,
-          value: expense.toCurrency(),
-          color: context.colorScheme.error,
-        ),
+        if (showIncome) ...[
+          _SummaryChip(
+            label: context.l10n.totalIncome,
+            value: income.toCurrency(),
+            color: context.colorScheme.secondary,
+          ),
+          if (showExpense) const Gap(8),
+        ],
+        if (showExpense)
+          _SummaryChip(
+            label: context.l10n.totalExpenses,
+            value: expense.toCurrency(),
+            color: context.colorScheme.error,
+          ),
       ],
     );
   }
@@ -377,11 +386,11 @@ class _TransactionRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '${isIncome ? '+' : '-'}${amount.toCurrency()}',
+                '${isIncome ? '+' : '-'}${amount.toCurrency(decimalDigits: 0)}',
                 style: context.textTheme.titleMedium!.copyWith(
                   color: isIncome
-                      ? context.colorScheme.tertiary
-                      : context.colorScheme.onSurface,
+                      ? context.colorScheme.secondary
+                      : context.colorScheme.error,
                 ),
               ),
               Container(
