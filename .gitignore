@@ -66,3 +66,10 @@ lib/app/injection_container.config.dart
 
 
 android/app/google-services.json
+
+# Golden test images — platform-specific versions are NOT versioned
+# (macOS renders fonts differently from Ubuntu CI runners)
+# CI goldens ARE versioned: test/**/goldens/ci/ → do NOT ignore
+test/**/goldens/macos/
+test/**/goldens/linux/
+test/**/goldens/windows/
