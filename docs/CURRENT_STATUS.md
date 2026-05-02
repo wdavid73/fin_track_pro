@@ -37,7 +37,7 @@
 - ✅ **Core tests: Failures, ShimmerBox, Skeleton, SettingsEntity, SettingsLocalDatasource** (35 tests)
 - ✅ **CI/CD: coverage gate ≥60% + lcov install + PR emoji comment**
 - ✅ **Target de cobertura revisado a ≥75%** (81.5% alcanzado ✅)
-- ✅ **Golden Tests: 4 escenarios** — TransactionCard income/expense/long title/no-hero (capturas base generadas)
+- ✅ **Golden Tests (Alchemist): 12 escenarios** — TransactionCard, StatCard, y BalanceHeroCard con text-blocking para CI y 0% de flaky tests por fuentes.
 - ✅ **Patrol configurado**: patrol.yaml + smoke_test.dart (3 flujos: tabs, FAB, filtros)
 - ✅ **Fastlane Android**: lanes test/beta/release + Firebase App Distribution
 - ✅ **Fastlane iOS**: lanes test/beta/release + Match + TestFlight + ExportOptions-adhoc.plist
@@ -83,7 +83,7 @@
  |---------|--------|------|----|----|------------|
  | **Transactions** | 100% | 100% | 100% | 100% | **100%** ✅ |
  | **Categories** | 100% | 100% | 95% | 100% | **98%** ✅ |
- | **Budgets** | 100% | 100% | 40% | 100% | **65%** 🟡 |
+ | **Budgets** | 100% | 100% | 100% | 100% | **100%** ✅ |
  | **Home** | 100% | 100% | 80% | 100% | **75%** 🟢 |
  | **Analytics** | 100% | 100% | 100% | 100% | **95%** ✅ |
  | **Settings** | 100% | 100% | 100% | 100% | **100%** ✅ |
@@ -189,7 +189,7 @@
  ### Deferred to Later Phases
  - [ ] Demo video (3 minutes) - **Deferred to Phase 1**
  - [ ] Portfolio screenshots - **Deferred to Phase 1**
- - [ ] Budget CRUD UI (data layer ready) - **Phase 2**
+ - [x] Budget CRUD UI (data layer ready) - **Phase 2** (Completed)
  - [ ] Data export - **Phase 2**
  - [ ] Pull-to-refresh - **Phase 2**
  - [ ] Onboarding flow - **Phase 2**

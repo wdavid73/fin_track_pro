@@ -63,7 +63,7 @@ jobs:
 
       # ⚡ Tests sin pub get
       - name: Run tests
-        run: flutter test --no-pub --coverage
+        run: flutter test --no-pub --coverage --exclude-tags golden
 
       # 🧹 Filter generated files from coverage report
       # Removes: Hive adapters (*.g.dart), l10n generated files,
@@ -159,6 +159,55 @@ jobs:
   #         name: app-dev-debug
   #         path: build/app/outputs/flutter-apk/app-dev-debug.apk
   #         retention-days: 7
+
+  golden_tests:
+    name: Run Golden Tests
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Cache Pub
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Create empty env files
+        run: |
+          touch .env.dev
+          touch .env.staging
+          touch .env.prod
+
+      - name: Run golden tests
+        run: flutter test --tags golden
+        env:
+          CI: "true"
+
+      - name: Upload golden test failures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-test-failures
+          path: test/**/failures/
+          retention-days: 7
 
   integration_test_android:
     name: Patrol Integration Tests (Android)
