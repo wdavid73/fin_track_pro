@@ -197,22 +197,29 @@ class _TransactionsBodyState extends State<_TransactionsBody> {
     return BlocBuilder<CategoryBloc, CategoryState>(
       builder: (context, catState) {
         final catMap = {for (final c in catState.categories) c.id: c};
-        return ListView.builder(
-          controller: _scrollController,
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-          itemCount: state.transactions.length,
-          itemBuilder: (context, index) {
-            final tx = state.transactions[index];
-            final cat = catMap[tx.categoryId];
-            return _TransactionRow(
-              emoji: CategoryHelper.categoryEmoji(cat?.icon ?? ''),
-              title: cat?.name ?? (tx.note ?? context.l10n.transactionFallback),
-              date: CategoryHelper.formatDate(tx.date),
-              amount: tx.amount,
-              isIncome: tx.type == 'income',
-              category: cat?.name ?? context.l10n.noCategory,
-            );
+        return RefreshIndicator(
+          onRefresh: () async {
+            context.read<TransactionBloc>().add(const LoadPaginatedTransactions());
+            await Future.delayed(const Duration(milliseconds: 500));
           },
+          child: ListView.builder(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+            itemCount: state.transactions.length,
+            itemBuilder: (context, index) {
+              final tx = state.transactions[index];
+              final cat = catMap[tx.categoryId];
+              return _TransactionRow(
+                emoji: CategoryHelper.categoryEmoji(cat?.icon ?? ''),
+                title: cat?.name ?? (tx.note ?? context.l10n.transactionFallback),
+                date: CategoryHelper.formatDate(tx.date),
+                amount: tx.amount,
+                isIncome: tx.type == 'income',
+                category: cat?.name ?? context.l10n.noCategory,
+              );
+            },
+          ),
         );
       },
     );

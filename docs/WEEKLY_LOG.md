@@ -715,7 +715,40 @@
 
 ---
 
-### Session 4 - Phase 1: Missing Pages Widget Tests\n\n**Date:** 2026-03-15\n**Planned Hours:** 2h\n**Actual Hours:** ~2h\n**Phase:** 1 (Testing & CI/CD)\n\n#### 🎯 Goals\n- [x] Add widget tests for missing pages (AllTransactionsPage, AddTransactionPage, SettingsPage)\n- [x] Add localized strings to en/es ARB files\n- [x] Analyze remaining work for Phase 1 completion\n\n#### ✅ Completed\n\n**Widget Tests (+80 nuevos tests agregados):**\n- ✅ Widget tests agregados pacientemente por el usuario para todas las páginas restantes principales.\n- ✅ `AllTransactionsPage` tester coverage\n- ✅ `AddTransactionPage` tester coverage\n- ✅ Actualizadas las localizaciones `recentTransactions`, `noDataAvailable` etc en sus ARB para no corromper la pantalla de Home y otras.\n- ✅ Ejecución de build_runner con parseo limpio de Hive_ce.\n\n#### 📝 Notes & Learnings\n- Al sobrepasar la meta de cobertura (75%), la métrica actual quedó re-validada en **81.5% filtrado** gracias a los últimos 80 tests elaborados. \n- De las pruebas modales pasamos a cobertura de Pantallas complejas, reduciendo la brecha con e2e Testing.\n\n#### 📊 Metrics\n- Test Coverage: **81.5%** (↑ desde 79.2% con nuevos Widget tests)\n- Total Tests: **533** (desde 453)\n\n#### ⏭️ Next Session\n- End-to-End Integration tests en Patrol (los flujos críticos que faltan, ej. E2E de crear transacción y verificar Home).\n- Preparar Demo Video de 3 minutos para cerrar fase 1.\n\n---\n\n### Weekend Template (Copy for new weekends)
+### Session 4 - Phase 1: Missing Pages Widget Tests\n\n**Date:** 2026-03-15\n**Planned Hours:** 2h\n**Actual Hours:** ~2h\n**Phase:** 1 (Testing & CI/CD)\n\n#### 🎯 Goals\n- [x] Add widget tests for missing pages (AllTransactionsPage, AddTransactionPage, SettingsPage)\n- [x] Add localized strings to en/es ARB files\n- [x] Analyze remaining work for Phase 1 completion\n\n#### ✅ Completed\n\n**Widget Tests (+80 nuevos tests agregados):**\n- ✅ Widget tests agregados pacientemente por el usuario para todas las páginas restantes principales.\n- ✅ `AllTransactionsPage` tester coverage\n- ✅ `AddTransactionPage` tester coverage\n- ✅ Actualizadas las localizaciones `recentTransactions`, `noDataAvailable` etc en sus ARB para no corromper la pantalla de Home y otras.\n- ✅ Ejecución de build_runner con parseo limpio de Hive_ce.\n\n#### 📝 Notes & Learnings\n- Al sobrepasar la meta de cobertura (75%), la métrica actual quedó re-validada en **81.5% filtrado** gracias a los últimos 80 tests elaborados. \n- De las pruebas modales pasamos a cobertura de Pantallas complejas, reduciendo la brecha con e2e Testing.\n\n#### 📊 Metrics\n- Test Coverage: **81.5%** (↑ desde 79.2% con nuevos Widget tests)\n- Total Tests: **533** (desde 453)\n\n#### ⏭️ Next Session\n- End-to-End Integration tests en Patrol (los flujos críticos que faltan, ej. E2E de crear transacción y verificar Home).\n- Preparar Demo Video de 3 minutos para cerrar fase 1.\n\n---\n\n### Session 1 - Phase 2: Onboarding & Data Export (Inicio)
+
+**Date:** 2026-05-01
+**Planned Hours:** 4h  
+**Actual Hours:** ~1h (en curso)
+**Phase:** 2 (Advanced Features)
+
+#### 🎯 Goals
+- [x] Actualizar documentación (CURRENT_STATUS.md) marcando Budgets como 100%
+- [ ] Implementar flujo de Onboarding guardando flag `hasSeenOnboarding` en Hive
+- [ ] Exportación de datos a CSV
+- [ ] Pull-to-refresh en Home y Transactions
+
+#### ✅ Completed
+- ✅ Documentación actualizada. La Fase 2 está oficialmente iniciada con reglas estrictas de persistencia local (Hive).
+
+#### 📝 Notes & Learnings
+- El feature de Budgets ya estaba completo, por lo que adelantamos trabajo de la Fase 2.
+- Decisión de mantener Firebase fuera por ahora y centrarse en el valor offline de la Fase 2 (Onboarding y Exportación CSV).
+
+#### 🚧 Challenges & Blockers
+- Ninguno hasta ahora.
+
+#### 📊 Metrics
+- Test Coverage: 81.5%
+- Commits: En curso
+- Files Changed: En curso
+
+#### ⏭️ Next Weekend
+- Continuar con las tareas de la Fase 2.
+
+---
+
+### Weekend Template (Copy for new weekends)
 
 **Date:** [YYYY-MM-DD]  
 **Planned Hours:** 8h  

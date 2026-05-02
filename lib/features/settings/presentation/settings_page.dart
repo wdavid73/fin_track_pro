@@ -5,21 +5,25 @@ import 'package:gap/gap.dart';
 
 import 'blocs/settings_bloc/settings_bloc.dart';
 import 'widgets/theme_option_bottom_sheet.dart';
+import 'package:fin_track_pro/app/injection_container.dart';
+import 'package:fin_track_pro/features/transactions/domain/usecases/export_transactions_csv.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   void _onTap(BuildContext context) {
     AppSnackbar().show(context, context.l10n.comingSoon);
-    // AppSnackbar().success(context, 'Success soon...');
-    // AppSnackbar().error(context, 'Error soon...');
-    // AppSnackbar().warning(context, 'Warning soon...');
-    /* AppSnackbar().custom(
-      context: context,
-      message: 'Custom soon...',
-      background: Colors.blue,
-      textColor: Colors.white,
-    ); */
+  }
+
+  Future<void> _onExportData(BuildContext context) async {
+    try {
+      AppSnackbar().show(context, 'Exporting data...');
+      await getIt<ExportTransactionsCsv>().call();
+    } catch (e) {
+      if (context.mounted) {
+        AppSnackbar().error(context, 'Error exporting data');
+      }
+    }
   }
 
   void _onChangeThemeMode(BuildContext context) {
@@ -119,7 +123,7 @@ class SettingsPage extends StatelessWidget {
                 SettingsItem(
                   icon: Icons.file_download,
                   title: context.l10n.exportData,
-                  onTap: () => _onTap(context),
+                  onTap: () => _onExportData(context),
                 ),
                 SettingsItem(
                   icon: Icons.shield_moon_sharp,
@@ -146,8 +150,6 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
             const Gap(20),
-            _LogoutButton(),
-            const Gap(20),
           ],
         ),
       ),
@@ -167,30 +169,6 @@ class _SectionTitle extends StatelessWidget {
       child: Text(
         toUpperCase ? title.toUpperCase() : title,
         style: context.textTheme.titleMedium,
-      ),
-    );
-  }
-}
-
-class _LogoutButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        height: 55,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.red.withValues(alpha: 0.3),
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: TextButton.icon(
-          onPressed: () {},
-          icon: const Icon(Icons.logout, color: Colors.red),
-          label: Text(
-            context.l10n.logout,
-            style: context.textTheme.titleMedium?.copyWith(color: Colors.red),
-          ),
-        ),
       ),
     );
   }

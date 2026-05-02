@@ -456,7 +456,8 @@ class _SpendingBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (barData.isEmpty) {
+    final hasData = barData.isNotEmpty && barData.any((v) => v > 0);
+    if (!hasData) {
       return Container(
         height: 180,
         decoration: BoxDecoration(
@@ -464,9 +465,20 @@ class _SpendingBarChart extends StatelessWidget {
           borderRadius: BorderRadius.circular(24.0),
         ),
         child: Center(
-          child: Text(
-            context.l10n.noDataAvailable,
-            style: context.textTheme.bodyMedium!,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.bar_chart_outlined,
+                size: 40,
+                color: context.colorScheme.outlineVariant,
+              ),
+              const Gap(8),
+              Text(
+                context.l10n.noSpendingDataAvailable,
+                style: context.textTheme.bodyMedium!,
+              ),
+            ],
           ),
         ),
       );

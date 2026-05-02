@@ -67,6 +67,9 @@ import '../features/settings/data/repositories/settings_repository_impl.dart'
     as _i1064;
 import '../features/settings/domain/repositories/settings_repository.dart'
     as _i89;
+import '../features/settings/domain/usecases/check_onboarding_status.dart'
+    as _i417;
+import '../features/settings/domain/usecases/complete_onboarding.dart' as _i379;
 import '../features/settings/domain/usecases/get_settings.dart' as _i463;
 import '../features/settings/domain/usecases/save_settings.dart' as _i315;
 import '../features/settings/presentation/blocs/settings_bloc/settings_bloc.dart'
@@ -82,6 +85,8 @@ import '../features/transactions/domain/usecases/create_transaction.dart'
     as _i333;
 import '../features/transactions/domain/usecases/delete_transaction.dart'
     as _i424;
+import '../features/transactions/domain/usecases/export_transactions_csv.dart'
+    as _i121;
 import '../features/transactions/domain/usecases/get_budget_data.dart' as _i230;
 import '../features/transactions/domain/usecases/get_paginated_transactions.dart'
     as _i735;
@@ -252,6 +257,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i333.CreateTransaction>(),
       ),
     );
+    gh.lazySingleton<_i417.CheckOnboardingStatus>(
+      () => _i417.CheckOnboardingStatus(gh<_i89.SettingsRepository>()),
+    );
+    gh.lazySingleton<_i379.CompleteOnboarding>(
+      () => _i379.CompleteOnboarding(gh<_i89.SettingsRepository>()),
+    );
     gh.singleton<_i905.TransactionBloc>(
       () => _i905.TransactionBloc(
         gh<_i913.GetTransactions>(),
@@ -273,6 +284,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i605.GetTotalBalance>(
       () => _i605.GetTotalBalance(gh<_i443.TransactionRepository>()),
+    );
+    gh.lazySingleton<_i121.ExportTransactionsCsv>(
+      () => _i121.ExportTransactionsCsv(gh<_i443.TransactionRepository>()),
     );
     gh.factory<_i230.GetBudgetData>(
       () => _i230.GetBudgetData(

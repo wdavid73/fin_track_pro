@@ -138,5 +138,16 @@
   "detailExceededBy": "{amount} excedido",
   "detailAvailable": "{amount} disponible",
   "detailAvgPerDay": "Promedio/día",
-  "detailDaysRemaining": "Días restantes"
+  "detailDaysRemaining": "Días restantes",
+  "onboardingWelcomeTitle": "Bienvenido a FinTrack Pro",
+  "onboardingWelcomeDesc": "Tu gestor de finanzas personales diseñado para darte control total sobre tu dinero.",
+  "onboardingTrackTitle": "Rastrea gastos fácilmente",
+  "onboardingTrackDesc": "Registra tus transacciones diarias rápidamente y categorízalas para ver exactamente a dónde va tu dinero.",
+  "onboardingBudgetTitle": "Presupuestos Inteligentes",
+  "onboardingBudgetDesc": "Configura presupuestos para diferentes categorías y mantente al día con indicadores visuales de progreso.",
+  "onboardingAnalyticsTitle": "Análisis Profundos",
+  "onboardingAnalyticsDesc": "Comprende tus hábitos de gasto con gráficos interactivos y detalles financieros.",
+  "getStarted": "Comenzar",
+  "next": "Siguiente",
+  "skip": "Omitir"
 }

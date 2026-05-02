@@ -12,7 +12,7 @@ void main() {
   late MockSettingsDatasource mockDatasource;
 
   setUpAll(() {
-    registerFallbackValue(SettingsModel(themeModeString: 'system'));
+    registerFallbackValue(SettingsModel(themeModeString: 'system', hasSeenOnboarding: false));
   });
 
   setUp(() {
@@ -24,7 +24,7 @@ void main() {
     group('getSettings', () {
       test('should return SettingsEntity when datasource succeeds', () async {
         // Arrange
-        final tModel = SettingsModel(themeModeString: 'dark');
+        final tModel = SettingsModel(themeModeString: 'dark', hasSeenOnboarding: false);
         when(
           () => mockDatasource.getSettings(),
         ).thenAnswer((_) async => tModel);
@@ -41,7 +41,7 @@ void main() {
         'should return system theme when datasource returns default',
         () async {
           // Arrange
-          final tModel = SettingsModel(themeModeString: 'system');
+          final tModel = SettingsModel(themeModeString: 'system', hasSeenOnboarding: false);
           when(
             () => mockDatasource.getSettings(),
           ).thenAnswer((_) async => tModel);

@@ -440,4 +440,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get detailDaysRemaining => 'Days remaining';
+
+  @override
+  String get onboardingWelcomeTitle => 'Welcome to FinTrack Pro';
+
+  @override
+  String get onboardingWelcomeDesc =>
+      'Your personal finance manager designed to give you complete control over your money.';
+
+  @override
+  String get onboardingTrackTitle => 'Track Expenses easily';
+
+  @override
+  String get onboardingTrackDesc =>
+      'Log your daily transactions quickly and categorize them to see exactly where your money goes.';
+
+  @override
+  String get onboardingBudgetTitle => 'Smart Budgets';
+
+  @override
+  String get onboardingBudgetDesc =>
+      'Set up budgets for different categories and stay on track with visual progress indicators.';
+
+  @override
+  String get onboardingAnalyticsTitle => 'Deep Analytics';
+
+  @override
+  String get onboardingAnalyticsDesc =>
+      'Understand your spending habits with interactive charts and detailed financial insights.';
+
+  @override
+  String get getStarted => 'Get Started';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get skip => 'Skip';
 }

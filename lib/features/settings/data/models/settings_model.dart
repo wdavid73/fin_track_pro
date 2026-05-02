@@ -9,11 +9,24 @@ class SettingsModel extends SettingsEntity {
   @HiveField(0)
   final String themeModeString;
 
-  SettingsModel({required this.themeModeString})
-    : super(themeMode: _themeModeFromString(themeModeString));
+  @override
+  @HiveField(1, defaultValue: false)
+  // ignore: overridden_fields
+  final bool hasSeenOnboarding;
+
+  SettingsModel({
+    required this.themeModeString,
+    required this.hasSeenOnboarding,
+  }) : super(
+          themeMode: _themeModeFromString(themeModeString),
+          hasSeenOnboarding: hasSeenOnboarding,
+        );
 
   factory SettingsModel.fromEntity(SettingsEntity entity) {
-    return SettingsModel(themeModeString: _themeModeToString(entity.themeMode));
+    return SettingsModel(
+      themeModeString: _themeModeToString(entity.themeMode),
+      hasSeenOnboarding: entity.hasSeenOnboarding,
+    );
   }
 
   static ThemeMode _themeModeFromString(String value) {

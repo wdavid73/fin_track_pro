@@ -18,6 +18,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     : super(const SettingsState()) {
     on<LoadSettings>(_onLoadSettings);
     on<ChangeThemeMode>(_onChangeThemeMode);
+    on<CompleteOnboardingEvent>(_onCompleteOnboarding);
   }
 
   Future<void> _onLoadSettings(
@@ -41,11 +42,35 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     emit(state.copyWith(status: SettingsStatus.loading));
     try {
-      await saveSettings.call(SettingsEntity(themeMode: event.themeMode));
+      final currentSettings = state.settings ?? SettingsEntity.initial();
+      final newSettings = currentSettings.copyWith(themeMode: event.themeMode);
+      await saveSettings.call(newSettings);
       emit(
         state.copyWith(
           status: SettingsStatus.success,
-          settings: SettingsEntity(themeMode: event.themeMode),
+          settings: newSettings,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(status: SettingsStatus.error));
+    } finally {
+      emit(state.copyWith(status: SettingsStatus.initial));
+    }
+  }
+
+  Future<void> _onCompleteOnboarding(
+    CompleteOnboardingEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    emit(state.copyWith(status: SettingsStatus.loading));
+    try {
+      final currentSettings = state.settings ?? SettingsEntity.initial();
+      final newSettings = currentSettings.copyWith(hasSeenOnboarding: true);
+      await saveSettings.call(newSettings);
+      emit(
+        state.copyWith(
+          status: SettingsStatus.success,
+          settings: newSettings,
         ),
       );
     } catch (e) {

@@ -6,6 +6,7 @@ import 'package:fin_track_pro/features/budgets/presentation/budget_detail_page.d
 import 'package:fin_track_pro/features/budgets/presentation/budget_page.dart';
 import 'package:fin_track_pro/features/categories/presentation/pages/categories_page.dart';
 import 'package:fin_track_pro/features/home/presentation/home_page.dart';
+import 'package:fin_track_pro/features/onboarding/presentation/pages/onboarding_page.dart';
 import 'package:fin_track_pro/features/settings/presentation/settings_page.dart';
 import 'package:fin_track_pro/features/splash/presentation/splash_page.dart';
 import 'package:fin_track_pro/features/transactions/presentation/pages/all_transactions_page.dart';
@@ -100,6 +101,10 @@ class AppRoutes {
       GoRoute(
         path: RouteConstants.settings,
         builder: (context, state) => const SettingsPage(),
+      ),
+      GoRoute(
+        path: RouteConstants.onboarding,
+        builder: (context, state) => const OnboardingPage(),
       ),
     ];
   }

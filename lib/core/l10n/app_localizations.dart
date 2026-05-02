@@ -931,6 +931,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Days remaining'**
   String get detailDaysRemaining;
+
+  /// Onboarding welcome title
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to FinTrack Pro'**
+  String get onboardingWelcomeTitle;
+
+  /// Onboarding welcome description
+  ///
+  /// In en, this message translates to:
+  /// **'Your personal finance manager designed to give you complete control over your money.'**
+  String get onboardingWelcomeDesc;
+
+  /// Onboarding track expenses title
+  ///
+  /// In en, this message translates to:
+  /// **'Track Expenses easily'**
+  String get onboardingTrackTitle;
+
+  /// Onboarding track expenses description
+  ///
+  /// In en, this message translates to:
+  /// **'Log your daily transactions quickly and categorize them to see exactly where your money goes.'**
+  String get onboardingTrackDesc;
+
+  /// Onboarding budgets title
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Budgets'**
+  String get onboardingBudgetTitle;
+
+  /// Onboarding budgets description
+  ///
+  /// In en, this message translates to:
+  /// **'Set up budgets for different categories and stay on track with visual progress indicators.'**
+  String get onboardingBudgetDesc;
+
+  /// Onboarding analytics title
+  ///
+  /// In en, this message translates to:
+  /// **'Deep Analytics'**
+  String get onboardingAnalyticsTitle;
+
+  /// Onboarding analytics description
+  ///
+  /// In en, this message translates to:
+  /// **'Understand your spending habits with interactive charts and detailed financial insights.'**
+  String get onboardingAnalyticsDesc;
+
+  /// Get Started button
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// Next button
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// Skip button
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
 }
 
 class _AppLocalizationsDelegate

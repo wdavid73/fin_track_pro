@@ -601,5 +601,49 @@
   "detailDaysRemaining": "Days remaining",
   "@detailDaysRemaining": {
     "description": "Stats box label in budget detail"
+  },
+  "onboardingWelcomeTitle": "Welcome to FinTrack Pro",
+  "@onboardingWelcomeTitle": {
+    "description": "Onboarding welcome title"
+  },
+  "onboardingWelcomeDesc": "Your personal finance manager designed to give you complete control over your money.",
+  "@onboardingWelcomeDesc": {
+    "description": "Onboarding welcome description"
+  },
+  "onboardingTrackTitle": "Track Expenses easily",
+  "@onboardingTrackTitle": {
+    "description": "Onboarding track expenses title"
+  },
+  "onboardingTrackDesc": "Log your daily transactions quickly and categorize them to see exactly where your money goes.",
+  "@onboardingTrackDesc": {
+    "description": "Onboarding track expenses description"
+  },
+  "onboardingBudgetTitle": "Smart Budgets",
+  "@onboardingBudgetTitle": {
+    "description": "Onboarding budgets title"
+  },
+  "onboardingBudgetDesc": "Set up budgets for different categories and stay on track with visual progress indicators.",
+  "@onboardingBudgetDesc": {
+    "description": "Onboarding budgets description"
+  },
+  "onboardingAnalyticsTitle": "Deep Analytics",
+  "@onboardingAnalyticsTitle": {
+    "description": "Onboarding analytics title"
+  },
+  "onboardingAnalyticsDesc": "Understand your spending habits with interactive charts and detailed financial insights.",
+  "@onboardingAnalyticsDesc": {
+    "description": "Onboarding analytics description"
+  },
+  "getStarted": "Get Started",
+  "@getStarted": {
+    "description": "Get Started button"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Next button"
+  },
+  "skip": "Skip",
+  "@skip": {
+    "description": "Skip button"
   }
 }

@@ -15,11 +15,7 @@ class BudgetFormPage extends StatefulWidget {
   /// All categories available for selection.
   final List<Category> categories;
 
-  const BudgetFormPage({
-    super.key,
-    this.budget,
-    required this.categories,
-  });
+  const BudgetFormPage({super.key, this.budget, required this.categories});
 
   bool get isEditMode => budget != null;
 
@@ -148,14 +144,16 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
 
   Widget _buildCategoryDropdown() {
     return DropdownButtonFormField<String>(
-      value: _selectedCategoryId,
+      initialValue: _selectedCategoryId,
       decoration: InputDecoration(
         labelText: context.l10n.category,
         hintText: context.l10n.selectACategory,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
         filled: true,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
       ),
       isExpanded: true,
       items: widget.categories.map((cat) {
@@ -183,8 +181,10 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
         prefixText: '\$ ',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
         filled: true,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
       ),
       validator: (value) {
         if (value == null || value.trim().isEmpty) {
@@ -221,9 +221,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
             final isSelected = _selectedPeriod == p.$1;
             return Expanded(
               child: Padding(
-                padding: EdgeInsets.only(
-                  right: p.$1 != 'yearly' ? 8 : 0,
-                ),
+                padding: EdgeInsets.only(right: p.$1 != 'yearly' ? 8 : 0),
                 child: GestureDetector(
                   onTap: () => setState(() => _selectedPeriod = p.$1),
                   child: AnimatedContainer(
