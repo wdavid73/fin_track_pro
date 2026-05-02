@@ -9,6 +9,7 @@ environment:
 dependencies:
   animate_do: ^4.2.0
   animations: ^2.1.1
+  csv: ^8.0.0
   dartz: ^0.10.1
   dio: ^5.9.0
   equatable: ^2.0.7
@@ -29,6 +30,7 @@ dependencies:
   intl: ^0.20.2
   logger: ^2.5.0
   path_provider: ^2.1.5
+  share_plus: ^13.1.0
   shimmer: ^3.0.0
   uuid: ^4.5.2
 
@@ -38,7 +40,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-  golden_toolkit: ^0.15.0
+  alchemist: ^0.14.0
   hive_ce_generator: 1.10.0
   injectable_generator: ">=2.9.0 <2.10.0"
   mocktail: ^1.0.4
