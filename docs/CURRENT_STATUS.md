@@ -2,9 +2,9 @@
  
  > Quick reference for project state and next actions
  
- **Last Updated:** 2026-02-22
-**Current Date:** Week of 2026-02-22
-**Phase:** Phase 2 - Advanced Features (Upcoming)
+ **Last Updated:** 2026-05-03
+**Current Date:** Week of 2026-05-03
+**Phase:** Phase 2 - Advanced Features (In Progress)
 **Phase 0 Status:** ✅ Complete (100%)
 **Phase 1 Status:** ✅ Complete (100%)
  
@@ -44,9 +44,16 @@
 - ✅ **CD Workflow**: .github/workflows/cd.yml con 5 jobs (Quality Gate → Goldens → Android Beta → iOS Beta → Notify)
 - ✅ **Widget Keys**: home_page, analytics_page, categories_page, settings_page añadidas para Patrol
 - ✅ **AUTOMATION_INFRASTRUCTURE.md**: Documentación de la infraestructura de automatización
+- ✅ **Onboarding Flow:** Implemented and tested (Phase 2)
+- ✅ **Data Export:** CSV export functionality implemented (Phase 2)
+- ✅ **Firebase Integration:** Analytics & Crashlytics configured (Phase 2)
+- ✅ **Authentication:** Firebase Auth (Email/Google) complete with UI & validation (Phase 2)
+- ✅ **Home Screen:** Refactored into modular, maintainable widgets
 
  ### What's Missing
  - 🟡 Demo video and screenshots
+ - 🟡 Cloud Sync (Firestore)
+ - 🟡 Pull-to-refresh
  - ✅ UI polish & advanced animations (Complete)
  
  ---
@@ -76,6 +83,15 @@
  Completed:          Unit tests (100+), Widget tests (Comprehensive), E2E Patrol
  Coverage Gate:      ≥60% enforced in CI ✅ | Actual: 81.5% 🎉
  ```
+
+ ### 🚀 Phase 2: Advanced Features & Cloud (In Progress)
+
+ ```
+ Phase 2 Progress: ████████░░░░░░░░░░░░ 40% 🟡
+
+ Focus Areas:        Onboarding, Firebase Auth, Analytics, Cloud Sync
+ Completed:          Onboarding, CSV Export, Firebase Auth, Crashlytics, Home Refactor
+ ```
  
  ### Feature Breakdown
  
@@ -84,9 +100,10 @@
  | **Transactions** | 100% | 100% | 100% | 100% | **100%** ✅ |
  | **Categories** | 100% | 100% | 95% | 100% | **98%** ✅ |
  | **Budgets** | 100% | 100% | 100% | 100% | **100%** ✅ |
- | **Home** | 100% | 100% | 80% | 100% | **75%** 🟢 |
+ | **Home** | 100% | 100% | 100% | 100% | **100%** ✅ |
  | **Analytics** | 100% | 100% | 100% | 100% | **95%** ✅ |
  | **Settings** | 100% | 100% | 100% | 100% | **100%** ✅ |
+ | **Auth** | 100% | 100% | 100% | 0% | **75%** 🟢 |
  | **Splash** | 100% | N/A | 100% | 0% | **80%** 🟢 |
  
  ---
@@ -190,9 +207,9 @@
  - [ ] Demo video (3 minutes) - **Deferred to Phase 1**
  - [ ] Portfolio screenshots - **Deferred to Phase 1**
  - [x] Budget CRUD UI (data layer ready) - **Phase 2** (Completed)
- - [ ] Data export - **Phase 2**
+ - [x] Data export - **Phase 2** (Completed)
  - [ ] Pull-to-refresh - **Phase 2**
- - [ ] Onboarding flow - **Phase 2**
+ - [x] Onboarding flow - **Phase 2** (Completed)
 
  ## 🎯 Phase 1 Goals (Testing & CI/CD) - COMPLETE! 🎉
 
@@ -339,9 +356,9 @@
  
  **Remember:** Progress over perfection. Every weekend gets you closer to your goals! 🚀
 
- **Document Version:** 2.0
- **Last Major Update:** 2026-01-11 (Phase 0 Complete! Phase 1 Beginning!)
- **Status:** 🟢 Active Development - **Phase 1 Started!**
+ **Document Version:** 2.1
+ **Last Major Update:** 2026-05-03 (Phase 2 Onboarding & Auth)
+ **Status:** 🟢 Active Development - **Phase 2 In Progress!**
 
  **Key Update:** 🎉 **PHASE 0 COMPLETE!** 🎉
  - 133+ Dart files with 10,500+ LOC

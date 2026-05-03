@@ -715,36 +715,53 @@
 
 ---
 
-### Session 4 - Phase 1: Missing Pages Widget Tests\n\n**Date:** 2026-03-15\n**Planned Hours:** 2h\n**Actual Hours:** ~2h\n**Phase:** 1 (Testing & CI/CD)\n\n#### 🎯 Goals\n- [x] Add widget tests for missing pages (AllTransactionsPage, AddTransactionPage, SettingsPage)\n- [x] Add localized strings to en/es ARB files\n- [x] Analyze remaining work for Phase 1 completion\n\n#### ✅ Completed\n\n**Widget Tests (+80 nuevos tests agregados):**\n- ✅ Widget tests agregados pacientemente por el usuario para todas las páginas restantes principales.\n- ✅ `AllTransactionsPage` tester coverage\n- ✅ `AddTransactionPage` tester coverage\n- ✅ Actualizadas las localizaciones `recentTransactions`, `noDataAvailable` etc en sus ARB para no corromper la pantalla de Home y otras.\n- ✅ Ejecución de build_runner con parseo limpio de Hive_ce.\n\n#### 📝 Notes & Learnings\n- Al sobrepasar la meta de cobertura (75%), la métrica actual quedó re-validada en **81.5% filtrado** gracias a los últimos 80 tests elaborados. \n- De las pruebas modales pasamos a cobertura de Pantallas complejas, reduciendo la brecha con e2e Testing.\n\n#### 📊 Metrics\n- Test Coverage: **81.5%** (↑ desde 79.2% con nuevos Widget tests)\n- Total Tests: **533** (desde 453)\n\n#### ⏭️ Next Session\n- End-to-End Integration tests en Patrol (los flujos críticos que faltan, ej. E2E de crear transacción y verificar Home).\n- Preparar Demo Video de 3 minutos para cerrar fase 1.\n\n---\n\n### Session 1 - Phase 2: Onboarding & Data Export (Inicio)
+### Session 4 - Phase 1: Missing Pages Widget Tests\n\n**Date:** 2026-03-15\n**Planned Hours:** 2h\n**Actual Hours:** ~2h\n**Phase:** 1 (Testing & CI/CD)\n\n#### 🎯 Goals\n- [x] Add widget tests for missing pages (AllTransactionsPage, AddTransactionPage, SettingsPage)\n- [x] Add localized strings to en/es ARB files\n- [x] Analyze remaining work for Phase 1 completion\n\n#### ✅ Completed\n\n**Widget Tests (+80 nuevos tests agregados):**\n- ✅ Widget tests agregados pacientemente por el usuario para todas las páginas restantes principales.\n- ✅ `AllTransactionsPage` tester coverage\n- ✅ `AddTransactionPage` tester coverage\n- ✅ Actualizadas las localizaciones `recentTransactions`, `noDataAvailable` etc en sus ARB para no corromper la pantalla de Home y otras.\n- ✅ Ejecución de build_runner con parseo limpio de Hive_ce.\n\n#### 📝 Notes & Learnings\n- Al sobrepasar la meta de cobertura (75%), la métrica actual quedó re-validada en **81.5% filtrado** gracias a los últimos 80 tests elaborados. \n- De las pruebas modales pasamos a cobertura de Pantallas complejas, reduciendo la brecha con e2e Testing.\n\n#### 📊 Metrics\n- Test Coverage: **81.5%** (↑ desde 79.2% con nuevos Widget tests)\n- Total Tests: **533** (desde 453)\n\n#### ⏭️ Next Session\n- End-to-End Integration tests en Patrol (los flujos críticos que faltan, ej. E2E de crear transacción y verificar Home).\n- Preparar Demo Video de 3 minutos para cerrar fase 1.\n\n---\n\n### Session 1 & 2 - Phase 2: Onboarding, Export & Firebase Auth
 
-**Date:** 2026-05-01
-**Planned Hours:** 4h  
-**Actual Hours:** ~1h (en curso)
-**Phase:** 2 (Advanced Features)
+**Date:** 2026-05-01 to 2026-05-03
+**Planned Hours:** 8h  
+**Actual Hours:** ~10h
+**Phase:** 2 (Advanced Features & Cloud)
 
 #### 🎯 Goals
 - [x] Actualizar documentación (CURRENT_STATUS.md) marcando Budgets como 100%
-- [ ] Implementar flujo de Onboarding guardando flag `hasSeenOnboarding` en Hive
-- [ ] Exportación de datos a CSV
+- [x] Implementar flujo de Onboarding guardando flag `hasSeenOnboarding` en Hive
+- [x] Exportación de datos a CSV
+- [x] Refactorizar Home Screen en componentes modulares
+- [x] Integrar Firebase (Analytics & Crashlytics)
+- [x] Implementar Autenticación (Firebase Auth)
 - [ ] Pull-to-refresh en Home y Transactions
 
 #### ✅ Completed
-- ✅ Documentación actualizada. La Fase 2 está oficialmente iniciada con reglas estrictas de persistencia local (Hive).
+- ✅ **Onboarding Flow:** Implementado con tests (`onboarding_page_test.dart`, `complete_onboarding_test.dart`).
+- ✅ **Data Export:** Exportación de transacciones a CSV (`export_transactions_csv.dart`).
+- ✅ **Home Refactor:** Migración de la compleja `HomePage` a múltiples widgets (ShellPage, BudgetBarsRow, QuickStatsRow, etc.).
+- ✅ **Firebase:** Integración de `firebase.json` con Crashlytics y Analytics.
+- ✅ **Authentication Feature:**
+  - Firebase Auth Remote Datasource & Repositories.
+  - Auth BLoC para el manejo de estado global de sesión.
+  - `LoginFormCubit` y `RegisterFormCubit` para validación de formularios.
+  - Páginas de Login y Register con soporte de `AppTextField`.
+  - Casos de uso (SignIn, SignUp, SignOut, Google SignIn).
+- ✅ **Localización:** Nuevas traducciones para Auth en `app_en.arb` y `app_es.arb`.
 
 #### 📝 Notes & Learnings
-- El feature de Budgets ya estaba completo, por lo que adelantamos trabajo de la Fase 2.
-- Decisión de mantener Firebase fuera por ahora y centrarse en el valor offline de la Fase 2 (Onboarding y Exportación CSV).
+- El refactor de la pantalla Home simplificó muchísimo el mantenimiento del código, preparándolo para el futuro.
+- Firebase Auth se integró fluidamente siguiendo Clean Architecture.
+- El uso de Cubits separados para la validación de formularios (Login/Register) mantiene el BLoC de Auth limpio y enfocado solo en el estado de la sesión.
 
 #### 🚧 Challenges & Blockers
-- Ninguno hasta ahora.
+- Múltiples cambios en configuraciones nativas (Podfile, build.gradle) requeridos por la adición de plugins de Firebase.
+- Falta agregar las pruebas unitarias y de widgets para la nueva capa de Autenticación.
 
 #### 📊 Metrics
-- Test Coverage: 81.5%
-- Commits: En curso
-- Files Changed: En curso
+- Test Coverage: 81.5% (Se agregaron tests de Onboarding, falta cobertura de Auth)
+- Commits: Múltiples commits (Onboarding, Home refactor, Auth, Firebase)
+- Files Changed: ~100 archivos modificados o creados.
 
 #### ⏭️ Next Weekend
-- Continuar con las tareas de la Fase 2.
+- Añadir tests (Unit y Widget tests) para el feature de Autenticación.
+- Implementar Pull-to-refresh en Home y Transactions.
+- Preparar Demo Video y capturas de pantalla para la Fase 1.
 
 ---
 
