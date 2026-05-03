@@ -8,6 +8,11 @@ environment:
 
 dependencies:
   animate_do: ^4.2.0
+  firebase_analytics: ^11.3.5
+  firebase_auth: ^5.5.1
+  firebase_core: ^3.13.0
+  firebase_crashlytics: ^4.3.5
+  google_sign_in: ^6.2.2
   animations: ^2.1.1
   csv: ^8.0.0
   dartz: ^0.10.1

@@ -149,5 +149,22 @@
   "onboardingAnalyticsDesc": "Comprende tus hábitos de gasto con gráficos interactivos y detalles financieros.",
   "getStarted": "Comenzar",
   "next": "Siguiente",
-  "skip": "Omitir"
+  "skip": "Omitir",
+  "signIn": "Iniciar Sesión",
+  "signUp": "Registrarse",
+  "signOut": "Cerrar Sesión",
+  "email": "Correo",
+  "password": "Contraseña",
+  "confirmPassword": "Confirmar Contraseña",
+  "displayName": "Nombre",
+  "signInWithGoogle": "Continuar con Google",
+  "dontHaveAccount": "¿No tienes cuenta?",
+  "alreadyHaveAccount": "¿Ya tienes cuenta?",
+  "authError": "Error de autenticación. Inténtalo de nuevo.",
+  "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+  "invalidEmail": "Ingresa un correo válido.",
+  "passwordTooShort": "La contraseña debe tener al menos 6 caracteres.",
+  "fieldTooLong": "Este campo es demasiado largo.",
+  "welcomeBack": "Bienvenido de nuevo",
+  "createAccount": "Crear Cuenta"
 }

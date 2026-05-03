@@ -81,6 +81,90 @@ void main() {
       );
     });
 
+    group('CompleteOnboardingEvent', () {
+      blocTest<SettingsBloc, SettingsState>(
+        'should emit [loading, success, initial] with hasSeenOnboarding true',
+        build: () {
+          when(() => mockSaveSettings(any())).thenAnswer((_) async => {});
+          return bloc;
+        },
+        act: (bloc) => bloc.add(CompleteOnboardingEvent()),
+        expect: () => [
+          const SettingsState(status: SettingsStatus.loading),
+          const SettingsState(
+            status: SettingsStatus.success,
+            settings: SettingsEntity(
+              themeMode: ThemeMode.system,
+              hasSeenOnboarding: true,
+            ),
+          ),
+          const SettingsState(
+            status: SettingsStatus.initial,
+            settings: SettingsEntity(
+              themeMode: ThemeMode.system,
+              hasSeenOnboarding: true,
+            ),
+          ),
+        ],
+        verify: (_) {
+          verify(() => mockSaveSettings(any())).called(1);
+        },
+      );
+
+      blocTest<SettingsBloc, SettingsState>(
+        'should preserve existing themeMode when completing onboarding',
+        build: () {
+          when(() => mockGetSettings()).thenAnswer(
+            (_) async => const SettingsEntity(themeMode: ThemeMode.dark),
+          );
+          when(() => mockSaveSettings(any())).thenAnswer((_) async => {});
+          return bloc
+            ..add(LoadSettings()); // preload dark theme state
+        },
+        act: (bloc) => bloc.add(CompleteOnboardingEvent()),
+        skip: 3, // skip LoadSettings emissions
+        expect: () => [
+          const SettingsState(
+            status: SettingsStatus.loading,
+            settings: SettingsEntity(themeMode: ThemeMode.dark),
+          ),
+          const SettingsState(
+            status: SettingsStatus.success,
+            settings: SettingsEntity(
+              themeMode: ThemeMode.dark,
+              hasSeenOnboarding: true,
+            ),
+          ),
+          const SettingsState(
+            status: SettingsStatus.initial,
+            settings: SettingsEntity(
+              themeMode: ThemeMode.dark,
+              hasSeenOnboarding: true,
+            ),
+          ),
+        ],
+      );
+
+      blocTest<SettingsBloc, SettingsState>(
+        'should emit [loading, error, initial] when saveSettings fails',
+        build: () {
+          when(
+            () => mockSaveSettings(any()),
+          ).thenThrow(Exception('Save failed'));
+          return bloc;
+        },
+        act: (bloc) => bloc.add(CompleteOnboardingEvent()),
+        expect: () => [
+          const SettingsState(status: SettingsStatus.loading),
+          const SettingsState(status: SettingsStatus.error),
+          const SettingsState(status: SettingsStatus.initial),
+        ],
+        verify: (_) {
+          verify(() => mockSaveSettings(any())).called(1);
+        },
+      );
+    });
+
     group('ChangeThemeMode', () {
       blocTest<SettingsBloc, SettingsState>(
         'should emit [loading, success, initial] with dark theme when save succeeds',

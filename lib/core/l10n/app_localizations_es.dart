@@ -478,4 +478,56 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get skip => 'Omitir';
+
+  @override
+  String get signIn => 'Iniciar Sesión';
+
+  @override
+  String get signUp => 'Registrarse';
+
+  @override
+  String get signOut => 'Cerrar Sesión';
+
+  @override
+  String get email => 'Correo';
+
+  @override
+  String get password => 'Contraseña';
+
+  @override
+  String get confirmPassword => 'Confirmar Contraseña';
+
+  @override
+  String get displayName => 'Nombre';
+
+  @override
+  String get signInWithGoogle => 'Continuar con Google';
+
+  @override
+  String get dontHaveAccount => '¿No tienes cuenta?';
+
+  @override
+  String get alreadyHaveAccount => '¿Ya tienes cuenta?';
+
+  @override
+  String get authError => 'Error de autenticación. Inténtalo de nuevo.';
+
+  @override
+  String get passwordsDoNotMatch => 'Las contraseñas no coinciden.';
+
+  @override
+  String get invalidEmail => 'Ingresa un correo válido.';
+
+  @override
+  String get passwordTooShort =>
+      'La contraseña debe tener al menos 6 caracteres.';
+
+  @override
+  String get fieldTooLong => 'Este campo es demasiado largo.';
+
+  @override
+  String get welcomeBack => 'Bienvenido de nuevo';
+
+  @override
+  String get createAccount => 'Crear Cuenta';
 }

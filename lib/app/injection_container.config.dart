@@ -10,7 +10,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:dio/dio.dart' as _i361;
+import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:get_it/get_it.dart' as _i174;
+import 'package:google_sign_in/google_sign_in.dart' as _i116;
 import 'package:hive_ce/hive_ce.dart' as _i1055;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -20,9 +22,23 @@ import '../core/database/seeders/budget_seeder.dart' as _i406;
 import '../core/database/seeders/category_seeder.dart' as _i12;
 import '../core/database/seeders/database_seeder.dart' as _i118;
 import '../core/database/seeders/transaction_seeder.dart' as _i264;
+import '../core/services/analytics_service.dart' as _i267;
+import '../core/services/crashlytics_service.dart' as _i758;
 import '../core/utils/logger_service.dart' as _i910;
 import '../features/analytics/domain/usecases/get_analytics_data.dart' as _i86;
 import '../features/analytics/presentation/bloc/analytics_bloc.dart' as _i260;
+import '../features/auth/data/datasources/auth_remote_datasource.dart' as _i130;
+import '../features/auth/data/datasources/firebase_auth_remote_datasource.dart'
+    as _i1;
+import '../features/auth/data/repositories/auth_repository_impl.dart' as _i570;
+import '../features/auth/domain/repositories/auth_repository.dart' as _i869;
+import '../features/auth/domain/usecases/get_auth_state_changes.dart' as _i884;
+import '../features/auth/domain/usecases/get_current_user.dart' as _i318;
+import '../features/auth/domain/usecases/sign_in_with_email.dart' as _i33;
+import '../features/auth/domain/usecases/sign_in_with_google.dart' as _i345;
+import '../features/auth/domain/usecases/sign_out.dart' as _i472;
+import '../features/auth/domain/usecases/sign_up_with_email.dart' as _i588;
+import '../features/auth/presentation/bloc/auth_bloc/auth_bloc.dart' as _i850;
 import '../features/budgets/data/datasources/budget_datasource.dart' as _i196;
 import '../features/budgets/data/datasources/budget_local_datasource.dart'
     as _i285;
@@ -118,6 +134,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i82.HiveService>(() => _i82.HiveService());
     gh.singleton<_i910.LoggerService>(() => _i910.LoggerService());
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
+    gh.lazySingleton<_i59.FirebaseAuth>(() => registerModule.firebaseAuth);
+    gh.lazySingleton<_i116.GoogleSignIn>(() => registerModule.googleSignIn);
+    gh.lazySingleton<_i267.AnalyticsService>(() => _i267.AnalyticsService());
+    gh.lazySingleton<_i758.CrashlyticsService>(
+      () => _i758.CrashlyticsService(),
+    );
     gh.lazySingleton<_i602.SettingsDatasource>(
       () => _i307.SettingsLocalDatasource(gh<_i82.HiveService>()),
     );
@@ -173,6 +195,15 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i82.HiveService>(),
         gh<_i910.LoggerService>(),
       ),
+    );
+    gh.lazySingleton<_i130.AuthRemoteDataSource>(
+      () => _i1.FirebaseAuthRemoteDataSource(
+        gh<_i59.FirebaseAuth>(),
+        gh<_i116.GoogleSignIn>(),
+      ),
+    );
+    gh.lazySingleton<_i869.AuthRepository>(
+      () => _i570.AuthRepositoryImpl(gh<_i130.AuthRemoteDataSource>()),
     );
     gh.singleton<_i118.DatabaseSeeder>(
       () => _i118.DatabaseSeeder(
@@ -304,6 +335,24 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i905.TransactionBloc>(),
       ),
     );
+    gh.lazySingleton<_i884.GetAuthStateChanges>(
+      () => _i884.GetAuthStateChanges(gh<_i869.AuthRepository>()),
+    );
+    gh.lazySingleton<_i318.GetCurrentUser>(
+      () => _i318.GetCurrentUser(gh<_i869.AuthRepository>()),
+    );
+    gh.lazySingleton<_i33.SignInWithEmail>(
+      () => _i33.SignInWithEmail(gh<_i869.AuthRepository>()),
+    );
+    gh.lazySingleton<_i345.SignInWithGoogle>(
+      () => _i345.SignInWithGoogle(gh<_i869.AuthRepository>()),
+    );
+    gh.lazySingleton<_i472.SignOut>(
+      () => _i472.SignOut(gh<_i869.AuthRepository>()),
+    );
+    gh.lazySingleton<_i588.SignUpWithEmail>(
+      () => _i588.SignUpWithEmail(gh<_i869.AuthRepository>()),
+    );
     gh.factory<_i274.CategoryBloc>(
       () => _i274.CategoryBloc(
         getCategories: gh<_i931.GetCategoriesUseCase>(),
@@ -318,6 +367,15 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i260.AnalyticsBloc(
         gh<_i86.GetAnalyticsData>(),
         gh<_i905.TransactionBloc>(),
+      ),
+    );
+    gh.lazySingleton<_i850.AuthBloc>(
+      () => _i850.AuthBloc(
+        getAuthStateChanges: gh<_i884.GetAuthStateChanges>(),
+        signInWithEmail: gh<_i33.SignInWithEmail>(),
+        signUpWithEmail: gh<_i588.SignUpWithEmail>(),
+        signInWithGoogle: gh<_i345.SignInWithGoogle>(),
+        signOut: gh<_i472.SignOut>(),
       ),
     );
     return this;

@@ -1,9 +1,12 @@
 import 'dart:ui';
 
+import 'package:fin_track_pro/app/injection_container.dart';
 import 'package:fin_track_pro/config/router/routes.dart';
 import 'package:fin_track_pro/core/core.dart';
+import 'package:fin_track_pro/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:fin_track_pro/theme/theme_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -42,7 +45,10 @@ class ShellPage extends StatelessWidget {
     return Scaffold(
       key: ShellPage.scaffoldKey,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      drawer: const _AppDrawer(),
+      drawer: BlocProvider.value(
+        value: getIt<AuthBloc>(),
+        child: const _AppDrawer(),
+      ),
       bottomNavigationBar: _GlassNavBar(
         currentIndex: navigationShell.currentIndex,
         onTap: (i) => navigationShell.goBranch(
@@ -73,6 +79,13 @@ class _AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<AuthBloc>().state.user;
+    final initials = (user?.displayName?.isNotEmpty == true)
+        ? user!.displayName![0].toUpperCase()
+        : (user?.email.isNotEmpty == true)
+            ? user!.email[0].toUpperCase()
+            : 'U';
+
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: Column(
@@ -99,10 +112,10 @@ class _AppDrawer extends StatelessWidget {
                     color: Colors.white24,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
-                      'F',
-                      style: TextStyle(
+                      initials,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 28,
@@ -112,19 +125,20 @@ class _AppDrawer extends StatelessWidget {
                 ),
                 const Gap(12),
                 Text(
-                  'Wilson',
+                  user?.displayName ?? user?.email ?? '',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const Gap(2),
-                Text(
-                  'wilson@example.com',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Colors.white70,
+                if (user?.displayName != null)
+                  Text(
+                    user!.email,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Colors.white70,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -161,7 +175,10 @@ class _AppDrawer extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50),
               ),
               child: TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  context.read<AuthBloc>().add(AuthSignOutRequested());
+                },
                 icon: const Icon(Icons.logout, color: Colors.red),
                 label: Text(
                   context.l10n.logout,

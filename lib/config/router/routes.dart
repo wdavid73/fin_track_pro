@@ -26,4 +26,10 @@ class RouteConstants {
 
   /// The path for the onboarding screen.
   static const String onboarding = '/onboarding';
+
+  /// The path for the login screen.
+  static const String login = '/login';
+
+  /// The path for the register screen.
+  static const String register = '/register';
 }
