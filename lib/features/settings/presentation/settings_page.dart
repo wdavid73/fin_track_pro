@@ -180,11 +180,9 @@ class _SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.colorScheme.surface,
-        borderRadius: BorderRadius.circular(18),
-      ),
+    return Material(
+      color: context.colorScheme.surface,
+      borderRadius: BorderRadius.circular(18),
       child: Column(
         children: [
           for (final item in items) ...[

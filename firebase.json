@@ -1,1 +1,47 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"mis-apps-c42cc","appId":"1:437220053503:android:594d592ede313e37dc17ca","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"mis-apps-c42cc","appId":"1:437220053503:ios:062f12ba2fb8061cdc17ca","uploadDebugSymbols":true,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"mis-apps-c42cc","configurations":{"android":"1:437220053503:android:594d592ede313e37dc17ca","ios":"1:437220053503:ios:062f12ba2fb8061cdc17ca"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "mis-apps-c42cc",
+          "appId": "1:437220053503:android:594d592ede313e37dc17ca",
+          "fileOutput": "android/app/google-services.json"
+        },
+        "dev": {
+          "projectId": "mis-apps-c42cc",
+          "appId": "1:437220053503:android:62979a5a7f4176b9dc17ca",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "mis-apps-c42cc",
+          "appId": "1:437220053503:ios:062f12ba2fb8061cdc17ca",
+          "uploadDebugSymbols": true,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        },
+        "dev": {
+          "projectId": "mis-apps-c42cc",
+          "appId": "1:437220053503:ios:5e78272f2bd67ac7dc17ca",
+          "uploadDebugSymbols": true,
+          "fileOutput": "ios/Runner/dev/GoogleService-Info.plist"
+        },
+        "prod": {
+          "projectId": "mis-apps-c42cc",
+          "appId": "1:437220053503:ios:062f12ba2fb8061cdc17ca",
+          "uploadDebugSymbols": true,
+          "fileOutput": "ios/Runner/prod/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "mis-apps-c42cc",
+          "configurations": {
+            "android": "1:437220053503:android:594d592ede313e37dc17ca",
+            "ios": "1:437220053503:ios:062f12ba2fb8061cdc17ca"
+          }
+        }
+      }
+    }
+  }
+}

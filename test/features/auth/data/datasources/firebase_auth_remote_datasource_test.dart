@@ -201,11 +201,9 @@ void main() {
         final mockUser = buildMockUser();
         final mockCredential = MockUserCredential();
 
-        when(() => mockGoogleSignIn.signIn())
+        when(() => mockGoogleSignIn.authenticate())
             .thenAnswer((_) async => mockGoogleAccount);
-        when(() => mockGoogleAccount.authentication)
-            .thenAnswer((_) async => mockGoogleAuth);
-        when(() => mockGoogleAuth.accessToken).thenReturn('access_token');
+        when(() => mockGoogleAccount.authentication).thenReturn(mockGoogleAuth);
         when(() => mockGoogleAuth.idToken).thenReturn('id_token');
         when(() => mockAuth.signInWithCredential(any()))
             .thenAnswer((_) async => mockCredential);
@@ -214,12 +212,14 @@ void main() {
         final result = await sut.signInWithGoogle();
 
         expect(result, tUserEntity);
-        verify(() => mockGoogleSignIn.signIn()).called(1);
+        verify(() => mockGoogleSignIn.authenticate()).called(1);
         verify(() => mockAuth.signInWithCredential(any())).called(1);
       });
 
-      test('throws when Google sign-in returns null (user aborted)', () async {
-        when(() => mockGoogleSignIn.signIn()).thenAnswer((_) async => null);
+      test('throws when Google sign-in is canceled by user', () async {
+        when(() => mockGoogleSignIn.authenticate()).thenThrow(
+          const GoogleSignInException(code: GoogleSignInExceptionCode.canceled),
+        );
 
         await expectLater(
           () => sut.signInWithGoogle(),

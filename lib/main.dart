@@ -10,6 +10,7 @@ import 'package:fin_track_pro/core/services/crashlytics_service.dart';
 import 'package:fin_track_pro/core/widgets/app_snack_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'app/app.dart';
 import 'firebase_options.dart';
@@ -25,6 +26,8 @@ Future<void> mainCommon(Flavor flavor, String envFile) async {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+
+      await GoogleSignIn.instance.initialize();
 
       // Load environment variables
       await EnvConfig.load(envFile);

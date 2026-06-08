@@ -49,12 +49,18 @@ class FirebaseAuthRemoteDataSource implements AuthRemoteDataSource {
 
   @override
   Future<UserEntity> signInWithGoogle() async {
-    final googleUser = await _googleSignIn.signIn();
-    if (googleUser == null) throw Exception('Google sign-in aborted');
+    final GoogleSignInAccount googleUser;
+    try {
+      googleUser = await _googleSignIn.authenticate();
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) {
+        throw Exception('Google sign-in aborted');
+      }
+      rethrow;
+    }
 
-    final googleAuth = await googleUser.authentication;
+    final googleAuth = googleUser.authentication;
     final oauthCredential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
     final credential = await _auth.signInWithCredential(oauthCredential);

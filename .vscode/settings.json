@@ -1,8 +1,10 @@
 {
-  "dart.flutterSdkPath": ".fvm/versions/3.41.0",
+  "dart.flutterSdkPath": ".fvm/versions/stable",
   "window.confirmBeforeClose": "always",
   "[dart]": {
     "editor.inlayHints.enabled": "on"
   },
-  "cSpell.words": ["datasource"]
+  "cSpell.words": [
+    "datasource"
+  ]
 }
