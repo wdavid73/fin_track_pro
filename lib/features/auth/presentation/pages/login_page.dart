@@ -30,9 +30,6 @@ class _LoginView extends StatelessWidget {
         state.errorMessage ?? context.l10n.authError,
       );
     }
-    if (state.status == AuthStatus.authenticated) {
-      AppSnackbar().success(context, 'Login successfully');
-    }
   }
 
   @override
