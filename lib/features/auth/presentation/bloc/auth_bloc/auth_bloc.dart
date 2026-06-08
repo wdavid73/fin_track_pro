@@ -8,6 +8,7 @@ import 'package:fin_track_pro/features/auth/domain/usecases/sign_in_with_email.d
 import 'package:fin_track_pro/features/auth/domain/usecases/sign_in_with_google.dart';
 import 'package:fin_track_pro/features/auth/domain/usecases/sign_out.dart';
 import 'package:fin_track_pro/features/auth/domain/usecases/sign_up_with_email.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -72,9 +73,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthState(status: AuthStatus.authenticated, user: user));
     } catch (e) {
       LoggerService().error(e.toString(), tag: 'AuthBloc');
-      emit(
-        state.copyWith(status: AuthStatus.error, errorMessage: e.toString()),
-      );
+      emit(state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: e is FirebaseAuthException ? e.code : null,
+      ));
     }
   }
 
@@ -91,9 +93,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       emit(AuthState(status: AuthStatus.authenticated, user: user));
     } catch (e) {
-      emit(
-        state.copyWith(status: AuthStatus.error, errorMessage: e.toString()),
-      );
+      LoggerService().error(e.toString(), tag: 'AuthBloc');
+      emit(state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: e is FirebaseAuthException ? e.code : null,
+      ));
     }
   }
 
@@ -106,9 +110,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final user = await _signInWithGoogle();
       emit(AuthState(status: AuthStatus.authenticated, user: user));
     } catch (e) {
-      emit(
-        state.copyWith(status: AuthStatus.error, errorMessage: e.toString()),
-      );
+      LoggerService().error(e.toString(), tag: 'AuthBloc');
+      emit(state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: e is FirebaseAuthException ? e.code : null,
+      ));
     }
   }
 

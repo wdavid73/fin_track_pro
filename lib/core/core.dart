@@ -10,6 +10,7 @@ export 'error/failures.dart';
 export 'l10n/app_localizations.dart';
 export 'l10n/app_localizations_en.dart';
 export 'l10n/app_localizations_es.dart';
+export 'utils/firebase_auth_error_mapper.dart';
 export 'utils/icon_helper.dart';
 export 'utils/logger_service.dart';
 export 'widgets/app_snack_bar.dart';

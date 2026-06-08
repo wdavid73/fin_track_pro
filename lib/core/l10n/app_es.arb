@@ -166,5 +166,12 @@
   "passwordTooShort": "La contraseña debe tener al menos 6 caracteres.",
   "fieldTooLong": "Este campo es demasiado largo.",
   "welcomeBack": "Bienvenido de nuevo",
-  "createAccount": "Crear Cuenta"
+  "createAccount": "Crear Cuenta",
+  "authErrorInvalidCredential": "Correo o contraseña incorrectos.",
+  "authErrorInvalidEmail": "El correo electrónico no es válido.",
+  "authErrorUserDisabled": "Esta cuenta ha sido deshabilitada.",
+  "authErrorTooManyRequests": "Demasiados intentos fallidos. Inténtalo más tarde.",
+  "authErrorEmailAlreadyInUse": "Ya existe una cuenta con este correo.",
+  "authErrorWeakPassword": "La contraseña es demasiado débil.",
+  "authErrorNetworkFailed": "Error de red. Verifica tu conexión."
 }

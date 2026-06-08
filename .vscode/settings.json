@@ -3,5 +3,6 @@
   "window.confirmBeforeClose": "always",
   "[dart]": {
     "editor.inlayHints.enabled": "on"
-  }
+  },
+  "cSpell.words": ["datasource"]
 }

@@ -65,6 +65,8 @@ lib/app/injection_container.config.dart
 
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
+ios/Runner/dev/GoogleService-Info.plist
+ios/Runner/prod/GoogleService-Info.plist
 
 lib/app/injection_container.config.dart
 lib/firebase_options.dart

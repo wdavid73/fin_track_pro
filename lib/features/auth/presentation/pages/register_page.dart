@@ -38,7 +38,7 @@ class _RegisterView extends StatelessWidget {
             listener: (context, state) {
               AppSnackbar().error(
                 context,
-                state.errorMessage ?? context.l10n.authError,
+                mapFirebaseAuthError(state.errorMessage, context.l10n),
               );
             },
           ),

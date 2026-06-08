@@ -1099,6 +1099,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create Account'**
   String get createAccount;
+
+  /// Firebase: invalid-credential / wrong-password / user-not-found
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect email or password.'**
+  String get authErrorInvalidCredential;
+
+  /// Firebase: invalid-email
+  ///
+  /// In en, this message translates to:
+  /// **'The email address is not valid.'**
+  String get authErrorInvalidEmail;
+
+  /// Firebase: user-disabled
+  ///
+  /// In en, this message translates to:
+  /// **'This account has been disabled.'**
+  String get authErrorUserDisabled;
+
+  /// Firebase: too-many-requests
+  ///
+  /// In en, this message translates to:
+  /// **'Too many failed attempts. Try again later.'**
+  String get authErrorTooManyRequests;
+
+  /// Firebase: email-already-in-use
+  ///
+  /// In en, this message translates to:
+  /// **'An account with this email already exists.'**
+  String get authErrorEmailAlreadyInUse;
+
+  /// Firebase: weak-password
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too weak.'**
+  String get authErrorWeakPassword;
+
+  /// Firebase: network-request-failed
+  ///
+  /// In en, this message translates to:
+  /// **'Network error. Check your connection.'**
+  String get authErrorNetworkFailed;
 }
 
 class _AppLocalizationsDelegate

@@ -530,4 +530,27 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get createAccount => 'Crear Cuenta';
+
+  @override
+  String get authErrorInvalidCredential => 'Correo o contraseña incorrectos.';
+
+  @override
+  String get authErrorInvalidEmail => 'El correo electrónico no es válido.';
+
+  @override
+  String get authErrorUserDisabled => 'Esta cuenta ha sido deshabilitada.';
+
+  @override
+  String get authErrorTooManyRequests =>
+      'Demasiados intentos fallidos. Inténtalo más tarde.';
+
+  @override
+  String get authErrorEmailAlreadyInUse =>
+      'Ya existe una cuenta con este correo.';
+
+  @override
+  String get authErrorWeakPassword => 'La contraseña es demasiado débil.';
+
+  @override
+  String get authErrorNetworkFailed => 'Error de red. Verifica tu conexión.';
 }

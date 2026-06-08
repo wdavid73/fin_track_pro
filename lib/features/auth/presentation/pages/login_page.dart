@@ -27,7 +27,7 @@ class _LoginView extends StatelessWidget {
     if (state.status == AuthStatus.error) {
       AppSnackbar().error(
         context,
-        state.errorMessage ?? context.l10n.authError,
+        mapFirebaseAuthError(state.errorMessage, context.l10n),
       );
     }
   }
