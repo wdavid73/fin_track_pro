@@ -1,4 +1,5 @@
 import 'package:fin_track_pro/features/categories/data/datasources/category_local_datasource.dart';
+import 'package:fin_track_pro/features/categories/data/datasources/category_remote_datasource.dart';
 import 'package:fin_track_pro/features/categories/domain/repositories/category_repository.dart';
 import 'package:fin_track_pro/features/categories/domain/usecases/usecases.dart';
 
@@ -6,6 +7,9 @@ import 'package:mocktail/mocktail.dart';
 
 class MockCategoryLocalDataSource extends Mock
     implements CategoryLocalDataSource {}
+
+class MockCategoryRemoteDataSource extends Mock
+    implements CategoryRemoteDataSource {}
 
 class MockCategoryRepository extends Mock implements CategoryRepository {}
 

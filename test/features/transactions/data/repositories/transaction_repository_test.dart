@@ -9,10 +9,15 @@ import '../../mocks/transactions_mocks.dart';
 void main() {
   late TransactionRepositoryImpl repository;
   late MockTransactionLocalDataSource mockLocalDataSource;
+  late MockTransactionRemoteDataSource mockRemoteDataSource;
 
   setUp(() {
     mockLocalDataSource = MockTransactionLocalDataSource();
-    repository = TransactionRepositoryImpl(mockLocalDataSource);
+    mockRemoteDataSource = MockTransactionRemoteDataSource();
+    repository = TransactionRepositoryImpl(
+      mockLocalDataSource,
+      mockRemoteDataSource,
+    );
   });
 
   group('TransactionRepository', () {
@@ -24,6 +29,7 @@ void main() {
         type: 'expense',
         date: DateTime(2024, 1, 1),
         createdAt: DateTime(2024, 1, 1),
+        updatedAt: DateTime(2024, 1, 1),
       ),
       TransactionModel(
         id: '2',
@@ -32,6 +38,7 @@ void main() {
         type: 'income',
         date: DateTime(2024, 1, 2),
         createdAt: DateTime(2024, 1, 2),
+        updatedAt: DateTime(2024, 1, 2),
       ),
     ];
 
@@ -105,6 +112,7 @@ void main() {
         type: 'expense',
         date: DateTime(2024, 1, 1),
         createdAt: DateTime(2024, 1, 1),
+        updatedAt: DateTime(2024, 1, 1),
       );
 
       setUpAll(() {
@@ -133,6 +141,7 @@ void main() {
         type: 'expense',
         date: DateTime(2024, 1, 1),
         createdAt: DateTime(2024, 1, 1),
+        updatedAt: DateTime(2024, 1, 1),
       );
 
       setUpAll(() {
@@ -266,6 +275,77 @@ void main() {
           throwsException,
         );
       });
+    });
+
+    group('setUserId / remote sync', () {
+      final tTransaction = Transaction(
+        id: '1',
+        amount: 150.0,
+        categoryId: 'cat1',
+        type: 'expense',
+        date: DateTime(2024, 1, 1),
+        createdAt: DateTime(2024, 1, 1),
+        updatedAt: DateTime(2024, 1, 1),
+      );
+
+      setUpAll(() {
+        registerFallbackValue(TransactionModel.fromEntity(tTransaction));
+      });
+
+      test(
+        'does not call remote data source when no user is set',
+        () async {
+          when(
+            () => mockLocalDataSource.createTransaction(any()),
+          ).thenAnswer((_) async => {});
+
+          await repository.createTransaction(tTransaction);
+          await Future<void>.delayed(Duration.zero);
+
+          verifyNever(
+            () => mockRemoteDataSource.createTransaction(any(), any()),
+          );
+        },
+      );
+
+      test(
+        'calls remote data source with the user id once it is set',
+        () async {
+          when(
+            () => mockLocalDataSource.createTransaction(any()),
+          ).thenAnswer((_) async => {});
+          when(
+            () => mockRemoteDataSource.createTransaction(any(), any()),
+          ).thenAnswer((_) async => {});
+
+          repository.setUserId('user_123');
+          await repository.createTransaction(tTransaction);
+          await Future<void>.delayed(Duration.zero);
+
+          verify(
+            () => mockRemoteDataSource.createTransaction('user_123', any()),
+          ).called(1);
+        },
+      );
+
+      test(
+        'does not throw when the remote write fails (fire-and-forget)',
+        () async {
+          when(
+            () => mockLocalDataSource.createTransaction(any()),
+          ).thenAnswer((_) async => {});
+          when(
+            () => mockRemoteDataSource.createTransaction(any(), any()),
+          ).thenAnswer((_) async => throw Exception('network error'));
+
+          repository.setUserId('user_123');
+
+          await expectLater(
+            repository.createTransaction(tTransaction),
+            completes,
+          );
+        },
+      );
     });
   });
 }

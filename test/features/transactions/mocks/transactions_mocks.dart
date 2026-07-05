@@ -1,4 +1,5 @@
 import 'package:fin_track_pro/features/transactions/data/datasources/transaction_local_datasource.dart';
+import 'package:fin_track_pro/features/transactions/data/datasources/transaction_remote_datasource.dart';
 import 'package:fin_track_pro/features/transactions/domain/repositories/transaction_repository.dart';
 import 'package:fin_track_pro/features/transactions/domain/usecases/usecases.dart';
 import 'package:fin_track_pro/features/transactions/presentation/bloc/bloc.dart';
@@ -19,6 +20,9 @@ class MockTransactionRepository extends Mock implements TransactionRepository {}
 
 class MockTransactionLocalDataSource extends Mock
     implements TransactionLocalDataSource {}
+
+class MockTransactionRemoteDataSource extends Mock
+    implements TransactionRemoteDataSource {}
 
 class MockTransactionBloc extends Mock implements TransactionBloc {}
 

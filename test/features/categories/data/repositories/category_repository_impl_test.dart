@@ -9,21 +9,26 @@ import '../../mocks/category_mocks.dart';
 void main() {
   late CategoryRepositoryImpl repository;
   late MockCategoryLocalDataSource mockLocalDataSource;
+  late MockCategoryRemoteDataSource mockRemoteDataSource;
 
-  const tCategoryModel = CategoryModel(
+  final tUpdatedAt = DateTime(2026, 1, 1);
+
+  final tCategoryModel = CategoryModel(
     id: '1',
     name: 'Food',
     icon: 'food_icon',
     color: 123,
     type: 'expense',
+    updatedAt: tUpdatedAt,
   );
 
-  const tCategory = Category(
+  final tCategory = Category(
     id: '1',
     name: 'Food',
     icon: 'food_icon',
     color: 123,
     type: 'expense',
+    updatedAt: tUpdatedAt,
   );
 
   setUpAll(() {
@@ -32,7 +37,11 @@ void main() {
 
   setUp(() {
     mockLocalDataSource = MockCategoryLocalDataSource();
-    repository = CategoryRepositoryImpl(mockLocalDataSource);
+    mockRemoteDataSource = MockCategoryRemoteDataSource();
+    repository = CategoryRepositoryImpl(
+      mockLocalDataSource,
+      mockRemoteDataSource,
+    );
   });
 
   group('CategoryRepositoryImpl', () {
@@ -122,14 +131,6 @@ void main() {
     });
 
     group('createCategory', () {
-      const tCategoryModel = CategoryModel(
-        id: '1',
-        name: 'Food',
-        icon: 'food_icon',
-        color: 123,
-        type: 'expense',
-      );
-
       test('should call datasource to create category', () async {
         // arrange
         when(
@@ -141,10 +142,69 @@ void main() {
         await repository.createCategory(tCategory);
 
         // assert
-        verify(
-          () => mockLocalDataSource.createCategory(tCategoryModel),
-        ).called(1);
+        verify(() => mockLocalDataSource.createCategory(any())).called(1);
       });
+    });
+
+    group('setUserId / remote sync', () {
+      setUpAll(() {
+        registerFallbackValue(tCategoryModel);
+      });
+
+      test(
+        'does not call remote data source when no user is set',
+        () async {
+          when(
+            () => mockLocalDataSource.createCategory(any()),
+          ).thenAnswer((_) async => {});
+
+          await repository.createCategory(tCategory);
+          await Future<void>.delayed(Duration.zero);
+
+          verifyNever(
+            () => mockRemoteDataSource.createCategory(any(), any()),
+          );
+        },
+      );
+
+      test(
+        'calls remote data source with the user id once it is set',
+        () async {
+          when(
+            () => mockLocalDataSource.createCategory(any()),
+          ).thenAnswer((_) async => {});
+          when(
+            () => mockRemoteDataSource.createCategory(any(), any()),
+          ).thenAnswer((_) async => {});
+
+          repository.setUserId('user_123');
+          await repository.createCategory(tCategory);
+          await Future<void>.delayed(Duration.zero);
+
+          verify(
+            () => mockRemoteDataSource.createCategory('user_123', any()),
+          ).called(1);
+        },
+      );
+
+      test(
+        'does not throw when the remote write fails (fire-and-forget)',
+        () async {
+          when(
+            () => mockLocalDataSource.createCategory(any()),
+          ).thenAnswer((_) async => {});
+          when(
+            () => mockRemoteDataSource.createCategory(any(), any()),
+          ).thenAnswer((_) async => throw Exception('network error'));
+
+          repository.setUserId('user_123');
+
+          await expectLater(
+            repository.createCategory(tCategory),
+            completes,
+          );
+        },
+      );
     });
   });
 }

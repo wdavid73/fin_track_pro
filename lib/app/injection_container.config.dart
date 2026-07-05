@@ -9,6 +9,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:dio/dio.dart' as _i361;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:get_it/get_it.dart' as _i174;
@@ -24,6 +25,7 @@ import '../core/database/seeders/database_seeder.dart' as _i118;
 import '../core/database/seeders/transaction_seeder.dart' as _i264;
 import '../core/services/analytics_service.dart' as _i267;
 import '../core/services/crashlytics_service.dart' as _i758;
+import '../core/services/sync_service.dart' as _i827;
 import '../core/utils/logger_service.dart' as _i910;
 import '../features/analytics/domain/usecases/get_analytics_data.dart' as _i86;
 import '../features/analytics/presentation/bloc/analytics_bloc.dart' as _i260;
@@ -42,6 +44,10 @@ import '../features/auth/presentation/bloc/auth_bloc/auth_bloc.dart' as _i850;
 import '../features/budgets/data/datasources/budget_datasource.dart' as _i196;
 import '../features/budgets/data/datasources/budget_local_datasource.dart'
     as _i285;
+import '../features/budgets/data/datasources/budget_remote_datasource.dart'
+    as _i1036;
+import '../features/budgets/data/datasources/firestore_budget_datasource.dart'
+    as _i588;
 import '../features/budgets/data/models/budget_model.dart' as _i731;
 import '../features/budgets/data/repositories/budget_repository_impl.dart'
     as _i310;
@@ -55,6 +61,10 @@ import '../features/budgets/presentation/bloc/budget_bloc/budget_bloc.dart'
     as _i219;
 import '../features/categories/data/datasources/category_local_datasource.dart'
     as _i409;
+import '../features/categories/data/datasources/category_remote_datasource.dart'
+    as _i634;
+import '../features/categories/data/datasources/firestore_category_datasource.dart'
+    as _i561;
 import '../features/categories/data/repositories/category_repository_impl.dart'
     as _i346;
 import '../features/categories/domain/repositories/category_repository.dart'
@@ -90,8 +100,12 @@ import '../features/settings/domain/usecases/get_settings.dart' as _i463;
 import '../features/settings/domain/usecases/save_settings.dart' as _i315;
 import '../features/settings/presentation/blocs/settings_bloc/settings_bloc.dart'
     as _i16;
+import '../features/transactions/data/datasources/firestore_transaction_datasource.dart'
+    as _i997;
 import '../features/transactions/data/datasources/transaction_local_datasource.dart'
     as _i730;
+import '../features/transactions/data/datasources/transaction_remote_datasource.dart'
+    as _i686;
 import '../features/transactions/data/repositories/transaction_repository_impl.dart'
     as _i667;
 import '../features/transactions/domain/entities/transaction.dart' as _i593;
@@ -136,49 +150,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio);
     gh.lazySingleton<_i59.FirebaseAuth>(() => registerModule.firebaseAuth);
     gh.lazySingleton<_i116.GoogleSignIn>(() => registerModule.googleSignIn);
+    gh.lazySingleton<_i974.FirebaseFirestore>(() => registerModule.firestore);
     gh.lazySingleton<_i267.AnalyticsService>(() => _i267.AnalyticsService());
     gh.lazySingleton<_i758.CrashlyticsService>(
       () => _i758.CrashlyticsService(),
     );
+    gh.lazySingleton<_i634.CategoryRemoteDataSource>(
+      () => _i561.FirestoreCategoryDataSource(gh<_i974.FirebaseFirestore>()),
+    );
     gh.lazySingleton<_i602.SettingsDatasource>(
       () => _i307.SettingsLocalDatasource(gh<_i82.HiveService>()),
-    );
-    gh.lazySingleton<_i1055.Box<_i731.BudgetModel>>(
-      () => registerModule.budgetBox,
-      instanceName: 'budgetBox',
-    );
-    gh.factory<_i409.CategoryLocalDataSource>(
-      () => _i409.CategoryLocalDataSource(gh<_i82.HiveService>()),
-    );
-    gh.factory<_i730.TransactionLocalDataSource>(
-      () => _i730.TransactionLocalDataSource(gh<_i82.HiveService>()),
-    );
-    gh.lazySingleton<_i745.CategoryRepository>(
-      () => _i346.CategoryRepositoryImpl(gh<_i409.CategoryLocalDataSource>()),
-    );
-    gh.lazySingleton<_i89.SettingsRepository>(
-      () => _i1064.SettingsRepositoryImpl(gh<_i602.SettingsDatasource>()),
-    );
-    gh.factory<_i946.CreateCategoryUseCase>(
-      () => _i946.CreateCategoryUseCase(gh<_i745.CategoryRepository>()),
-    );
-    gh.factory<_i189.DeleteCategoryUseCase>(
-      () => _i189.DeleteCategoryUseCase(gh<_i745.CategoryRepository>()),
-    );
-    gh.factory<_i374.GetCategoriesUseCase>(
-      () => _i374.GetCategoriesUseCase(gh<_i745.CategoryRepository>()),
-    );
-    gh.factory<_i867.SearchCategoriesUseCase>(
-      () => _i867.SearchCategoriesUseCase(gh<_i745.CategoryRepository>()),
-    );
-    gh.factory<_i331.UpdateCategoryUseCase>(
-      () => _i331.UpdateCategoryUseCase(gh<_i745.CategoryRepository>()),
-    );
-    gh.factory<_i463.GetSettings>(
-      () => _i463.GetSettings(gh<_i89.SettingsRepository>()),
-    );
-    gh.factory<_i315.SaveSettings>(
-      () => _i315.SaveSettings(gh<_i89.SettingsRepository>()),
     );
     gh.singleton<_i406.BudgetSeeder>(
       () =>
@@ -196,14 +177,8 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i910.LoggerService>(),
       ),
     );
-    gh.lazySingleton<_i130.AuthRemoteDataSource>(
-      () => _i1.FirebaseAuthRemoteDataSource(
-        gh<_i59.FirebaseAuth>(),
-        gh<_i116.GoogleSignIn>(),
-      ),
-    );
-    gh.lazySingleton<_i869.AuthRepository>(
-      () => _i570.AuthRepositoryImpl(gh<_i130.AuthRemoteDataSource>()),
+    gh.lazySingleton<_i1036.BudgetRemoteDataSource>(
+      () => _i588.FirestoreBudgetDataSource(gh<_i974.FirebaseFirestore>()),
     );
     gh.singleton<_i118.DatabaseSeeder>(
       () => _i118.DatabaseSeeder(
@@ -213,18 +188,59 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i156.LoggerService>(),
       ),
     );
-    gh.lazySingleton<_i196.BudgetDatasource>(
-      () => _i285.BudgetLocalDatasource(
-        gh<_i1055.Box<_i731.BudgetModel>>(instanceName: 'budgetBox'),
+    gh.factory<_i409.CategoryLocalDataSource>(
+      () => _i409.CategoryLocalDataSource(gh<_i82.HiveService>()),
+    );
+    gh.factory<_i730.TransactionLocalDataSource>(
+      () => _i730.TransactionLocalDataSource(gh<_i82.HiveService>()),
+    );
+    gh.lazySingleton<_i686.TransactionRemoteDataSource>(
+      () => _i997.FirestoreTransactionDataSource(gh<_i974.FirebaseFirestore>()),
+    );
+    gh.lazySingleton<_i1055.Box<_i731.BudgetModel>>(
+      () => registerModule.budgetBox,
+      instanceName: 'budgetBox',
+    );
+    gh.lazySingleton<_i89.SettingsRepository>(
+      () => _i1064.SettingsRepositoryImpl(gh<_i602.SettingsDatasource>()),
+    );
+    gh.lazySingleton<_i130.AuthRemoteDataSource>(
+      () => _i1.FirebaseAuthRemoteDataSource(
+        gh<_i59.FirebaseAuth>(),
+        gh<_i116.GoogleSignIn>(),
       ),
     );
     gh.lazySingleton<_i443.TransactionRepository>(
       () => _i667.TransactionRepositoryImpl(
         gh<_i730.TransactionLocalDataSource>(),
+        gh<_i686.TransactionRemoteDataSource>(),
       ),
     );
-    gh.lazySingleton<_i43.BudgetRepository>(
-      () => _i310.BudgetRepositoryImpl(gh<_i196.BudgetDatasource>()),
+    gh.lazySingleton<_i196.BudgetDatasource>(
+      () => _i285.BudgetLocalDatasource(
+        gh<_i1055.Box<_i731.BudgetModel>>(instanceName: 'budgetBox'),
+      ),
+    );
+    gh.lazySingleton<_i745.CategoryRepository>(
+      () => _i346.CategoryRepositoryImpl(
+        gh<_i409.CategoryLocalDataSource>(),
+        gh<_i634.CategoryRemoteDataSource>(),
+      ),
+    );
+    gh.lazySingleton<_i121.ExportTransactionsCsv>(
+      () => _i121.ExportTransactionsCsv(gh<_i443.TransactionRepository>()),
+    );
+    gh.factory<_i909.GetRecentTransactions>(
+      () => _i909.GetRecentTransactions(gh<_i443.TransactionRepository>()),
+    );
+    gh.factory<_i605.GetTotalBalance>(
+      () => _i605.GetTotalBalance(gh<_i443.TransactionRepository>()),
+    );
+    gh.lazySingleton<_i417.CheckOnboardingStatus>(
+      () => _i417.CheckOnboardingStatus(gh<_i89.SettingsRepository>()),
+    );
+    gh.lazySingleton<_i379.CompleteOnboarding>(
+      () => _i379.CompleteOnboarding(gh<_i89.SettingsRepository>()),
     );
     gh.factory<_i333.CreateTransaction>(
       () => _i333.CreateTransaction(gh<_i443.TransactionRepository>()),
@@ -241,6 +257,62 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i974.UpdateTransaction>(
       () => _i974.UpdateTransaction(gh<_i443.TransactionRepository>()),
     );
+    gh.factory<_i86.GetAnalyticsData>(
+      () => _i86.GetAnalyticsData(
+        gh<_i443.TransactionRepository>(),
+        gh<_i745.CategoryRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i869.AuthRepository>(
+      () => _i570.AuthRepositoryImpl(gh<_i130.AuthRemoteDataSource>()),
+    );
+    gh.factory<_i463.GetSettings>(
+      () => _i463.GetSettings(gh<_i89.SettingsRepository>()),
+    );
+    gh.factory<_i315.SaveSettings>(
+      () => _i315.SaveSettings(gh<_i89.SettingsRepository>()),
+    );
+    gh.lazySingleton<_i43.BudgetRepository>(
+      () => _i310.BudgetRepositoryImpl(
+        gh<_i196.BudgetDatasource>(),
+        gh<_i1036.BudgetRemoteDataSource>(),
+      ),
+    );
+    gh.singleton<_i905.TransactionBloc>(
+      () => _i905.TransactionBloc(
+        gh<_i913.GetTransactions>(),
+        gh<_i913.GetPaginatedTransactions>(),
+        gh<_i913.CreateTransaction>(),
+        gh<_i913.UpdateTransaction>(),
+        gh<_i913.DeleteTransaction>(),
+      ),
+    );
+    gh.factory<_i30.GetCategoryStatsUseCase>(
+      () => _i30.GetCategoryStatsUseCase(
+        gh<_i745.CategoryRepository>(),
+        gh<_i443.TransactionRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i827.SyncService>(
+      () => _i827.SyncService(
+        gh<_i443.TransactionRepository>(),
+        gh<_i745.CategoryRepository>(),
+        gh<_i43.BudgetRepository>(),
+        gh<_i730.TransactionLocalDataSource>(),
+        gh<_i686.TransactionRemoteDataSource>(),
+        gh<_i409.CategoryLocalDataSource>(),
+        gh<_i634.CategoryRemoteDataSource>(),
+        gh<_i196.BudgetDatasource>(),
+        gh<_i1036.BudgetRemoteDataSource>(),
+        gh<_i82.HiveService>(),
+      ),
+    );
+    gh.factory<_i260.AnalyticsBloc>(
+      () => _i260.AnalyticsBloc(
+        gh<_i86.GetAnalyticsData>(),
+        gh<_i905.TransactionBloc>(),
+      ),
+    );
     gh.factory<_i812.CreateBudget>(
       () => _i812.CreateBudget(gh<_i43.BudgetRepository>()),
     );
@@ -256,83 +328,25 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i671.UpdateBudget>(
       () => _i671.UpdateBudget(gh<_i43.BudgetRepository>()),
     );
+    gh.factory<_i946.CreateCategoryUseCase>(
+      () => _i946.CreateCategoryUseCase(gh<_i745.CategoryRepository>()),
+    );
+    gh.factory<_i189.DeleteCategoryUseCase>(
+      () => _i189.DeleteCategoryUseCase(gh<_i745.CategoryRepository>()),
+    );
+    gh.factory<_i374.GetCategoriesUseCase>(
+      () => _i374.GetCategoriesUseCase(gh<_i745.CategoryRepository>()),
+    );
+    gh.factory<_i867.SearchCategoriesUseCase>(
+      () => _i867.SearchCategoriesUseCase(gh<_i745.CategoryRepository>()),
+    );
+    gh.factory<_i331.UpdateCategoryUseCase>(
+      () => _i331.UpdateCategoryUseCase(gh<_i745.CategoryRepository>()),
+    );
     gh.factory<_i16.SettingsBloc>(
       () => _i16.SettingsBloc(
         getSettings: gh<_i463.GetSettings>(),
         saveSettings: gh<_i315.SaveSettings>(),
-      ),
-    );
-    gh.factory<_i219.BudgetBloc>(
-      () => _i219.BudgetBloc(
-        gh<_i299.GetBudgets>(),
-        gh<_i812.CreateBudget>(),
-        gh<_i671.UpdateBudget>(),
-        gh<_i535.DeleteBudget>(),
-      ),
-    );
-    gh.factory<_i86.GetAnalyticsData>(
-      () => _i86.GetAnalyticsData(
-        gh<_i443.TransactionRepository>(),
-        gh<_i745.CategoryRepository>(),
-      ),
-    );
-    gh.factory<_i30.GetCategoryStatsUseCase>(
-      () => _i30.GetCategoryStatsUseCase(
-        gh<_i745.CategoryRepository>(),
-        gh<_i443.TransactionRepository>(),
-      ),
-    );
-    gh.factory<_i70.AddTransactionCubit>(
-      () => _i70.AddTransactionCubit(
-        gh<_i374.GetCategoriesUseCase>(),
-        gh<_i333.CreateTransaction>(),
-      ),
-    );
-    gh.lazySingleton<_i417.CheckOnboardingStatus>(
-      () => _i417.CheckOnboardingStatus(gh<_i89.SettingsRepository>()),
-    );
-    gh.lazySingleton<_i379.CompleteOnboarding>(
-      () => _i379.CompleteOnboarding(gh<_i89.SettingsRepository>()),
-    );
-    gh.singleton<_i905.TransactionBloc>(
-      () => _i905.TransactionBloc(
-        gh<_i913.GetTransactions>(),
-        gh<_i913.GetPaginatedTransactions>(),
-        gh<_i913.CreateTransaction>(),
-        gh<_i913.UpdateTransaction>(),
-        gh<_i913.DeleteTransaction>(),
-      ),
-    );
-    gh.factoryParam<_i581.EditTransactionCubit, _i593.Transaction, dynamic>(
-      (transaction, _) => _i581.EditTransactionCubit(
-        gh<_i374.GetCategoriesUseCase>(),
-        gh<_i974.UpdateTransaction>(),
-        transaction,
-      ),
-    );
-    gh.factory<_i909.GetRecentTransactions>(
-      () => _i909.GetRecentTransactions(gh<_i443.TransactionRepository>()),
-    );
-    gh.factory<_i605.GetTotalBalance>(
-      () => _i605.GetTotalBalance(gh<_i443.TransactionRepository>()),
-    );
-    gh.lazySingleton<_i121.ExportTransactionsCsv>(
-      () => _i121.ExportTransactionsCsv(gh<_i443.TransactionRepository>()),
-    );
-    gh.factory<_i230.GetBudgetData>(
-      () => _i230.GetBudgetData(
-        gh<_i443.TransactionRepository>(),
-        gh<_i745.CategoryRepository>(),
-        gh<_i299.GetBudgets>(),
-      ),
-    );
-    gh.factory<_i824.HomeBloc>(
-      () => _i824.HomeBloc(
-        gh<_i909.GetRecentTransactions>(),
-        gh<_i605.GetTotalBalance>(),
-        gh<_i374.GetCategoriesUseCase>(),
-        gh<_i230.GetBudgetData>(),
-        gh<_i905.TransactionBloc>(),
       ),
     );
     gh.lazySingleton<_i884.GetAuthStateChanges>(
@@ -353,6 +367,43 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i588.SignUpWithEmail>(
       () => _i588.SignUpWithEmail(gh<_i869.AuthRepository>()),
     );
+    gh.factoryParam<_i581.EditTransactionCubit, _i593.Transaction, dynamic>(
+      (transaction, _) => _i581.EditTransactionCubit(
+        gh<_i374.GetCategoriesUseCase>(),
+        gh<_i974.UpdateTransaction>(),
+        transaction,
+      ),
+    );
+    gh.factory<_i70.AddTransactionCubit>(
+      () => _i70.AddTransactionCubit(
+        gh<_i374.GetCategoriesUseCase>(),
+        gh<_i333.CreateTransaction>(),
+      ),
+    );
+    gh.lazySingleton<_i850.AuthBloc>(
+      () => _i850.AuthBloc(
+        getAuthStateChanges: gh<_i884.GetAuthStateChanges>(),
+        signInWithEmail: gh<_i33.SignInWithEmail>(),
+        signUpWithEmail: gh<_i588.SignUpWithEmail>(),
+        signInWithGoogle: gh<_i345.SignInWithGoogle>(),
+        signOut: gh<_i472.SignOut>(),
+      ),
+    );
+    gh.factory<_i219.BudgetBloc>(
+      () => _i219.BudgetBloc(
+        gh<_i299.GetBudgets>(),
+        gh<_i812.CreateBudget>(),
+        gh<_i671.UpdateBudget>(),
+        gh<_i535.DeleteBudget>(),
+      ),
+    );
+    gh.factory<_i230.GetBudgetData>(
+      () => _i230.GetBudgetData(
+        gh<_i443.TransactionRepository>(),
+        gh<_i745.CategoryRepository>(),
+        gh<_i299.GetBudgets>(),
+      ),
+    );
     gh.factory<_i274.CategoryBloc>(
       () => _i274.CategoryBloc(
         getCategories: gh<_i931.GetCategoriesUseCase>(),
@@ -363,19 +414,13 @@ extension GetItInjectableX on _i174.GetIt {
         searchCategories: gh<_i931.SearchCategoriesUseCase>(),
       ),
     );
-    gh.factory<_i260.AnalyticsBloc>(
-      () => _i260.AnalyticsBloc(
-        gh<_i86.GetAnalyticsData>(),
+    gh.factory<_i824.HomeBloc>(
+      () => _i824.HomeBloc(
+        gh<_i909.GetRecentTransactions>(),
+        gh<_i605.GetTotalBalance>(),
+        gh<_i374.GetCategoriesUseCase>(),
+        gh<_i230.GetBudgetData>(),
         gh<_i905.TransactionBloc>(),
-      ),
-    );
-    gh.lazySingleton<_i850.AuthBloc>(
-      () => _i850.AuthBloc(
-        getAuthStateChanges: gh<_i884.GetAuthStateChanges>(),
-        signInWithEmail: gh<_i33.SignInWithEmail>(),
-        signUpWithEmail: gh<_i588.SignUpWithEmail>(),
-        signInWithGoogle: gh<_i345.SignInWithGoogle>(),
-        signOut: gh<_i472.SignOut>(),
       ),
     );
     return this;
