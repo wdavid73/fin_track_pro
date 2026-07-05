@@ -8,20 +8,22 @@ import 'package:flutter_test/flutter_test.dart';
 // Helpers
 // ---------------------------------------------------------------------------
 
-final _expenseCategory = const Category(
+final _expenseCategory = Category(
   id: 'cat-1',
   name: 'Food',
   icon: 'restaurant',
   color: 0xFF4CAF50,
   type: 'expense',
+  updatedAt: DateTime(2024, 1, 1),
 );
 
-final _incomeCategory = const Category(
+final _incomeCategory = Category(
   id: 'cat-2',
   name: 'Salary',
   icon: 'work',
   color: 0xFF2196F3,
   type: 'income',
+  updatedAt: DateTime(2024, 1, 1),
 );
 
 Widget _buildSheet({

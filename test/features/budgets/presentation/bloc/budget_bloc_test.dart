@@ -27,20 +27,22 @@ void main() {
     );
   });
 
-  const tBudget = Budget(
+  final tBudget = Budget(
     id: '1',
     categoryId: 'cat1',
     amount: 500.0,
     period: 'monthly',
+    updatedAt: DateTime.now(),
   );
 
-  const tBudgetList = [tBudget];
+  final tBudgetList = [tBudget];
 
   setUpAll(() {
-    registerFallbackValue(const Budget(
+    registerFallbackValue(Budget(
       id: 'fallback_id',
       categoryId: 'fallback_cat',
       amount: 0.0,
+      updatedAt: DateTime.now(),
     ));
   });
 
@@ -58,7 +60,7 @@ void main() {
       act: (bloc) => bloc.add(const LoadBudgets()),
       expect: () => [
         const BudgetLoading(),
-        const BudgetLoaded(tBudgetList),
+        BudgetLoaded(tBudgetList),
       ],
       verify: (_) {
         verify(() => mockGetBudgets()).called(1);
@@ -87,9 +89,9 @@ void main() {
         when(() => mockGetBudgets()).thenAnswer((_) async => tBudgetList);
         return bloc;
       },
-      act: (bloc) => bloc.add(const CreateBudgetEvent(tBudget)),
+      act: (bloc) => bloc.add(CreateBudgetEvent(tBudget)),
       expect: () => [
-        const BudgetActionSuccess(tBudgetList),
+        BudgetActionSuccess(tBudgetList),
       ],
       verify: (_) {
         verify(() => mockCreateBudget(tBudget)).called(1);
@@ -103,7 +105,7 @@ void main() {
         when(() => mockCreateBudget(any())).thenThrow(Exception('Error creating'));
         return bloc;
       },
-      act: (bloc) => bloc.add(const CreateBudgetEvent(tBudget)),
+      act: (bloc) => bloc.add(CreateBudgetEvent(tBudget)),
       expect: () => [
         const BudgetError('Exception: Error creating'),
       ],
@@ -118,9 +120,9 @@ void main() {
         when(() => mockGetBudgets()).thenAnswer((_) async => tBudgetList);
         return bloc;
       },
-      act: (bloc) => bloc.add(const UpdateBudgetEvent(tBudget)),
+      act: (bloc) => bloc.add(UpdateBudgetEvent(tBudget)),
       expect: () => [
-        const BudgetActionSuccess(tBudgetList),
+        BudgetActionSuccess(tBudgetList),
       ],
       verify: (_) {
         verify(() => mockUpdateBudget(tBudget)).called(1);
@@ -134,7 +136,7 @@ void main() {
         when(() => mockUpdateBudget(any())).thenThrow(Exception('Error updating'));
         return bloc;
       },
-      act: (bloc) => bloc.add(const UpdateBudgetEvent(tBudget)),
+      act: (bloc) => bloc.add(UpdateBudgetEvent(tBudget)),
       expect: () => [
         const BudgetError('Exception: Error updating'),
       ],

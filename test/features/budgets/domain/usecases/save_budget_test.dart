@@ -12,11 +12,12 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(
-      const Budget(
+      Budget(
         id: 'fallback',
         categoryId: 'fallback',
         amount: 0,
         period: 'monthly',
+        updatedAt: DateTime.now(),
       ),
     );
   });
@@ -26,11 +27,12 @@ void main() {
     usecase = SaveBudget(mockRepository);
   });
 
-  const tBudget = Budget(
+  final tBudget = Budget(
     id: '1',
     categoryId: 'cat1',
     amount: 500.0,
     period: 'monthly',
+    updatedAt: DateTime.now(),
   );
 
   test('should save budget to repository', () async {

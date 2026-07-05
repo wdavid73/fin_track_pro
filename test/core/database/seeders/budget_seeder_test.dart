@@ -48,6 +48,7 @@ CategoryModel _cat(String name, String type) => CategoryModel(
   icon: 'icon',
   color: 0xFF000000,
   type: type,
+  updatedAt: DateTime.now(),
 );
 
 // Default categories: 2 expense + 1 income (income should be ignored)

@@ -37,20 +37,22 @@ class FakeTransactionEvent extends Fake implements TransactionEvent {}
 // Fixtures
 // ---------------------------------------------------------------------------
 
-final _tExpenseCategory = const Category(
+final _tExpenseCategory = Category(
   id: '1',
   name: 'Food',
   icon: 'restaurant',
   color: 0xFF000000,
   type: 'expense',
+  updatedAt: DateTime(2024, 1, 1),
 );
 
-final _tIncomeCategory = const Category(
+final _tIncomeCategory = Category(
   id: '2',
   name: 'Salary',
   icon: 'work',
   color: 0xFF00FF00,
   type: 'income',
+  updatedAt: DateTime(2024, 1, 1),
 );
 
 final _tDate = DateTime(2024, 1, 1);

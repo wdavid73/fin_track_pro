@@ -18,6 +18,7 @@ void main() {
         type: '',
         date: DateTime.now(),
         createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       ),
     );
   });
@@ -36,6 +37,7 @@ void main() {
       note: 'Test transaction',
       date: DateTime(2024, 1, 1),
       createdAt: DateTime(2024, 1, 1),
+      updatedAt: DateTime(2024, 1, 1),
     );
 
     test('should create transaction in repository', () async {

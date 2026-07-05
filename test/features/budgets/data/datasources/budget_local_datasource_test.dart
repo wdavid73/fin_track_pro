@@ -12,11 +12,12 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(
-      const BudgetModel(
+      BudgetModel(
         id: 'fallback',
         categoryId: 'fallback',
         amount: 0,
         period: 'monthly',
+        updatedAt: DateTime.now(),
       ),
     );
   });
@@ -26,11 +27,12 @@ void main() {
     datasource = BudgetLocalDatasource(mockBudgetBox);
   });
 
-  const tBudgetModel = BudgetModel(
+  final tBudgetModel = BudgetModel(
     id: '1',
     categoryId: 'cat1',
     amount: 500.0,
     period: 'monthly',
+    updatedAt: DateTime.now(),
   );
 
   group('BudgetLocalDatasource', () {

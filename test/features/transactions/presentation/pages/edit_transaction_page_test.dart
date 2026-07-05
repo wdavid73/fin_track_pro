@@ -32,22 +32,25 @@ final _transaction = Transaction(
   note: 'Groceries',
   date: DateTime(2025, 12, 15, 10, 0),
   createdAt: DateTime(2025, 12, 15),
+  updatedAt: DateTime(2025, 12, 15),
 );
 
 final _testCategories = [
-  const Category(
+  Category(
     id: 'cat-1',
     name: 'Food',
     icon: 'restaurant',
     color: 0xFF4CAF50,
     type: 'expense',
+    updatedAt: DateTime(2025, 12, 15),
   ),
-  const Category(
+  Category(
     id: 'cat-2',
     name: 'Salary',
     icon: 'work',
     color: 0xFF2196F3,
     type: 'income',
+    updatedAt: DateTime(2025, 12, 15),
   ),
 ];
 

@@ -125,13 +125,14 @@ void main() {
       blocTest<HomeBloc, HomeState>(
         'emits [Loading, Loaded] with multiple categories correctly mapped',
         build: () {
-          const tCategories = [
+          final tCategories = [
             Category(
               id: 'cat1',
               name: 'Food',
               icon: 'food',
               color: 1,
               type: 'expense',
+              updatedAt: DateTime.now(),
             ),
             Category(
               id: 'cat2',
@@ -139,6 +140,7 @@ void main() {
               icon: 'money',
               color: 2,
               type: 'income',
+              updatedAt: DateTime.now(),
             ),
             Category(
               id: 'cat3',
@@ -146,6 +148,7 @@ void main() {
               icon: 'car',
               color: 3,
               type: 'expense',
+              updatedAt: DateTime.now(),
             ),
           ];
           when(
@@ -225,6 +228,7 @@ void main() {
               type: 'expense',
               date: DateTime(2024, 1, i + 1),
               createdAt: DateTime(2024, 1, i + 1),
+              updatedAt: DateTime(2024, 1, i + 1),
             ),
           );
           when(

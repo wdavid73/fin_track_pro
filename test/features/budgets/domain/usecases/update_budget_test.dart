@@ -15,19 +15,21 @@ void main() {
   });
 
   setUpAll(() {
-    registerFallbackValue(const Budget(
+    registerFallbackValue(Budget(
       id: 'fallback',
       categoryId: 'fallback',
       amount: 0,
       period: 'monthly',
+      updatedAt: DateTime.now(),
     ));
   });
 
-  const tBudget = Budget(
+  final tBudget = Budget(
     id: '1',
     categoryId: 'cat1',
     amount: 700.0,
     period: 'monthly',
+    updatedAt: DateTime.now(),
   );
 
   test('should update budget using repository', () async {

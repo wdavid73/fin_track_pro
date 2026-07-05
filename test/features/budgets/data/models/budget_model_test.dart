@@ -3,18 +3,22 @@ import 'package:fin_track_pro/features/budgets/domain/entities/budget.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const tBudgetModel = BudgetModel(
+  final tUpdatedAt = DateTime(2026, 1, 1);
+
+  final tBudgetModel = BudgetModel(
     id: '1',
     categoryId: 'cat1',
     amount: 500.0,
     period: 'monthly',
+    updatedAt: tUpdatedAt,
   );
 
-  const tBudget = Budget(
+  final tBudget = Budget(
     id: '1',
     categoryId: 'cat1',
     amount: 500.0,
     period: 'monthly',
+    updatedAt: tUpdatedAt,
   );
 
   group('BudgetModel', () {

@@ -35,6 +35,7 @@ final _tExpense = Transaction(
   type: 'expense',
   date: DateTime(2024, 1, 1),
   createdAt: DateTime(2024, 1, 1),
+  updatedAt: DateTime(2024, 1, 1),
   note: 'Groceries',
 );
 
@@ -45,23 +46,26 @@ final _tIncome = Transaction(
   type: 'income',
   date: DateTime(2024, 1, 2),
   createdAt: DateTime(2024, 1, 2),
+  updatedAt: DateTime(2024, 1, 2),
   note: 'Salary',
 );
 
-final _tCategory1 = const Category(
+final _tCategory1 = Category(
   id: 'cat1',
   name: 'Food',
   icon: 'food',
   color: 0xFF000000,
   type: 'expense',
+  updatedAt: DateTime(2024, 1, 1),
 );
 
-final _tCategory2 = const Category(
+final _tCategory2 = Category(
   id: 'cat2',
   name: 'Income',
   icon: 'money',
   color: 0xFF000000,
   type: 'income',
+  updatedAt: DateTime(2024, 1, 1),
 );
 
 // ---------------------------------------------------------------------------

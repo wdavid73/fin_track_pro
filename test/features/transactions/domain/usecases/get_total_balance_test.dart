@@ -23,6 +23,7 @@ void main() {
       type: 'income',
       date: DateTime.now(),
       createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
       note: 'Income',
     ),
     Transaction(
@@ -32,6 +33,7 @@ void main() {
       type: 'expense',
       date: DateTime.now(),
       createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
       note: 'Expense',
     ),
   ];

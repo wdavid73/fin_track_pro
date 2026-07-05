@@ -23,6 +23,7 @@ void main() {
         type: 'expense',
         date: DateTime.now(),
         createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
         note: 'fallback',
       ),
     );
@@ -45,6 +46,7 @@ void main() {
     type: 'expense',
     date: DateTime(2024, 1, 1),
     createdAt: DateTime(2024, 1, 1),
+    updatedAt: DateTime(2024, 1, 1),
     note: 'Test',
   );
 
@@ -134,6 +136,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 1).add(Duration(days: index)),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
             note: 'Test $index',
           ),
         );
@@ -164,6 +167,7 @@ void main() {
               type: 'expense',
               date: DateTime(2024, 1, 1).add(Duration(days: index)),
               createdAt: DateTime(2024, 1, 1),
+              updatedAt: DateTime(2024, 1, 1),
               note: 'Test $index',
             ),
           );
@@ -193,6 +197,7 @@ void main() {
               type: 'expense',
               date: DateTime(2024, 1, 1).add(Duration(days: index)),
               createdAt: DateTime(2024, 1, 1),
+              updatedAt: DateTime(2024, 1, 1),
               note: 'Test $index',
             ),
           );
@@ -223,6 +228,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 6),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '2',
@@ -231,6 +237,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 4),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '3',
@@ -239,6 +246,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 8),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
         ];
         when(() => mockBox.values).thenReturn(tTransactions);
@@ -267,6 +275,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 5),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '2',
@@ -275,6 +284,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 15),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '3',
@@ -283,6 +293,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 10),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
         ];
         when(() => mockBox.values).thenReturn(tTransactions);
@@ -310,6 +321,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 1),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '2',
@@ -318,6 +330,7 @@ void main() {
             type: 'income',
             date: DateTime(2024, 1, 2),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '3',
@@ -326,6 +339,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 3),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
         ];
         when(() => mockBox.values).thenReturn(tTransactions);
@@ -348,6 +362,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 1),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '2',
@@ -356,6 +371,7 @@ void main() {
             type: 'income',
             date: DateTime(2024, 1, 2),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
         ];
         when(() => mockBox.values).thenReturn(tTransactions);
@@ -379,6 +395,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 1),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '2',
@@ -387,6 +404,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 5),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
         ];
         when(() => mockBox.values).thenReturn(tTransactions);
@@ -411,6 +429,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 1),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '2',
@@ -419,6 +438,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 2),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '3',
@@ -427,6 +447,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 3),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
         ];
         when(() => mockBox.values).thenReturn(tTransactions);
@@ -453,6 +474,7 @@ void main() {
               type: 'expense',
               date: DateTime(2024, 1, 1),
               createdAt: DateTime(2024, 1, 1),
+              updatedAt: DateTime(2024, 1, 1),
             ),
           ];
           when(() => mockBox.values).thenReturn(tTransactions);
@@ -475,6 +497,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 1),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '2',
@@ -483,6 +506,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 10),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
           TransactionModel(
             id: '3',
@@ -491,6 +515,7 @@ void main() {
             type: 'expense',
             date: DateTime(2024, 1, 5),
             createdAt: DateTime(2024, 1, 1),
+            updatedAt: DateTime(2024, 1, 1),
           ),
         ];
         when(() => mockBox.values).thenReturn(tTransactions);

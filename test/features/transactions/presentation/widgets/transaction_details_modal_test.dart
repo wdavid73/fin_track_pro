@@ -26,6 +26,7 @@ final _incomeTransaction = Transaction(
   note: 'Monthly salary',
   date: DateTime(2025, 12, 15, 10, 30),
   createdAt: DateTime(2025, 12, 15),
+  updatedAt: DateTime(2025, 12, 15),
 );
 
 final _expenseTransaction = Transaction(
@@ -36,6 +37,7 @@ final _expenseTransaction = Transaction(
   note: 'Lunch',
   date: DateTime(2025, 12, 16, 13, 0),
   createdAt: DateTime(2025, 12, 16),
+  updatedAt: DateTime(2025, 12, 16),
 );
 
 Widget _buildModal({
@@ -127,6 +129,7 @@ void main() {
         note: null,
         date: DateTime(2025, 12, 15, 10, 30),
         createdAt: DateTime(2025, 12, 15),
+        updatedAt: DateTime(2025, 12, 15),
       );
       await tester.pumpWidget(
         _buildModal(transaction: noNoteTransaction, bloc: mockBloc),

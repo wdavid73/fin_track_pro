@@ -3,20 +3,24 @@ import 'package:fin_track_pro/features/categories/domain/entities/category.dart'
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const tCategoryModel = CategoryModel(
+  final tUpdatedAt = DateTime(2026, 1, 1);
+
+  final tCategoryModel = CategoryModel(
     id: '1',
     name: 'Food',
     icon: 'food_icon',
     color: 123,
     type: 'expense',
+    updatedAt: tUpdatedAt,
   );
 
-  const tCategory = Category(
+  final tCategory = Category(
     id: '1',
     name: 'Food',
     icon: 'food_icon',
     color: 123,
     type: 'expense',
+    updatedAt: tUpdatedAt,
   );
 
   group('CategoryModel', () {

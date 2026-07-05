@@ -14,6 +14,7 @@ void main() {
     note: 'Test note',
     date: tDateTime,
     createdAt: tCreatedAt,
+    updatedAt: tCreatedAt,
   );
 
   final tTransaction = Transaction(
@@ -24,6 +25,7 @@ void main() {
     note: 'Test note',
     date: tDateTime,
     createdAt: tCreatedAt,
+    updatedAt: tCreatedAt,
   );
 
   group('TransactionModel', () {
@@ -45,6 +47,7 @@ void main() {
           type: 'income',
           date: tDateTime,
           createdAt: tCreatedAt,
+          updatedAt: tCreatedAt,
         );
 
         final result = TransactionModel.fromEntity(tTransactionWithoutNote);
@@ -88,6 +91,7 @@ void main() {
           note: 'Test',
           date: tDateTime,
           createdAt: tCreatedAt,
+          updatedAt: tCreatedAt,
         );
 
         final model2 = TransactionModel(
@@ -98,6 +102,7 @@ void main() {
           note: 'Test',
           date: tDateTime,
           createdAt: tCreatedAt,
+          updatedAt: tCreatedAt,
         );
 
         expect(model1, equals(model2));
@@ -111,6 +116,7 @@ void main() {
           type: 'expense',
           date: tDateTime,
           createdAt: tCreatedAt,
+          updatedAt: tCreatedAt,
         );
 
         final model2 = TransactionModel(
@@ -120,6 +126,7 @@ void main() {
           type: 'expense',
           date: tDateTime,
           createdAt: tCreatedAt,
+          updatedAt: tCreatedAt,
         );
 
         expect(model1, isNot(equals(model2)));

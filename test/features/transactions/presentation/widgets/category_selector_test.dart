@@ -7,19 +7,21 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   final tCategories = [
-    const Category(
+    Category(
       id: '1',
       name: 'Food',
       icon: 'restaurant',
       color: 0xFF000000,
       type: 'expense',
+      updatedAt: DateTime(2024, 1, 1),
     ),
-    const Category(
+    Category(
       id: '2',
       name: 'Salary',
       icon: 'work',
       color: 0xFF000000,
       type: 'income',
+      updatedAt: DateTime(2024, 1, 1),
     ),
   ];
 

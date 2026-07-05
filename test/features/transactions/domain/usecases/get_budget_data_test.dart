@@ -32,12 +32,13 @@ void main() {
     );
   });
 
-  final tCategory = const Category(
+  final tCategory = Category(
     id: 'cat1',
     name: 'Food',
     icon: 'food',
     color: 1,
     type: 'expense',
+    updatedAt: DateTime.now(),
   );
 
   final tTransaction = Transaction(
@@ -47,14 +48,16 @@ void main() {
     type: 'expense',
     date: DateTime.now(),
     createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
     note: 'Lunch',
   );
 
-  final tBudget = const Budget(
+  final tBudget = Budget(
     id: '1',
     categoryId: 'cat1',
     amount: 500.0,
     period: 'monthly',
+    updatedAt: DateTime.now(),
   );
 
   test('should return correct BudgetData', () async {

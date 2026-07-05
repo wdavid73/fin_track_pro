@@ -16,20 +16,22 @@ void main() {
   late MockGetCategories mockGetCategories;
   late MockCreateTransaction mockCreateTransaction;
 
-  const tCategory1 = Category(
+  final tCategory1 = Category(
     id: 'cat1',
     name: 'Food',
     icon: '🍔',
     color: 123,
     type: 'expense',
+    updatedAt: DateTime(2024, 1, 1),
   );
 
-  const tCategory2 = Category(
+  final tCategory2 = Category(
     id: 'cat2',
     name: 'Salary',
     icon: '💼',
     color: 456,
     type: 'income',
+    updatedAt: DateTime(2024, 1, 1),
   );
 
   final tCategories = [tCategory1, tCategory2];
@@ -44,6 +46,7 @@ void main() {
         type: 'expense',
         date: DateTime.now(),
         createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       ),
     );
   });

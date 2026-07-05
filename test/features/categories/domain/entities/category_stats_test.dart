@@ -4,15 +4,16 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('CategoryStats', () {
-    const tCategory = Category(
+    final tCategory = Category(
       id: '1',
       name: 'Groceries',
       icon: 'shopping_bag',
       color: 0xFF4CAF50,
       type: 'expense',
+      updatedAt: DateTime(2026, 1, 1),
     );
 
-    const tCategoryStats = CategoryStats(
+    final tCategoryStats = CategoryStats(
       category: tCategory,
       transactionCount: 5,
       totalAmount: 250.50,
@@ -40,12 +41,12 @@ void main() {
 
     test('two instances with same values should be equal', () {
       // arrange
-      const tCategoryStats1 = CategoryStats(
+      final tCategoryStats1 = CategoryStats(
         category: tCategory,
         transactionCount: 5,
         totalAmount: 250.50,
       );
-      const tCategoryStats2 = CategoryStats(
+      final tCategoryStats2 = CategoryStats(
         category: tCategory,
         transactionCount: 5,
         totalAmount: 250.50,
@@ -57,12 +58,12 @@ void main() {
 
     test('two instances with different values should not be equal', () {
       // arrange
-      const tCategoryStats1 = CategoryStats(
+      final tCategoryStats1 = CategoryStats(
         category: tCategory,
         transactionCount: 5,
         totalAmount: 250.50,
       );
-      const tCategoryStats2 = CategoryStats(
+      final tCategoryStats2 = CategoryStats(
         category: tCategory,
         transactionCount: 10,
         totalAmount: 500.00,
@@ -82,7 +83,7 @@ void main() {
 
     test('should handle zero transaction count', () {
       // arrange
-      const tStatsWithZero = CategoryStats(
+      final tStatsWithZero = CategoryStats(
         category: tCategory,
         transactionCount: 0,
         totalAmount: 0.0,
@@ -95,7 +96,7 @@ void main() {
 
     test('should handle large transaction count', () {
       // arrange
-      const tStatsWithLargeCount = CategoryStats(
+      final tStatsWithLargeCount = CategoryStats(
         category: tCategory,
         transactionCount: 1000,
         totalAmount: 50000.99,

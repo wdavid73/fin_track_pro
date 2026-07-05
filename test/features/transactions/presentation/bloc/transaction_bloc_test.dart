@@ -43,6 +43,7 @@ void main() {
       type: 'expense',
       date: DateTime(2024, 1, 1),
       createdAt: DateTime(2024, 1, 1),
+      updatedAt: DateTime(2024, 1, 1),
     ),
     Transaction(
       id: '2',
@@ -51,6 +52,7 @@ void main() {
       type: 'income',
       date: DateTime(2024, 1, 2),
       createdAt: DateTime(2024, 1, 2),
+      updatedAt: DateTime(2024, 1, 2),
     ),
   ];
 
@@ -131,6 +133,7 @@ void main() {
         type: 'expense',
         date: DateTime(2024, 1, 3),
         createdAt: DateTime(2024, 1, 3),
+        updatedAt: DateTime(2024, 1, 3),
       );
 
       setUpAll(() {
@@ -204,6 +207,7 @@ void main() {
         type: 'expense',
         date: DateTime(2024, 1, 1),
         createdAt: DateTime(2024, 1, 1),
+        updatedAt: DateTime(2024, 1, 1),
       );
 
       setUpAll(() {
@@ -363,6 +367,7 @@ void main() {
               type: 'expense',
               date: DateTime(2024, 1, i + 1),
               createdAt: DateTime(2024, 1, i + 1),
+              updatedAt: DateTime(2024, 1, i + 1),
             ),
           );
           when(
@@ -414,6 +419,7 @@ void main() {
           type: 'expense',
           date: DateTime(2024, 1, i + 1),
           createdAt: DateTime(2024, 1, i + 1),
+          updatedAt: DateTime(2024, 1, i + 1),
         ),
       );
 
@@ -426,6 +432,7 @@ void main() {
           type: 'expense',
           date: DateTime(2024, 1, i + 16),
           createdAt: DateTime(2024, 1, i + 16),
+          updatedAt: DateTime(2024, 1, i + 16),
         ),
       );
 

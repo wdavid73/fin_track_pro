@@ -22,13 +22,14 @@ void main() {
     );
   });
 
-  const tCategories = [
+  final tCategories = [
     Category(
       id: 'cat1',
       name: 'Groceries',
       icon: 'shopping_bag',
       color: 0xFF4CAF50,
       type: 'expense',
+      updatedAt: DateTime(2026, 1, 1),
     ),
     Category(
       id: 'cat2',
@@ -36,6 +37,7 @@ void main() {
       icon: 'directions_car',
       color: 0xFF2196F3,
       type: 'expense',
+      updatedAt: DateTime(2026, 1, 1),
     ),
   ];
 
@@ -47,6 +49,7 @@ void main() {
       type: 'expense',
       date: DateTime(2024, 1, 1),
       createdAt: DateTime(2024, 1, 1),
+      updatedAt: DateTime(2024, 1, 1),
     ),
     Transaction(
       id: '2',
@@ -55,6 +58,7 @@ void main() {
       type: 'expense',
       date: DateTime(2024, 1, 2),
       createdAt: DateTime(2024, 1, 2),
+      updatedAt: DateTime(2024, 1, 2),
     ),
   ];
 
@@ -66,6 +70,7 @@ void main() {
       type: 'expense',
       date: DateTime(2024, 1, 1),
       createdAt: DateTime(2024, 1, 1),
+      updatedAt: DateTime(2024, 1, 1),
     ),
   ];
 
@@ -162,6 +167,7 @@ void main() {
           type: 'expense',
           date: DateTime(2024, 1, 1),
           createdAt: DateTime(2024, 1, 1),
+          updatedAt: DateTime(2024, 1, 1),
         ),
         Transaction(
           id: '2',
@@ -170,6 +176,7 @@ void main() {
           type: 'expense',
           date: DateTime(2024, 1, 2),
           createdAt: DateTime(2024, 1, 2),
+          updatedAt: DateTime(2024, 1, 2),
         ),
       ];
 
@@ -229,6 +236,7 @@ void main() {
           type: 'expense',
           date: DateTime(2024, 1, 1).add(Duration(days: index)),
           createdAt: DateTime(2024, 1, 1),
+          updatedAt: DateTime(2024, 1, 1),
         ),
       );
 
