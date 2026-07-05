@@ -8,6 +8,7 @@ class Transaction extends Equatable {
   final String? note;
   final DateTime date;
   final DateTime createdAt;
+  final DateTime updatedAt;
 
   const Transaction({
     required this.id,
@@ -17,6 +18,7 @@ class Transaction extends Equatable {
     this.note,
     required this.date,
     required this.createdAt,
+    required this.updatedAt,
   });
 
   @override
@@ -28,6 +30,7 @@ class Transaction extends Equatable {
     note,
     date,
     createdAt,
+    updatedAt,
   ];
 
   Transaction copyWith({
@@ -38,6 +41,7 @@ class Transaction extends Equatable {
     String? note,
     DateTime? date,
     DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return Transaction(
       id: id ?? this.id,
@@ -47,6 +51,7 @@ class Transaction extends Equatable {
       note: note ?? this.note,
       date: date ?? this.date,
       createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 

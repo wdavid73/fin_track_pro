@@ -32,9 +32,17 @@ void main() {
       expect(a, isNot(equals(b)));
     });
 
-    test('props contains themeMode', () {
+    test('props contains themeMode and hasSeenOnboarding', () {
       const entity = SettingsEntity(themeMode: ThemeMode.light);
-      expect(entity.props, [ThemeMode.light]);
+      expect(entity.props, [ThemeMode.light, false]);
+    });
+
+    test('props reflects hasSeenOnboarding when true', () {
+      const entity = SettingsEntity(
+        themeMode: ThemeMode.dark,
+        hasSeenOnboarding: true,
+      );
+      expect(entity.props, [ThemeMode.dark, true]);
     });
 
     // ── copyWith() ────────────────────────────────────────────────────────

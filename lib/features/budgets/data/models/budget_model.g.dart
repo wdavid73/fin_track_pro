@@ -21,13 +21,14 @@ class BudgetModelAdapter extends TypeAdapter<BudgetModel> {
       categoryId: fields[1] as String,
       amount: (fields[2] as num).toDouble(),
       period: fields[3] == null ? 'monthly' : fields[3] as String,
+      updatedAt: fields[4] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, BudgetModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class BudgetModelAdapter extends TypeAdapter<BudgetModel> {
       ..writeByte(2)
       ..write(obj.amount)
       ..writeByte(3)
-      ..write(obj.period);
+      ..write(obj.period)
+      ..writeByte(4)
+      ..write(obj.updatedAt);
   }
 
   @override

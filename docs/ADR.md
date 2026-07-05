@@ -19,6 +19,7 @@
 - [ADR-007: Conventional Commits with Gitmoji](#adr-007-conventional-commits-with-gitmoji)
 - [ADR-008: Flutter Flavors for Environment Management](#adr-008-flutter-flavors-for-environment-management)
 - [ADR-009: Patrol para Integration Tests](#adr-009-patrol-para-integration-tests)
+- [ADR-010: Alchemist para Golden Tests](#adr-010-alchemist-para-golden-tests)
 
 ---
 
@@ -656,6 +657,57 @@ dependencies {
 
 ---
 
+## ADR-010: Alchemist para Golden Tests
+
+**Status:** ✅ Accepted
+**Date:** 2026-05-02
+**Decision Makers:** Wilson David Padilla
+**Phase:** 2
+
+### Context
+
+El proyecto utilizaba `golden_toolkit` para tests de regresión visual (Golden Tests). Sin embargo, `golden_toolkit` fue descontinuado.
+Además, los tests visuales solían fallar en CI (GitHub Actions en Ubuntu) cuando se generaban localmente en macOS debido a diferencias sutiles en el renderizado de fuentes (anti-aliasing) entre plataformas. Esto requería un comparador personalizado ignorando un porcentaje de píxeles, lo que podía ocultar errores reales.
+
+### Decision
+
+Migrar todos los tests de regresión visual de `golden_toolkit` a **alchemist (^0.14.0)**.
+
+### Rationale
+
+**Pros:**
+- Mantenimiento activo.
+- Diferenciación nativa entre modo local (texto legible) y modo CI (texto reemplazado por bloques oscurecidos) a través de variables de entorno, eliminando falsos positivos por fuentes cross-platform.
+- API declarativa limpia (`GoldenTestGroup`, `GoldenTestScenario`).
+- No requiere umbrales de tolerancia artificiales en CI.
+
+**Cons:**
+- Requiere regenerar todas las imágenes de referencia.
+- Incompatibilidad en versiones menores (Flutter 3.41 requirió actualizar a alchemist 0.14.0).
+
+**Alternatives Considered:**
+- **Mantener `golden_toolkit`**: Descartado por estar descontinuado.
+- **`flutter_test` nativo**: Muy básico, no maneja "font blocking" para CI ni emulación de múltiples estados fácilmente.
+
+### Consequences
+
+**Positive:**
+- Pipeline de CI/CD más robusto (0 falsos positivos por fuentes).
+- Configuración global más limpia en `flutter_test_config.dart`.
+- Job de CI dedicado que sube artefactos con diffs visuales en caso de fallos.
+
+**Negative:**
+- El texto no es legible en las imágenes de CI, por lo que la revisión de strings debe hacerse en modo local.
+
+**Mitigation:**
+- Las imágenes generadas localmente (`macos/`) se añaden a `.gitignore` para no contaminar el repo, pero sirven para validación en la máquina del desarrollador.
+
+### Status
+
+✅ **Validated** - Migración completada, 3 widgets cubiertos (12 escenarios) corriendo exitosamente en local y configurados para CI.
+
+---
+
 ## ADR Template
 
 Use this template for future ADRs:
@@ -710,6 +762,7 @@ Use this template for future ADRs:
 | 1.0 | 2025-12-06 | Wilson David Padilla | Initial ADR document created |
 | - | - | - | 8 ADRs documented (001-008) |
 | 1.1 | 2026-03-08 | Wilson David Padilla | ADR-009 Patrol integration tests |
+| 1.2 | 2026-05-02 | Wilson David Padilla | ADR-010 Alchemist para Golden Tests |
 
 ---
 

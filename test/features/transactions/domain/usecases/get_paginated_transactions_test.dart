@@ -22,6 +22,7 @@ void main() {
     type: 'expense',
     date: DateTime.now(),
     createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
     note: 'Test',
   );
 

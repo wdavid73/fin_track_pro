@@ -6,6 +6,7 @@ class Category extends Equatable {
   final String icon;
   final int color;
   final String type; // 'income' or 'expense'
+  final DateTime updatedAt;
 
   const Category({
     required this.id,
@@ -13,10 +14,29 @@ class Category extends Equatable {
     required this.icon,
     required this.color,
     required this.type,
+    required this.updatedAt,
   });
 
   @override
-  List<Object?> get props => [id, name, icon, color, type];
+  List<Object?> get props => [id, name, icon, color, type, updatedAt];
+
+  Category copyWith({
+    String? id,
+    String? name,
+    String? icon,
+    int? color,
+    String? type,
+    DateTime? updatedAt,
+  }) {
+    return Category(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      color: color ?? this.color,
+      type: type ?? this.type,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 
   @override
   String toString() {

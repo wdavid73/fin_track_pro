@@ -6,6 +6,7 @@ analyzer:
   exclude:
     - "**.g.dart" # Generated files (if you use any code generation tools later)
     - "**.freezed.dart" # Freezed-generated files (kept here just in case event if not used)
+    - build/**
 linter:
   rules:
     # Formatting and code styles rules

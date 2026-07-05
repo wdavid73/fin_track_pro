@@ -2,9 +2,9 @@
  
  > Quick reference for project state and next actions
  
- **Last Updated:** 2026-02-22
-**Current Date:** Week of 2026-02-22
-**Phase:** Phase 2 - Advanced Features (Upcoming)
+ **Last Updated:** 2026-07-05
+**Current Date:** Week of 2026-07-05
+**Phase:** Phase 2 - Advanced Features (In Progress)
 **Phase 0 Status:** ✅ Complete (100%)
 **Phase 1 Status:** ✅ Complete (100%)
  
@@ -37,16 +37,24 @@
 - ✅ **Core tests: Failures, ShimmerBox, Skeleton, SettingsEntity, SettingsLocalDatasource** (35 tests)
 - ✅ **CI/CD: coverage gate ≥60% + lcov install + PR emoji comment**
 - ✅ **Target de cobertura revisado a ≥75%** (81.5% alcanzado ✅)
-- ✅ **Golden Tests: 4 escenarios** — TransactionCard income/expense/long title/no-hero (capturas base generadas)
+- ✅ **Golden Tests (Alchemist): 12 escenarios** — TransactionCard, StatCard, y BalanceHeroCard con text-blocking para CI y 0% de flaky tests por fuentes.
 - ✅ **Patrol configurado**: patrol.yaml + smoke_test.dart (3 flujos: tabs, FAB, filtros)
 - ✅ **Fastlane Android**: lanes test/beta/release + Firebase App Distribution
 - ✅ **Fastlane iOS**: lanes test/beta/release + Match + TestFlight + ExportOptions-adhoc.plist
 - ✅ **CD Workflow**: .github/workflows/cd.yml con 5 jobs (Quality Gate → Goldens → Android Beta → iOS Beta → Notify)
 - ✅ **Widget Keys**: home_page, analytics_page, categories_page, settings_page añadidas para Patrol
 - ✅ **AUTOMATION_INFRASTRUCTURE.md**: Documentación de la infraestructura de automatización
+- ✅ **Onboarding Flow:** Implemented and tested (Phase 2)
+- ✅ **Data Export:** CSV export functionality implemented (Phase 2)
+- ✅ **Firebase Integration:** Analytics & Crashlytics configured (Phase 2)
+- ✅ **Authentication:** Firebase Auth (Email/Google) complete with UI & validation (Phase 2)
+- ✅ **Home Screen:** Refactored into modular, maintainable widgets
+- ✅ **Cloud Sync (Firestore):** Offline-first sync for Transactions/Categories/Budgets — `updatedAt` LWW merge, dual local/remote repositories, `SyncService` wired to `AuthBloc`, Firestore data namespaced per flavor (`environments/{dev|staging|prod}/users/{uid}/...`), `firestore.rules` deployed (Phase 2)
 
  ### What's Missing
  - 🟡 Demo video and screenshots
+ - 🟡 Integration tests (Patrol) for Firestore sync — dev flavor, planned next session
+ - 🟡 Pull-to-refresh
  - ✅ UI polish & advanced animations (Complete)
  
  ---
@@ -76,6 +84,15 @@
  Completed:          Unit tests (100+), Widget tests (Comprehensive), E2E Patrol
  Coverage Gate:      ≥60% enforced in CI ✅ | Actual: 81.5% 🎉
  ```
+
+ ### 🚀 Phase 2: Advanced Features & Cloud (In Progress)
+
+ ```
+ Phase 2 Progress: ███████████░░░░░░░░░ 55% 🟡
+
+ Focus Areas:        Onboarding, Firebase Auth, Analytics, Cloud Sync
+ Completed:          Onboarding, CSV Export, Firebase Auth, Crashlytics, Home Refactor, Firestore Cloud Sync
+ ```
  
  ### Feature Breakdown
  
@@ -83,10 +100,11 @@
  |---------|--------|------|----|----|------------|
  | **Transactions** | 100% | 100% | 100% | 100% | **100%** ✅ |
  | **Categories** | 100% | 100% | 95% | 100% | **98%** ✅ |
- | **Budgets** | 100% | 100% | 40% | 100% | **65%** 🟡 |
- | **Home** | 100% | 100% | 80% | 100% | **75%** 🟢 |
+ | **Budgets** | 100% | 100% | 100% | 100% | **100%** ✅ |
+ | **Home** | 100% | 100% | 100% | 100% | **100%** ✅ |
  | **Analytics** | 100% | 100% | 100% | 100% | **95%** ✅ |
  | **Settings** | 100% | 100% | 100% | 100% | **100%** ✅ |
+ | **Auth** | 100% | 100% | 100% | 0% | **75%** 🟢 |
  | **Splash** | 100% | N/A | 100% | 0% | **80%** 🟢 |
  
  ---
@@ -189,10 +207,10 @@
  ### Deferred to Later Phases
  - [ ] Demo video (3 minutes) - **Deferred to Phase 1**
  - [ ] Portfolio screenshots - **Deferred to Phase 1**
- - [ ] Budget CRUD UI (data layer ready) - **Phase 2**
- - [ ] Data export - **Phase 2**
+ - [x] Budget CRUD UI (data layer ready) - **Phase 2** (Completed)
+ - [x] Data export - **Phase 2** (Completed)
  - [ ] Pull-to-refresh - **Phase 2**
- - [ ] Onboarding flow - **Phase 2**
+ - [x] Onboarding flow - **Phase 2** (Completed)
 
  ## 🎯 Phase 1 Goals (Testing & CI/CD) - COMPLETE! 🎉
 
@@ -244,7 +262,7 @@
  - **Total Files:** 133+ Dart files
  - **Lines of Code:** 10,500+
  - **Features:** 7 (transactions, categories, budgets, home, analytics, settings, splash)
- - **Test Files:** 76 files / **386 tests** 🎉
+ - **Test Files:** 106 files / **2,215+ tests** 🎉
  - **Test Coverage:** **72.3%** (filtrado, excl. generados)
  - **Commits:** 26+
  - **Active Days:** 11 (Nov 23, 24, 25, 29, 30, Dec 6, 8, 13, 24, Feb 21 x2)
@@ -334,14 +352,27 @@
  - [x] Analytics Period enum unit tests
  - [x] Expand Patrol integration tests (End-to-end critical flows)
  - [ ] Demo video and portfolio screenshots
- 
+
+ ### Session Jul 5, 2026 ✅ — Firestore Cloud Sync
+ - [x] `updatedAt` field + `copyWith` on Transaction/Category/Budget (entities + Hive models)
+ - [x] Defensive Hive box recovery on incompatible schema (crash fix found mid-session)
+ - [x] Firestore remote datasources + dual local/remote repositories for the 3 features
+ - [x] `SyncService` with Last-Write-Wins merge, wired to `AuthBloc` in `main.dart`
+ - [x] Firestore data namespaced per flavor (`environments/{dev|staging|prod}/...`) — 3 flavors share one Firebase project
+ - [x] `firestore.rules` + Firebase CLI setup (`.firebaserc`, `firestore.indexes.json`), rules deployed
+ - [x] `docs/FIRESTORE_SYNC_GUIDE.md` rewritten to match the real implementation
+
+ ### Next Steps (Phase 2)
+ - [ ] Integration tests with Patrol for Firestore sync (dev flavor) — planned next session
+ - [ ] Demo video and portfolio screenshots
+
  ---
  
  **Remember:** Progress over perfection. Every weekend gets you closer to your goals! 🚀
 
- **Document Version:** 2.0
- **Last Major Update:** 2026-01-11 (Phase 0 Complete! Phase 1 Beginning!)
- **Status:** 🟢 Active Development - **Phase 1 Started!**
+ **Document Version:** 2.2
+ **Last Major Update:** 2026-07-05 (Phase 2 Firestore Cloud Sync)
+ **Status:** 🟢 Active Development - **Phase 2 In Progress!**
 
  **Key Update:** 🎉 **PHASE 0 COMPLETE!** 🎉
  - 133+ Dart files with 10,500+ LOC

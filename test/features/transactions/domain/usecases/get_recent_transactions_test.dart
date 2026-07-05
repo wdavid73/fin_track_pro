@@ -24,6 +24,7 @@ void main() {
       type: 'expense',
       date: DateTime(2024, 1, 1).add(Duration(days: index)),
       createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
       note: 'Test $index',
     ),
   );

@@ -354,4 +354,203 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get filterByCategory => 'Filtrar por Categoría';
+
+  @override
+  String get newBudget => 'Nuevo Presupuesto';
+
+  @override
+  String get editBudget => 'Editar Presupuesto';
+
+  @override
+  String get budgetAmount => 'Monto del Presupuesto';
+
+  @override
+  String get period => 'Período';
+
+  @override
+  String get monthly => 'Mensual';
+
+  @override
+  String get weekly => 'Semanal';
+
+  @override
+  String get yearly => 'Anual';
+
+  @override
+  String get selectACategory => 'Selecciona una categoría';
+
+  @override
+  String get enterAmount => 'Ingresa el monto';
+
+  @override
+  String get pleaseSelectCategory => 'Por favor selecciona una categoría';
+
+  @override
+  String get pleaseEnterAmount => 'Por favor ingresa un monto';
+
+  @override
+  String get pleaseEnterValidAmount => 'Por favor ingresa un monto válido';
+
+  @override
+  String get deleteBudget => 'Eliminar Presupuesto';
+
+  @override
+  String get areYouSureDeleteBudget =>
+      '¿Estás seguro de que quieres eliminar este presupuesto?';
+
+  @override
+  String get budgetDeleted => 'Presupuesto eliminado';
+
+  @override
+  String get budgetSaved => 'Presupuesto guardado';
+
+  @override
+  String get budgetUpdated => 'Presupuesto actualizado';
+
+  @override
+  String get detailTransactions => 'Transacciones';
+
+  @override
+  String detailMovements(int count) {
+    return '$count movimientos';
+  }
+
+  @override
+  String get detailNoTransactions => 'Sin transacciones';
+
+  @override
+  String get detailUsed => 'usado';
+
+  @override
+  String detailBudgeted(String total) {
+    return 'de $total presupuestado';
+  }
+
+  @override
+  String detailExceededBy(String amount) {
+    return '$amount excedido';
+  }
+
+  @override
+  String detailAvailable(String amount) {
+    return '$amount disponible';
+  }
+
+  @override
+  String get detailAvgPerDay => 'Promedio/día';
+
+  @override
+  String get detailDaysRemaining => 'Días restantes';
+
+  @override
+  String get onboardingWelcomeTitle => 'Bienvenido a FinTrack Pro';
+
+  @override
+  String get onboardingWelcomeDesc =>
+      'Tu gestor de finanzas personales diseñado para darte control total sobre tu dinero.';
+
+  @override
+  String get onboardingTrackTitle => 'Rastrea gastos fácilmente';
+
+  @override
+  String get onboardingTrackDesc =>
+      'Registra tus transacciones diarias rápidamente y categorízalas para ver exactamente a dónde va tu dinero.';
+
+  @override
+  String get onboardingBudgetTitle => 'Presupuestos Inteligentes';
+
+  @override
+  String get onboardingBudgetDesc =>
+      'Configura presupuestos para diferentes categorías y mantente al día con indicadores visuales de progreso.';
+
+  @override
+  String get onboardingAnalyticsTitle => 'Análisis Profundos';
+
+  @override
+  String get onboardingAnalyticsDesc =>
+      'Comprende tus hábitos de gasto con gráficos interactivos y detalles financieros.';
+
+  @override
+  String get getStarted => 'Comenzar';
+
+  @override
+  String get next => 'Siguiente';
+
+  @override
+  String get skip => 'Omitir';
+
+  @override
+  String get signIn => 'Iniciar Sesión';
+
+  @override
+  String get signUp => 'Registrarse';
+
+  @override
+  String get signOut => 'Cerrar Sesión';
+
+  @override
+  String get email => 'Correo';
+
+  @override
+  String get password => 'Contraseña';
+
+  @override
+  String get confirmPassword => 'Confirmar Contraseña';
+
+  @override
+  String get displayName => 'Nombre';
+
+  @override
+  String get signInWithGoogle => 'Continuar con Google';
+
+  @override
+  String get dontHaveAccount => '¿No tienes cuenta?';
+
+  @override
+  String get alreadyHaveAccount => '¿Ya tienes cuenta?';
+
+  @override
+  String get authError => 'Error de autenticación. Inténtalo de nuevo.';
+
+  @override
+  String get passwordsDoNotMatch => 'Las contraseñas no coinciden.';
+
+  @override
+  String get invalidEmail => 'Ingresa un correo válido.';
+
+  @override
+  String get passwordTooShort =>
+      'La contraseña debe tener al menos 6 caracteres.';
+
+  @override
+  String get fieldTooLong => 'Este campo es demasiado largo.';
+
+  @override
+  String get welcomeBack => 'Bienvenido de nuevo';
+
+  @override
+  String get createAccount => 'Crear Cuenta';
+
+  @override
+  String get authErrorInvalidCredential => 'Correo o contraseña incorrectos.';
+
+  @override
+  String get authErrorInvalidEmail => 'El correo electrónico no es válido.';
+
+  @override
+  String get authErrorUserDisabled => 'Esta cuenta ha sido deshabilitada.';
+
+  @override
+  String get authErrorTooManyRequests =>
+      'Demasiados intentos fallidos. Inténtalo más tarde.';
+
+  @override
+  String get authErrorEmailAlreadyInUse =>
+      'Ya existe una cuenta con este correo.';
+
+  @override
+  String get authErrorWeakPassword => 'La contraseña es demasiado débil.';
+
+  @override
+  String get authErrorNetworkFailed => 'Error de red. Verifica tu conexión.';
 }

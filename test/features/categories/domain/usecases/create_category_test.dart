@@ -11,7 +11,14 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(
-      const Category(id: '', name: '', icon: '', color: 0, type: ''),
+      Category(
+        id: '',
+        name: '',
+        icon: '',
+        color: 0,
+        type: '',
+        updatedAt: DateTime(2026, 1, 1),
+      ),
     );
   });
 
@@ -21,12 +28,13 @@ void main() {
   });
 
   group('CreateCategory', () {
-    const tCategory = Category(
+    final tCategory = Category(
       id: '1',
       name: 'Groceries',
       icon: '🛒',
       color: 0xFF4CAF50,
       type: 'expense',
+      updatedAt: DateTime(2026, 1, 1),
     );
 
     test('should create category in repository', () async {

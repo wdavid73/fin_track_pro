@@ -51,6 +51,7 @@ CategoryModel _cat(String id, String name, String type) => CategoryModel(
   icon: 'icon',
   color: 0xFF000000,
   type: type,
+  updatedAt: DateTime.now(),
 );
 
 final _expenseCategories = [

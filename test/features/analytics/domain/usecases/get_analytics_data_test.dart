@@ -31,6 +31,7 @@ void main() {
         type: 'income',
         date: tDate,
         createdAt: tDate,
+        updatedAt: tDate,
       ),
       Transaction(
         id: '2',
@@ -39,6 +40,7 @@ void main() {
         type: 'expense',
         date: tDate,
         createdAt: tDate,
+        updatedAt: tDate,
       ),
       Transaction(
         id: '3',
@@ -47,23 +49,26 @@ void main() {
         type: 'expense',
         date: tDate.add(const Duration(days: 1)),
         createdAt: tDate.add(const Duration(days: 1)),
+        updatedAt: tDate.add(const Duration(days: 1)),
       ),
     ];
 
     final tCategories = [
-      const Category(
+      Category(
         id: 'cat1',
         name: 'Salary',
         icon: 'salary_icon',
         color: 456,
         type: 'income',
+        updatedAt: tDate,
       ),
-      const Category(
+      Category(
         id: 'cat2',
         name: 'Food',
         icon: 'food_icon',
         color: 101,
         type: 'expense',
+        updatedAt: tDate,
       ),
     ];
 

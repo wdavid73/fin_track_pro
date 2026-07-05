@@ -5,6 +5,7 @@ import 'package:fin_track_pro/features/analytics/domain/entities/analytics_perio
 import 'package:fin_track_pro/features/analytics/presentation/bloc/analytics_bloc.dart';
 import 'package:fin_track_pro/core/utils/category_helper.dart';
 import 'package:fin_track_pro/theme/theme_constants.dart';
+import 'package:fin_track_pro/theme/utils/resposive.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -168,11 +169,17 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
           topCatLabel: topCatLabel,
         ),
         const Gap(4.00),
-        Text(context.l10n.spendingTrend, style: context.textTheme.headlineSmall!),
-        const Gap(24.0),
+        Text(
+          context.l10n.spendingTrend,
+          style: context.textTheme.headlineSmall!,
+        ),
+        const Gap(26.0),
         _SpendingBarChart(barData: barValues, labels: barLabels),
-        const Gap(4.00),
-        Text(context.l10n.spendingByCategory, style: context.textTheme.headlineSmall!),
+        const Gap(16.00),
+        Text(
+          context.l10n.spendingByCategory,
+          style: context.textTheme.headlineSmall!,
+        ),
         const Gap(24.0),
         if (categoryShares.isNotEmpty) ...[
           _PieChartSection(
@@ -180,13 +187,16 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
             touchedIndex: _touchedPieIndex,
             onTouch: (i) => setState(() => _touchedPieIndex = i),
           ),
-          const Gap(32.0),
+          const Gap(38.0),
           ...categoryShares.map((c) => _CategoryBreakdownRow(item: c)),
         ] else
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 24),
-              child: Text(context.l10n.noSpendingDataAvailable, style: context.textTheme.bodyMedium!),
+              child: Text(
+                context.l10n.noSpendingDataAvailable,
+                style: context.textTheme.bodyMedium!,
+              ),
             ),
           ),
       ],
@@ -197,18 +207,16 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
+        const Row(
           children: [
-            Expanded(
-              child: const ShimmerBox(height: 100, borderRadius: 12.0),
-            ),
-            const Gap(8),
+            Expanded(child: ShimmerBox(height: 100, borderRadius: 12.0)),
+            Gap(8),
             Expanded(
               child: Column(
                 children: [
-                  const ShimmerBox(height: 44, borderRadius: 12.0),
-                  const Gap(8),
-                  const ShimmerBox(height: 44, borderRadius: 12.0),
+                  ShimmerBox(height: 44, borderRadius: 12.0),
+                  Gap(8),
+                  ShimmerBox(height: 44, borderRadius: 12.0),
                 ],
               ),
             ),
@@ -225,9 +233,9 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
         const Gap(32.0),
         ...List.generate(
           4,
-          (_) => Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: const ShimmerBox(height: 40, borderRadius: 12.0),
+          (_) => const Padding(
+            padding: EdgeInsets.only(bottom: 12.0),
+            child: ShimmerBox(height: 40, borderRadius: 12.0),
           ),
         ),
       ],
@@ -246,7 +254,11 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
               size: 48,
             ),
             const Gap(16),
-            Text(message, style: context.textTheme.bodyMedium!, textAlign: TextAlign.center),
+            Text(
+              message,
+              style: context.textTheme.bodyMedium!,
+              textAlign: TextAlign.center,
+            ),
             const Gap(16),
             TextButton(
               onPressed: () => context.read<AnalyticsBloc>().add(
@@ -262,7 +274,6 @@ class _AnalyticsBodyState extends State<_AnalyticsBody> {
       ),
     );
   }
-
 }
 
 // --- Range Selector ---
@@ -295,7 +306,9 @@ class _RangeSelector extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 margin: const EdgeInsets.all(3),
                 decoration: BoxDecoration(
-                  color: isSelected ? context.colorScheme.primary : Colors.transparent,
+                  color: isSelected
+                      ? context.colorScheme.primary
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Center(
@@ -336,6 +349,7 @@ class _SummaryCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: Container(
@@ -349,26 +363,22 @@ class _SummaryCards extends StatelessWidget {
               children: [
                 Text(
                   context.l10n.totalExpenses,
-                  style: TextStyle(
+                  style: context.textTheme.bodyMedium!.copyWith(
                     color: Colors.white.withValues(alpha: 0.7),
-                    fontSize: 12,
                   ),
                 ),
                 const Gap(6),
                 Text(
                   totalExpenses.toCurrency(),
-                  style: const TextStyle(
+                  style: context.textTheme.headlineMedium!.copyWith(
                     color: Colors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -0.5,
                   ),
                 ),
               ],
             ),
           ),
         ),
-        const Gap(8),
+        const Gap(16),
         Expanded(
           child: Column(
             children: [
@@ -386,7 +396,10 @@ class _SummaryCards extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(context.l10n.avgPerDay, style: context.textTheme.labelLarge!),
+                          Text(
+                            context.l10n.avgPerDay,
+                            style: context.textTheme.labelLarge!,
+                          ),
                           Text(
                             avgPerDay.toCurrency(),
                             style: context.textTheme.titleMedium!,
@@ -406,14 +419,20 @@ class _SummaryCards extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Text('🏆', style: TextStyle(fontSize: 18)),
+                    const Text('🔥', style: TextStyle(fontSize: 18)),
                     const Gap(8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(context.l10n.topExpense, style: context.textTheme.labelLarge!),
-                          Text(topCatLabel, style: context.textTheme.titleMedium!),
+                          Text(
+                            context.l10n.topExpense,
+                            style: context.textTheme.labelLarge!,
+                          ),
+                          Text(
+                            topCatLabel,
+                            style: context.textTheme.titleMedium!,
+                          ),
                         ],
                       ),
                     ),
@@ -437,14 +456,31 @@ class _SpendingBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (barData.isEmpty) {
+    final hasData = barData.isNotEmpty && barData.any((v) => v > 0);
+    if (!hasData) {
       return Container(
         height: 180,
         decoration: BoxDecoration(
           color: context.colorScheme.surface,
           borderRadius: BorderRadius.circular(24.0),
         ),
-        child: Center(child: Text(context.l10n.noDataAvailable, style: context.textTheme.bodyMedium!)),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.bar_chart_outlined,
+                size: 40,
+                color: context.colorScheme.outlineVariant,
+              ),
+              const Gap(8),
+              Text(
+                context.l10n.noSpendingDataAvailable,
+                style: context.textTheme.bodyMedium!,
+              ),
+            ],
+          ),
+        ),
       );
     }
 
@@ -475,7 +511,10 @@ class _SpendingBarChart extends StatelessWidget {
                   }
                   return Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: Text(labels[i], style: context.textTheme.labelLarge!),
+                    child: Text(
+                      labels[i],
+                      style: context.textTheme.labelLarge!,
+                    ),
                   );
                 },
               ),
@@ -509,7 +548,9 @@ class _SpendingBarChart extends StatelessWidget {
                       : LinearGradient(
                           colors: [
                             context.colorScheme.primary.withValues(alpha: 0.3),
-                            context.colorScheme.primaryContainer.withValues(alpha: 0.3),
+                            context.colorScheme.primaryContainer.withValues(
+                              alpha: 0.3,
+                            ),
                           ],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
@@ -555,14 +596,16 @@ class _PieChartSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 200,
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(18.0),
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
         borderRadius: BorderRadius.circular(24.0),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
+          SizedBox(
+            width: context.wp(30),
             child: PieChart(
               PieChartData(
                 pieTouchData: PieTouchData(
@@ -597,7 +640,7 @@ class _PieChartSection extends StatelessWidget {
               ),
             ),
           ),
-          const Gap(24.0),
+
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -683,7 +726,8 @@ class _CategoryBreakdownRow extends StatelessWidget {
                   child: LinearProgressIndicator(
                     value: item.percent / 100,
                     minHeight: 5,
-                    backgroundColor: context.colorScheme.surfaceContainerHighest,
+                    backgroundColor:
+                        context.colorScheme.surfaceContainerHighest,
                     valueColor: AlwaysStoppedAnimation<Color>(item.color),
                   ),
                 ),

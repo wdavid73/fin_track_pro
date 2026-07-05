@@ -353,4 +353,202 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filterByCategory => 'Filter by Category';
+
+  @override
+  String get newBudget => 'New Budget';
+
+  @override
+  String get editBudget => 'Edit Budget';
+
+  @override
+  String get budgetAmount => 'Budget Amount';
+
+  @override
+  String get period => 'Period';
+
+  @override
+  String get monthly => 'Monthly';
+
+  @override
+  String get weekly => 'Weekly';
+
+  @override
+  String get yearly => 'Yearly';
+
+  @override
+  String get selectACategory => 'Select a category';
+
+  @override
+  String get enterAmount => 'Enter amount';
+
+  @override
+  String get pleaseSelectCategory => 'Please select a category';
+
+  @override
+  String get pleaseEnterAmount => 'Please enter an amount';
+
+  @override
+  String get pleaseEnterValidAmount => 'Please enter a valid amount';
+
+  @override
+  String get deleteBudget => 'Delete Budget';
+
+  @override
+  String get areYouSureDeleteBudget =>
+      'Are you sure you want to delete this budget?';
+
+  @override
+  String get budgetDeleted => 'Budget deleted';
+
+  @override
+  String get budgetSaved => 'Budget saved';
+
+  @override
+  String get budgetUpdated => 'Budget updated';
+
+  @override
+  String get detailTransactions => 'Transactions';
+
+  @override
+  String detailMovements(int count) {
+    return '$count movements';
+  }
+
+  @override
+  String get detailNoTransactions => 'No transactions';
+
+  @override
+  String get detailUsed => 'used';
+
+  @override
+  String detailBudgeted(String total) {
+    return 'of $total budgeted';
+  }
+
+  @override
+  String detailExceededBy(String amount) {
+    return '$amount exceeded';
+  }
+
+  @override
+  String detailAvailable(String amount) {
+    return '$amount available';
+  }
+
+  @override
+  String get detailAvgPerDay => 'Avg/day';
+
+  @override
+  String get detailDaysRemaining => 'Days remaining';
+
+  @override
+  String get onboardingWelcomeTitle => 'Welcome to FinTrack Pro';
+
+  @override
+  String get onboardingWelcomeDesc =>
+      'Your personal finance manager designed to give you complete control over your money.';
+
+  @override
+  String get onboardingTrackTitle => 'Track Expenses easily';
+
+  @override
+  String get onboardingTrackDesc =>
+      'Log your daily transactions quickly and categorize them to see exactly where your money goes.';
+
+  @override
+  String get onboardingBudgetTitle => 'Smart Budgets';
+
+  @override
+  String get onboardingBudgetDesc =>
+      'Set up budgets for different categories and stay on track with visual progress indicators.';
+
+  @override
+  String get onboardingAnalyticsTitle => 'Deep Analytics';
+
+  @override
+  String get onboardingAnalyticsDesc =>
+      'Understand your spending habits with interactive charts and detailed financial insights.';
+
+  @override
+  String get getStarted => 'Get Started';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get signIn => 'Sign In';
+
+  @override
+  String get signUp => 'Sign Up';
+
+  @override
+  String get signOut => 'Sign Out';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get displayName => 'Name';
+
+  @override
+  String get signInWithGoogle => 'Continue with Google';
+
+  @override
+  String get dontHaveAccount => 'Don\'t have an account?';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get authError => 'Authentication failed. Please try again.';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match.';
+
+  @override
+  String get invalidEmail => 'Please enter a valid email.';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 6 characters.';
+
+  @override
+  String get fieldTooLong => 'This field is too long.';
+
+  @override
+  String get welcomeBack => 'Welcome back';
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get authErrorInvalidCredential => 'Incorrect email or password.';
+
+  @override
+  String get authErrorInvalidEmail => 'The email address is not valid.';
+
+  @override
+  String get authErrorUserDisabled => 'This account has been disabled.';
+
+  @override
+  String get authErrorTooManyRequests =>
+      'Too many failed attempts. Try again later.';
+
+  @override
+  String get authErrorEmailAlreadyInUse =>
+      'An account with this email already exists.';
+
+  @override
+  String get authErrorWeakPassword => 'Password is too weak.';
+
+  @override
+  String get authErrorNetworkFailed => 'Network error. Check your connection.';
 }

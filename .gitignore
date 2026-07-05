@@ -63,6 +63,19 @@ lib/app/injection_container.config.dart
 
 # build ouput
 
-
-
 android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+ios/Runner/dev/GoogleService-Info.plist
+ios/Runner/prod/GoogleService-Info.plist
+
+lib/app/injection_container.config.dart
+lib/firebase_options.dart
+
+# Golden test images — platform-specific versions are NOT versioned
+# (macOS renders fonts differently from Ubuntu CI runners)
+# CI goldens ARE versioned: test/**/goldens/ci/ → do NOT ignore
+test/**/goldens/macos/
+test/**/goldens/linux/
+test/**/goldens/windows/
+
+.codegraph/*

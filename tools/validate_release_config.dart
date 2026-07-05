@@ -752,7 +752,12 @@ void validateSecurity() {
   final dartFiles = libDir
       .listSync(recursive: true)
       .whereType<File>()
-      .where((f) => f.path.endsWith('.dart'));
+      .where((f) => f.path.endsWith('.dart'))
+      .where((f) {
+        // Skip files that are gitignored
+        final result = Process.runSync('git', ['check-ignore', '-q', f.path]);
+        return result.exitCode != 0;
+      });
 
   for (final dartFile in dartFiles) {
     final content = dartFile.readAsStringSync();

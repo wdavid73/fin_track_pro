@@ -114,6 +114,7 @@ class AddTransactionCubit extends Cubit<AddTransactionState> {
         note: state.description.isEmpty ? null : state.description,
         date: state.selectedDate,
         createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       );
 
       await _createTransaction(transaction);

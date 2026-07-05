@@ -62,16 +62,18 @@ void main() {
       type: 'expense',
       date: DateTime(2024, 1, 1),
       createdAt: DateTime(2024, 1, 1),
+      updatedAt: DateTime(2024, 1, 1),
     ),
   ];
 
   final tCategories = [
-    const Category(
+    Category(
       id: 'cat1',
       name: 'Food',
       icon: 'food_icon',
       color: 123,
       type: 'expense',
+      updatedAt: DateTime(2024, 1, 1),
     ),
   ];
 

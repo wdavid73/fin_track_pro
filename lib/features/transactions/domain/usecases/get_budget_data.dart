@@ -46,14 +46,12 @@ class GetBudgetData {
 
     for (final category in categories) {
       if (category.type == 'expense') {
-        final spent = spentByCategory[category.id] ?? 0.0;
-        final budget = budgetByCategory[category.id] ?? 500.0; // Default budget
-
-        if (spent > 0 || budget > 0) {
+        final budget = budgetByCategory[category.id] ?? 0.0;
+        if (budget > 0) {
+          final spent = spentByCategory[category.id] ?? 0.0;
           categoryBudgets.add(
             CategoryBudget(category: category, spent: spent, budget: budget),
           );
-
           totalBudget += budget;
           totalSpent += spent;
         }

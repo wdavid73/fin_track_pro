@@ -46,8 +46,15 @@ void main() {
     });
 
     group('LoadCategories', () {
-      const tCategories = [
-        Category(id: '', name: '', icon: '', color: 0, type: 'expense'),
+      final tCategories = [
+        Category(
+          id: '',
+          name: '',
+          icon: '',
+          color: 0,
+          type: 'expense',
+          updatedAt: DateTime(2026, 1, 1),
+        ),
       ];
       blocTest(
         'should emit [Loading, Success] when data is gotten successfully',
@@ -58,7 +65,7 @@ void main() {
         act: (bloc) => bloc.add(LoadCategoriesEvent()),
         expect: () => [
           const CategoryState(status: CategoryStatus.loading),
-          const CategoryState(
+          CategoryState(
             status: CategoryStatus.success,
             categories: tCategories,
           ),
@@ -89,12 +96,13 @@ void main() {
     });
 
     group('CreateCategoryEvent', () {
-      final tCategory = const Category(
+      final tCategory = Category(
         id: '1',
         name: 'test',
         icon: 'test',
         color: 0,
         type: 'expense',
+        updatedAt: DateTime(2026, 1, 1),
       );
 
       setUpAll(() {
@@ -142,12 +150,13 @@ void main() {
     });
 
     group('UpdateCategoryEvent', () {
-      final tCategory = const Category(
+      final tCategory = Category(
         id: '1',
         name: 'Updated Category',
         icon: 'icon',
         color: 0,
         type: 'expense',
+        updatedAt: DateTime(2026, 1, 1),
       );
 
       setUpAll(() {
@@ -243,13 +252,14 @@ void main() {
 
     group('SearchCategoriesEvent', () {
       const tQuery = 'Food';
-      const tCategories = [
+      final tCategories = [
         Category(
           id: '1',
           name: 'Food & Dining',
           icon: 'icon',
           color: 0,
           type: 'expense',
+          updatedAt: DateTime(2026, 1, 1),
         ),
       ];
 
@@ -267,7 +277,7 @@ void main() {
         act: (bloc) => bloc.add(const SearchCategoriesEvent(tQuery)),
         expect: () => [
           const CategoryState(status: CategoryStatus.loading),
-          const CategoryState(
+          CategoryState(
             status: CategoryStatus.success,
             categories: tCategories,
           ),
@@ -299,16 +309,17 @@ void main() {
     });
 
     group('LoadCategoryStatsEvent', () {
-      const tCategory = Category(
+      final tCategory = Category(
         id: 'cat1',
         name: 'Groceries',
         icon: 'shopping_bag',
         color: 0xFF4CAF50,
         type: 'expense',
+        updatedAt: DateTime(2026, 1, 1),
       );
 
       final tCategoryStats = [
-        const CategoryStats(
+        CategoryStats(
           category: tCategory,
           transactionCount: 5,
           totalAmount: 250.75,
@@ -378,24 +389,26 @@ void main() {
         'should emit [Loading, Success] with multiple category stats',
         build: () {
           final tMultipleStats = [
-            const CategoryStats(
+            CategoryStats(
               category: Category(
                 id: 'cat1',
                 name: 'Groceries',
                 icon: 'shopping_bag',
                 color: 0xFF4CAF50,
                 type: 'expense',
+                updatedAt: DateTime(2026, 1, 1),
               ),
               transactionCount: 5,
               totalAmount: 250.75,
             ),
-            const CategoryStats(
+            CategoryStats(
               category: Category(
                 id: 'cat2',
                 name: 'Transport',
                 icon: 'directions_car',
                 color: 0xFF2196F3,
                 type: 'expense',
+                updatedAt: DateTime(2026, 1, 1),
               ),
               transactionCount: 3,
               totalAmount: 150.00,
@@ -431,7 +444,7 @@ void main() {
         'should emit [Loading, Success] with zero stats for categories without transactions',
         build: () {
           final tStatsWithZero = [
-            const CategoryStats(
+            CategoryStats(
               category: tCategory,
               transactionCount: 0,
               totalAmount: 0.0,

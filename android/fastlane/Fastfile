@@ -29,14 +29,17 @@ platform :android do
   lane :beta do
     build_number = sh("git rev-list --count HEAD").strip
 
+    # Usa fvm si está disponible (local), flutter directo en CI
+    flutter_cmd = `which fvm 2>/dev/null`.strip.empty? ? "flutter" : "fvm flutter"
+
     # APK debug: no requiere keystore ni cuenta de desarrollador
-    sh("flutter build apk --flavor dev -t lib/flavors/main_dev.dart --debug --build-number #{build_number}")
+    sh("#{flutter_cmd} build apk --flavor dev -t lib/flavors/main_dev.dart --debug --build-number #{build_number}")
 
     firebase_app_distribution(
       app: ENV["FIREBASE_ANDROID_APP_ID"],
       firebase_cli_token: ENV["FIREBASE_APP_DIST_TOKEN"],
-      apk_path: "build/app/outputs/flutter-apk/app-dev-debug.apk",
-      groups: "internal-testers",
+      apk_path: "../build/app/outputs/flutter-apk/app-dev-debug.apk",
+      # groups: "internal-testers",  # Descomentar cuando el grupo exista en Firebase Console → App Distribution → Testers & Groups
       release_notes: sh("git log -1 --pretty=format:'%s'").strip,
     )
   end

@@ -97,7 +97,10 @@ class _TransactionsBodyState extends State<_TransactionsBody> {
         backgroundColor: context.colorScheme.surface,
         elevation: 0,
         titleSpacing: 20,
-        title: Text(context.l10n.allTransactions, style: context.textTheme.headlineSmall!),
+        title: Text(
+          context.l10n.allTransactions,
+          style: context.textTheme.headlineSmall!,
+        ),
         actions: [
           BlocBuilder<CategoryBloc, CategoryState>(
             builder: (context, catState) {
@@ -132,7 +135,10 @@ class _TransactionsBodyState extends State<_TransactionsBody> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-                child: _SummaryRow(transactions: state.transactions),
+                child: _SummaryRow(
+                  transactions: state.transactions,
+                  filterIndex: _filterIndex,
+                ),
               ),
               Expanded(child: _buildList(context, state)),
             ],
@@ -156,19 +162,19 @@ class _TransactionsBodyState extends State<_TransactionsBody> {
       return ListView.builder(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
         itemCount: 8,
-        itemBuilder: (context, _) => Padding(
-          padding: const EdgeInsets.only(bottom: 12.0),
+        itemBuilder: (context, _) => const Padding(
+          padding: EdgeInsets.only(bottom: 12.0),
           child: Row(
             children: [
-              const ShimmerCircle(size: 44),
-              const Gap(12),
+              ShimmerCircle(size: 44),
+              Gap(12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const ShimmerBox(height: 14, width: 120, borderRadius: 4),
-                    const Gap(4),
-                    const ShimmerBox(height: 12, width: 80, borderRadius: 4),
+                    ShimmerBox(height: 14, width: 120, borderRadius: 4),
+                    Gap(4),
+                    ShimmerBox(height: 12, width: 80, borderRadius: 4),
                   ],
                 ),
               ),
@@ -181,34 +187,43 @@ class _TransactionsBodyState extends State<_TransactionsBody> {
     if (state.transactions.isEmpty &&
         state.status == TransactionStatus.success) {
       return Center(
-        child: Text(context.l10n.noTransactions, style: context.textTheme.bodyMedium!),
+        child: Text(
+          context.l10n.noTransactions,
+          style: context.textTheme.bodyMedium!,
+        ),
       );
     }
 
     return BlocBuilder<CategoryBloc, CategoryState>(
       builder: (context, catState) {
         final catMap = {for (final c in catState.categories) c.id: c};
-        return ListView.builder(
-          controller: _scrollController,
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-          itemCount: state.transactions.length,
-          itemBuilder: (context, index) {
-            final tx = state.transactions[index];
-            final cat = catMap[tx.categoryId];
-            return _TransactionRow(
-              emoji: CategoryHelper.categoryEmoji(cat?.icon ?? ''),
-              title: cat?.name ?? (tx.note ?? context.l10n.transactionFallback),
-              date: CategoryHelper.formatDate(tx.date),
-              amount: tx.amount,
-              isIncome: tx.type == 'income',
-              category: cat?.name ?? context.l10n.noCategory,
-            );
+        return RefreshIndicator(
+          onRefresh: () async {
+            context.read<TransactionBloc>().add(const LoadPaginatedTransactions());
+            await Future.delayed(const Duration(milliseconds: 500));
           },
+          child: ListView.builder(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+            itemCount: state.transactions.length,
+            itemBuilder: (context, index) {
+              final tx = state.transactions[index];
+              final cat = catMap[tx.categoryId];
+              return _TransactionRow(
+                emoji: CategoryHelper.categoryEmoji(cat?.icon ?? ''),
+                title: cat?.name ?? (tx.note ?? context.l10n.transactionFallback),
+                date: CategoryHelper.formatDate(tx.date),
+                amount: tx.amount,
+                isIncome: tx.type == 'income',
+                category: cat?.name ?? context.l10n.noCategory,
+              );
+            },
+          ),
         );
       },
     );
   }
-
 }
 
 class _FilterChips extends StatelessWidget {
@@ -259,9 +274,10 @@ class _FilterChips extends StatelessWidget {
 }
 
 class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({required this.transactions});
+  const _SummaryRow({required this.transactions, required this.filterIndex});
 
   final List<Transaction> transactions;
+  final int filterIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -271,19 +287,24 @@ class _SummaryRow extends StatelessWidget {
     final expense = transactions
         .where((t) => t.type == 'expense')
         .fold(0.0, (s, t) => s + t.amount);
+    final showIncome = filterIndex == 0 || filterIndex == 2;
+    final showExpense = filterIndex == 0 || filterIndex == 1;
     return Row(
       children: [
-        _SummaryChip(
-          label: context.l10n.totalIncome,
-          value: income.toCurrency(),
-          color: context.colorScheme.secondary,
-        ),
-        const Gap(8),
-        _SummaryChip(
-          label: context.l10n.totalExpenses,
-          value: expense.toCurrency(),
-          color: context.colorScheme.error,
-        ),
+        if (showIncome) ...[
+          _SummaryChip(
+            label: context.l10n.totalIncome,
+            value: income.toCurrency(),
+            color: context.colorScheme.secondary,
+          ),
+          if (showExpense) const Gap(8),
+        ],
+        if (showExpense)
+          _SummaryChip(
+            label: context.l10n.totalExpenses,
+            value: expense.toCurrency(),
+            color: context.colorScheme.error,
+          ),
       ],
     );
   }
@@ -372,11 +393,11 @@ class _TransactionRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '${isIncome ? '+' : '-'}${amount.toCurrency()}',
+                '${isIncome ? '+' : '-'}${amount.toCurrency(decimalDigits: 0)}',
                 style: context.textTheme.titleMedium!.copyWith(
                   color: isIncome
-                      ? context.colorScheme.tertiary
-                      : context.colorScheme.onSurface,
+                      ? context.colorScheme.secondary
+                      : context.colorScheme.error,
                 ),
               ),
               Container(

@@ -23,6 +23,7 @@ void main() {
         type: 'expense',
         date: DateTime(2024, 1, 1),
         createdAt: DateTime(2024, 1, 1),
+        updatedAt: DateTime(2024, 1, 1),
       ),
       Transaction(
         id: '2',
@@ -31,6 +32,7 @@ void main() {
         type: 'income',
         date: DateTime(2024, 1, 2),
         createdAt: DateTime(2024, 1, 2),
+        updatedAt: DateTime(2024, 1, 2),
       ),
     ];
 

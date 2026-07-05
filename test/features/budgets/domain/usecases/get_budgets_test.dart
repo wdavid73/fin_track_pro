@@ -15,11 +15,12 @@ void main() {
     usecase = GetBudgets(mockRepository);
   });
 
-  const tBudget = Budget(
+  final tBudget = Budget(
     id: '1',
     categoryId: 'cat1',
     amount: 500.0,
     period: 'monthly',
+    updatedAt: DateTime.now(),
   );
 
   test('should get budgets from repository', () async {

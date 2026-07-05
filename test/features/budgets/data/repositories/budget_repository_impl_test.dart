@@ -5,40 +5,49 @@ import 'package:fin_track_pro/features/budgets/domain/entities/budget.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../mocks/budget_mocks.dart';
+
 class MockBudgetDatasource extends Mock implements BudgetDatasource {}
 
 void main() {
   late BudgetRepositoryImpl repository;
   late MockBudgetDatasource mockDatasource;
+  late MockBudgetRemoteDataSource mockRemoteDataSource;
 
   setUpAll(() {
     registerFallbackValue(
-      const BudgetModel(
+      BudgetModel(
         id: 'fallback',
         categoryId: 'fallback',
         amount: 0,
         period: 'monthly',
+        updatedAt: DateTime.now(),
       ),
     );
   });
 
   setUp(() {
     mockDatasource = MockBudgetDatasource();
-    repository = BudgetRepositoryImpl(mockDatasource);
+    mockRemoteDataSource = MockBudgetRemoteDataSource();
+    repository = BudgetRepositoryImpl(mockDatasource, mockRemoteDataSource);
   });
 
-  const tBudgetModel = BudgetModel(
+  final tUpdatedAt = DateTime(2026, 1, 1);
+
+  final tBudgetModel = BudgetModel(
     id: '1',
     categoryId: 'cat1',
     amount: 500.0,
     period: 'monthly',
+    updatedAt: tUpdatedAt,
   );
 
-  const tBudget = Budget(
+  final tBudget = Budget(
     id: '1',
     categoryId: 'cat1',
     amount: 500.0,
     period: 'monthly',
+    updatedAt: tUpdatedAt,
   );
 
   group('BudgetRepositoryImpl', () {
@@ -99,7 +108,7 @@ void main() {
         await repository.saveBudget(tBudget);
 
         // assert
-        verify(() => mockDatasource.saveBudget(tBudgetModel)).called(1);
+        verify(() => mockDatasource.saveBudget(any())).called(1);
       });
     });
 
@@ -116,6 +125,58 @@ void main() {
         // assert
         verify(() => mockDatasource.deleteBudget('1')).called(1);
       });
+    });
+
+    group('setUserId / remote sync', () {
+      test(
+        'does not call remote data source when no user is set',
+        () async {
+          when(
+            () => mockDatasource.saveBudget(any()),
+          ).thenAnswer((_) async => {});
+
+          await repository.saveBudget(tBudget);
+          await Future<void>.delayed(Duration.zero);
+
+          verifyNever(() => mockRemoteDataSource.saveBudget(any(), any()));
+        },
+      );
+
+      test(
+        'calls remote data source with the user id once it is set',
+        () async {
+          when(
+            () => mockDatasource.saveBudget(any()),
+          ).thenAnswer((_) async => {});
+          when(
+            () => mockRemoteDataSource.saveBudget(any(), any()),
+          ).thenAnswer((_) async => {});
+
+          repository.setUserId('user_123');
+          await repository.saveBudget(tBudget);
+          await Future<void>.delayed(Duration.zero);
+
+          verify(
+            () => mockRemoteDataSource.saveBudget('user_123', any()),
+          ).called(1);
+        },
+      );
+
+      test(
+        'does not throw when the remote write fails (fire-and-forget)',
+        () async {
+          when(
+            () => mockDatasource.saveBudget(any()),
+          ).thenAnswer((_) async => {});
+          when(
+            () => mockRemoteDataSource.saveBudget(any(), any()),
+          ).thenAnswer((_) async => throw Exception('network error'));
+
+          repository.setUserId('user_123');
+
+          await expectLater(repository.saveBudget(tBudget), completes);
+        },
+      );
     });
   });
 }

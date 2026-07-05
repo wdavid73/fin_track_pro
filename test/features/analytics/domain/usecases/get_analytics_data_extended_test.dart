@@ -24,12 +24,13 @@ void main() {
   group('GetAnalyticsData - Period comparisons', () {
     final now = DateTime.now();
 
-    const tCategory = Category(
+    final tCategory = Category(
       id: 'cat1',
       name: 'Food',
       icon: 'food_icon',
       color: 456,
       type: 'expense',
+      updatedAt: DateTime.now(),
     );
 
     test('year period produces 12 comparisons', () async {
@@ -84,6 +85,7 @@ void main() {
           type: 'income',
           date: tDate,
           createdAt: tDate,
+          updatedAt: tDate,
         ),
         Transaction(
           id: '2',
@@ -92,6 +94,7 @@ void main() {
           type: 'income',
           date: tDate,
           createdAt: tDate,
+          updatedAt: tDate,
         ),
       ];
 
@@ -121,6 +124,7 @@ void main() {
           type: 'expense',
           date: tDate,
           createdAt: tDate,
+          updatedAt: tDate,
         ),
       ];
 
@@ -150,6 +154,7 @@ void main() {
           type: 'expense',
           date: tDate,
           createdAt: tDate,
+          updatedAt: tDate,
         ),
         Transaction(
           id: '2',
@@ -158,6 +163,7 @@ void main() {
           type: 'expense',
           date: tDate,
           createdAt: tDate,
+          updatedAt: tDate,
         ),
         Transaction(
           id: '3',
@@ -166,6 +172,7 @@ void main() {
           type: 'expense',
           date: tDate,
           createdAt: tDate,
+          updatedAt: tDate,
         ),
       ];
 

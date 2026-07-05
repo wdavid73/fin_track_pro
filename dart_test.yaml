@@ -1,5 +1,6 @@
 tags:
-  # Tag usado por golden_toolkit para identificar y filtrar tests visuales.
+  # Tag usado por Alchemist para identificar y filtrar tests visuales.
+  # Alchemist aplica este tag automáticamente a todos los goldenTest().
   # Registrarlo aquí elimina el warning "A tag was used that wasn't specified".
   #
   # Puedes ejecutar solo golden tests con:

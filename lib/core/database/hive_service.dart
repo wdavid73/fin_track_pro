@@ -3,6 +3,7 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:fin_track_pro/core/config/flavor_config.dart';
 import 'package:fin_track_pro/core/database/seeders/database_seeder.dart';
+import 'package:fin_track_pro/core/utils/logger_service.dart';
 import 'package:fin_track_pro/features/categories/data/models/category_model.dart';
 import 'package:fin_track_pro/features/transactions/data/models/transaction_model.dart';
 import 'package:fin_track_pro/features/budgets/data/models/budget_model.dart';
@@ -38,10 +39,10 @@ class HiveService {
     }
 
     // Open boxes and wait for them to be fully opened
-    await Hive.openBox<CategoryModel>(categoriesBox);
-    await Hive.openBox<TransactionModel>(transactionsBox);
-    await Hive.openBox<BudgetModel>(budgetsBox);
-    await Hive.openBox<SettingsModel>(settingsBox);
+    await _openBoxSafely<CategoryModel>(categoriesBox);
+    await _openBoxSafely<TransactionModel>(transactionsBox);
+    await _openBoxSafely<BudgetModel>(budgetsBox);
+    await _openBoxSafely<SettingsModel>(settingsBox);
 
     // Run seeders only in development mode and if requested
     // IMPORTANT: This runs AFTER boxes are opened
@@ -50,6 +51,29 @@ class HiveService {
         FlavorConfig.instance.isDev &&
         databaseSeeder != null) {
       await databaseSeeder.seedAll();
+    }
+  }
+
+  /// Opens a box, recovering from schema-incompatible or corrupted local
+  /// data by deleting and recreating the box instead of crashing app startup.
+  ///
+  /// Necessary because Hive fields added to existing models (e.g. `updatedAt`
+  /// for Firestore sync) are missing on records written before the field
+  /// existed, and the generated adapter has no way to default a `DateTime`
+  /// (Dart's `DateTime` has no const constructor, so Hive's `defaultValue`
+  /// mechanism can't be used for it).
+  Future<void> _openBoxSafely<T>(String name) async {
+    try {
+      await Hive.openBox<T>(name);
+    } catch (e, stackTrace) {
+      LoggerService().warning(
+        'Failed to open Hive box "$name", recreating it: $e',
+        tag: 'HiveService',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      await Hive.deleteBoxFromDisk(name);
+      await Hive.openBox<T>(name);
     }
   }
 

@@ -55,7 +55,7 @@ class TransactionSeeder extends Seeder {
 
     final transactions = <TransactionModel>[];
     final now = DateTime.now();
-    int _catIndex = 0;
+    int catIndex = 0;
 
     // Create transactions for the last 30 days
     for (int i = 0; i < 30; i++) {
@@ -64,8 +64,8 @@ class TransactionSeeder extends Seeder {
       // Add 1-3 expenses per day
       final expenseCount = 1 + _random.nextInt(3);
       for (int j = 0; j < expenseCount; j++) {
-        final category = expenseCategories[_catIndex % expenseCategories.length];
-        _catIndex++;
+        final category = expenseCategories[catIndex % expenseCategories.length];
+        catIndex++;
         transactions.add(
           TransactionModel(
             id: _uuid.v4(),
@@ -75,6 +75,7 @@ class TransactionSeeder extends Seeder {
             note: _generateNote(category.name, 'expense'),
             date: date,
             createdAt: date,
+            updatedAt: date,
           ),
         );
       }
@@ -96,6 +97,7 @@ class TransactionSeeder extends Seeder {
             note: 'Pago quincenal',
             date: date,
             createdAt: date,
+            updatedAt: date,
           ),
         );
       }
@@ -117,6 +119,7 @@ class TransactionSeeder extends Seeder {
             note: 'Proyecto freelance',
             date: date,
             createdAt: date,
+            updatedAt: date,
           ),
         );
       }

@@ -39,6 +39,7 @@ class CategorySeeder extends Seeder {
         icon: 'work',
         color: Colors.green.toARGB32(),
         type: 'income',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: _uuid.v4(),
@@ -46,6 +47,7 @@ class CategorySeeder extends Seeder {
         icon: 'laptop',
         color: Colors.teal.toARGB32(),
         type: 'income',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: _uuid.v4(),
@@ -53,6 +55,7 @@ class CategorySeeder extends Seeder {
         icon: 'trending_up',
         color: Colors.blue.toARGB32(),
         type: 'income',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: _uuid.v4(),
@@ -60,6 +63,7 @@ class CategorySeeder extends Seeder {
         icon: 'attach_money',
         color: Colors.lightGreen.toARGB32(),
         type: 'income',
+        updatedAt: DateTime.now(),
       ),
 
       // Expense Categories
@@ -69,6 +73,7 @@ class CategorySeeder extends Seeder {
         icon: 'restaurant',
         color: Colors.orange.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: _uuid.v4(),
@@ -76,6 +81,7 @@ class CategorySeeder extends Seeder {
         icon: 'directions_car',
         color: Colors.purple.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: _uuid.v4(),
@@ -83,6 +89,7 @@ class CategorySeeder extends Seeder {
         icon: 'home',
         color: Colors.brown.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: _uuid.v4(),
@@ -90,6 +97,7 @@ class CategorySeeder extends Seeder {
         icon: 'movie',
         color: Colors.pink.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: _uuid.v4(),
@@ -97,6 +105,7 @@ class CategorySeeder extends Seeder {
         icon: 'local_hospital',
         color: Colors.red.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: _uuid.v4(),
@@ -104,6 +113,7 @@ class CategorySeeder extends Seeder {
         icon: 'school',
         color: Colors.indigo.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: _uuid.v4(),
@@ -111,6 +121,7 @@ class CategorySeeder extends Seeder {
         icon: 'shopping_bag',
         color: Colors.deepOrange.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: _uuid.v4(),
@@ -118,6 +129,7 @@ class CategorySeeder extends Seeder {
         icon: 'settings',
         color: Colors.blueGrey.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: _uuid.v4(),
@@ -125,6 +137,7 @@ class CategorySeeder extends Seeder {
         icon: 'more_horiz',
         color: Colors.grey.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
     ];
 

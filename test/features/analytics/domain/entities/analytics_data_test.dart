@@ -3,23 +3,24 @@ import 'package:fin_track_pro/features/categories/domain/entities/category.dart'
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const tCategory = Category(
+  final tCategory = Category(
     id: 'cat1',
     name: 'Food',
     icon: 'food_icon',
     color: 0xFF4CAF50,
     type: 'expense',
+    updatedAt: DateTime.now(),
   );
 
   group('CategorySpending', () {
-    const tSpending = CategorySpending(
+    final tSpending = CategorySpending(
       category: tCategory,
       amount: 250.0,
       transactionCount: 5,
     );
 
     test('supports equality', () {
-      const other = CategorySpending(
+      final other = CategorySpending(
         category: tCategory,
         amount: 250.0,
         transactionCount: 5,
@@ -87,21 +88,22 @@ void main() {
   });
 
   group('AnalyticsData', () {
-    const tCategory2 = Category(
+    final tCategory2 = Category(
       id: 'cat2',
       name: 'Transport',
       icon: 'car_icon',
       color: 0xFF2196F3,
       type: 'expense',
+      updatedAt: DateTime.now(),
     );
 
     final tCategorySpending = [
-      const CategorySpending(
+      CategorySpending(
         category: tCategory,
         amount: 500.0,
         transactionCount: 10,
       ),
-      const CategorySpending(
+      CategorySpending(
         category: tCategory2,
         amount: 200.0,
         transactionCount: 3,

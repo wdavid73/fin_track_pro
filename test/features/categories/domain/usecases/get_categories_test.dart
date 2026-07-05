@@ -15,13 +15,14 @@ void main() {
   });
 
   group('GetCategories', () {
-    const tCategories = [
+    final tCategories = [
       Category(
         id: '1',
         name: 'Groceries',
         icon: '🛒',
         color: 0xFF4CAF50,
         type: 'expense',
+        updatedAt: DateTime(2026, 1, 1),
       ),
       Category(
         id: '2',
@@ -29,6 +30,7 @@ void main() {
         icon: '🚗',
         color: 0xFF2196F3,
         type: 'expense',
+        updatedAt: DateTime(2026, 1, 1),
       ),
       Category(
         id: '3',
@@ -36,6 +38,7 @@ void main() {
         icon: '💼',
         color: 0xFF4CAF50,
         type: 'income',
+        updatedAt: DateTime(2026, 1, 1),
       ),
     ];
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fin_track_pro/config/router/routes.dart';
+import 'package:fin_track_pro/app/injection_container.dart';
+import 'package:fin_track_pro/features/settings/domain/usecases/check_onboarding_status.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -20,10 +22,14 @@ class _SplashPageState extends State<SplashPage> {
     // Simulate splash screen delay
     await Future.delayed(const Duration(seconds: 2));
 
-    // Add authentication check here
-    // For now, we'll just navigate to home
+    final hasSeenOnboarding = await getIt<CheckOnboardingStatus>().call();
+
     if (mounted) {
-      context.go(RouteConstants.home);
+      if (hasSeenOnboarding) {
+        context.go(RouteConstants.home);
+      } else {
+        context.go(RouteConstants.onboarding);
+      }
     }
   }
 

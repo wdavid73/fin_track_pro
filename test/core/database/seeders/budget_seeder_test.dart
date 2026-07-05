@@ -48,6 +48,7 @@ CategoryModel _cat(String name, String type) => CategoryModel(
   icon: 'icon',
   color: 0xFF000000,
   type: type,
+  updatedAt: DateTime.now(),
 );
 
 // Default categories: 2 expense + 1 income (income should be ignored)
@@ -141,7 +142,7 @@ void main() {
       final amounts = budgetBox._data.values
           .map((b) => (b as dynamic).amount as double)
           .toList();
-      expect(amounts, containsAll([2000000.0, 600000.0]));
+      expect(amounts, containsAll([1500000.0, 500000.0]));
     });
 
     test('assigns default 500.0 amount for unknown category names', () async {

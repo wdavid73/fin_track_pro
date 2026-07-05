@@ -2,7 +2,13 @@ import 'package:fin_track_pro/features/budgets/domain/entities/budget.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const budget = Budget(id: 'b-1', categoryId: 'cat-food', amount: 300.0);
+  final tUpdatedAt = DateTime(2026, 1, 1);
+  final budget = Budget(
+    id: 'b-1',
+    categoryId: 'cat-food',
+    amount: 300.0,
+    updatedAt: tUpdatedAt,
+  );
 
   group('Budget', () {
     // ── Construction ──────────────────────────────────────────────────────
@@ -18,11 +24,12 @@ void main() {
     });
 
     test('accepts custom period', () {
-      const weekly = Budget(
+      final weekly = Budget(
         id: 'b-2',
         categoryId: 'cat-food',
         amount: 75.0,
         period: 'weekly',
+        updatedAt: tUpdatedAt,
       );
       expect(weekly.period, 'weekly');
     });
@@ -30,32 +37,48 @@ void main() {
     // ── Equatable ─────────────────────────────────────────────────────────
 
     test('two budgets with same fields are equal', () {
-      const same = Budget(id: 'b-1', categoryId: 'cat-food', amount: 300.0);
+      final same = Budget(
+        id: 'b-1',
+        categoryId: 'cat-food',
+        amount: 300.0,
+        updatedAt: tUpdatedAt,
+      );
       expect(budget, equals(same));
     });
 
     test('two budgets with different ids are not equal', () {
-      const other = Budget(id: 'b-2', categoryId: 'cat-food', amount: 300.0);
-      expect(budget, isNot(equals(other)));
-    });
-
-    test('two budgets with different amounts are not equal', () {
-      const other = Budget(id: 'b-1', categoryId: 'cat-food', amount: 500.0);
-      expect(budget, isNot(equals(other)));
-    });
-
-    test('two budgets with different periods are not equal', () {
-      const other = Budget(
-        id: 'b-1',
+      final other = Budget(
+        id: 'b-2',
         categoryId: 'cat-food',
         amount: 300.0,
-        period: 'yearly',
+        updatedAt: tUpdatedAt,
       );
       expect(budget, isNot(equals(other)));
     });
 
-    test('props contains id, categoryId, amount, period', () {
-      expect(budget.props, ['b-1', 'cat-food', 300.0, 'monthly']);
+    test('two budgets with different amounts are not equal', () {
+      final other = Budget(
+        id: 'b-1',
+        categoryId: 'cat-food',
+        amount: 500.0,
+        updatedAt: tUpdatedAt,
+      );
+      expect(budget, isNot(equals(other)));
+    });
+
+    test('two budgets with different periods are not equal', () {
+      final other = Budget(
+        id: 'b-1',
+        categoryId: 'cat-food',
+        amount: 300.0,
+        period: 'yearly',
+        updatedAt: tUpdatedAt,
+      );
+      expect(budget, isNot(equals(other)));
+    });
+
+    test('props contains id, categoryId, amount, period, updatedAt', () {
+      expect(budget.props, ['b-1', 'cat-food', 300.0, 'monthly', tUpdatedAt]);
     });
 
     // ── toString ─────────────────────────────────────────────────────────

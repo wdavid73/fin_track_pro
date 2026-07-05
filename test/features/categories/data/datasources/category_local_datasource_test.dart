@@ -16,12 +16,13 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(
-      const CategoryModel(
+      CategoryModel(
         id: 'fallback',
         name: 'Fallback',
         icon: 'icon',
         color: 0,
         type: 'expense',
+        updatedAt: DateTime(2026, 1, 1),
       ),
     );
   });
@@ -36,20 +37,22 @@ void main() {
     ).thenReturn(mockBox);
   });
 
-  const tCategoryModel = CategoryModel(
+  final tCategoryModel = CategoryModel(
     id: '1',
     name: 'Food',
     icon: '🍔',
     color: 123,
     type: 'expense',
+    updatedAt: DateTime(2026, 1, 1),
   );
 
-  const tCategoryModel2 = CategoryModel(
+  final tCategoryModel2 = CategoryModel(
     id: '2',
     name: 'Salary',
     icon: '💼',
     color: 456,
     type: 'income',
+    updatedAt: DateTime(2026, 1, 1),
   );
 
   group('CategoryLocalDataSource', () {
@@ -181,12 +184,13 @@ void main() {
     });
 
     group('createCategory', () {
-      const tCategory = CategoryModel(
+      final tCategory = CategoryModel(
         id: '1',
         name: 'Food',
         icon: '🍔',
         color: 123,
         type: 'expense',
+        updatedAt: DateTime(2026, 1, 1),
       );
       test('should add category to Hive box', () async {
         // arrange

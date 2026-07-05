@@ -49,6 +49,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
         icon: _selectedIcon,
         color: _selectedColor,
         type: _selectedType,
+        updatedAt: DateTime.now(),
       );
 
       if (isEditMode) {

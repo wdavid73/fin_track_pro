@@ -775,6 +775,372 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Filter by Category'**
   String get filterByCategory;
+
+  /// New Budget form title
+  ///
+  /// In en, this message translates to:
+  /// **'New Budget'**
+  String get newBudget;
+
+  /// Edit Budget form title
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Budget'**
+  String get editBudget;
+
+  /// Budget amount field label
+  ///
+  /// In en, this message translates to:
+  /// **'Budget Amount'**
+  String get budgetAmount;
+
+  /// Budget period selector label
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get period;
+
+  /// Monthly budget period
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get monthly;
+
+  /// Weekly budget period
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get weekly;
+
+  /// Yearly budget period
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get yearly;
+
+  /// Hint for category selector in budget form
+  ///
+  /// In en, this message translates to:
+  /// **'Select a category'**
+  String get selectACategory;
+
+  /// Hint for amount field
+  ///
+  /// In en, this message translates to:
+  /// **'Enter amount'**
+  String get enterAmount;
+
+  /// Validation: please select a category
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a category'**
+  String get pleaseSelectCategory;
+
+  /// Validation: please enter an amount
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter an amount'**
+  String get pleaseEnterAmount;
+
+  /// Validation: amount must be a number > 0
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid amount'**
+  String get pleaseEnterValidAmount;
+
+  /// Delete Budget dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Budget'**
+  String get deleteBudget;
+
+  /// Confirmation message for deleting a budget
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this budget?'**
+  String get areYouSureDeleteBudget;
+
+  /// Success snackbar after deleting a budget
+  ///
+  /// In en, this message translates to:
+  /// **'Budget deleted'**
+  String get budgetDeleted;
+
+  /// Success snackbar after saving a budget
+  ///
+  /// In en, this message translates to:
+  /// **'Budget saved'**
+  String get budgetSaved;
+
+  /// Success snackbar after updating a budget
+  ///
+  /// In en, this message translates to:
+  /// **'Budget updated'**
+  String get budgetUpdated;
+
+  /// Section title in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get detailTransactions;
+
+  /// Number of movements in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'{count} movements'**
+  String detailMovements(int count);
+
+  /// Empty state in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions'**
+  String get detailNoTransactions;
+
+  /// Label under ring progress percentage
+  ///
+  /// In en, this message translates to:
+  /// **'used'**
+  String get detailUsed;
+
+  /// Sub-label under spent amount in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'of {total} budgeted'**
+  String detailBudgeted(String total);
+
+  /// Over-budget badge in detail
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} exceeded'**
+  String detailExceededBy(String amount);
+
+  /// Available badge in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} available'**
+  String detailAvailable(String amount);
+
+  /// Stats box label in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'Avg/day'**
+  String get detailAvgPerDay;
+
+  /// Stats box label in budget detail
+  ///
+  /// In en, this message translates to:
+  /// **'Days remaining'**
+  String get detailDaysRemaining;
+
+  /// Onboarding welcome title
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to FinTrack Pro'**
+  String get onboardingWelcomeTitle;
+
+  /// Onboarding welcome description
+  ///
+  /// In en, this message translates to:
+  /// **'Your personal finance manager designed to give you complete control over your money.'**
+  String get onboardingWelcomeDesc;
+
+  /// Onboarding track expenses title
+  ///
+  /// In en, this message translates to:
+  /// **'Track Expenses easily'**
+  String get onboardingTrackTitle;
+
+  /// Onboarding track expenses description
+  ///
+  /// In en, this message translates to:
+  /// **'Log your daily transactions quickly and categorize them to see exactly where your money goes.'**
+  String get onboardingTrackDesc;
+
+  /// Onboarding budgets title
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Budgets'**
+  String get onboardingBudgetTitle;
+
+  /// Onboarding budgets description
+  ///
+  /// In en, this message translates to:
+  /// **'Set up budgets for different categories and stay on track with visual progress indicators.'**
+  String get onboardingBudgetDesc;
+
+  /// Onboarding analytics title
+  ///
+  /// In en, this message translates to:
+  /// **'Deep Analytics'**
+  String get onboardingAnalyticsTitle;
+
+  /// Onboarding analytics description
+  ///
+  /// In en, this message translates to:
+  /// **'Understand your spending habits with interactive charts and detailed financial insights.'**
+  String get onboardingAnalyticsDesc;
+
+  /// Get Started button
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// Next button
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// Skip button
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// Sign in button
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signIn;
+
+  /// Sign up button
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get signUp;
+
+  /// Sign out button
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOut;
+
+  /// Email field label
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// Password field label
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// Confirm password field label
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
+  /// Display name field label
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get displayName;
+
+  /// Google sign in button
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get signInWithGoogle;
+
+  /// Sign up prompt
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account?'**
+  String get dontHaveAccount;
+
+  /// Sign in prompt
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyHaveAccount;
+
+  /// Generic auth error
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication failed. Please try again.'**
+  String get authError;
+
+  /// Password mismatch validation
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match.'**
+  String get passwordsDoNotMatch;
+
+  /// Invalid email validation
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email.'**
+  String get invalidEmail;
+
+  /// Password too short validation
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters.'**
+  String get passwordTooShort;
+
+  /// Generic field too long validation
+  ///
+  /// In en, this message translates to:
+  /// **'This field is too long.'**
+  String get fieldTooLong;
+
+  /// Login page title
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get welcomeBack;
+
+  /// Register page title
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
+
+  /// Firebase: invalid-credential / wrong-password / user-not-found
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect email or password.'**
+  String get authErrorInvalidCredential;
+
+  /// Firebase: invalid-email
+  ///
+  /// In en, this message translates to:
+  /// **'The email address is not valid.'**
+  String get authErrorInvalidEmail;
+
+  /// Firebase: user-disabled
+  ///
+  /// In en, this message translates to:
+  /// **'This account has been disabled.'**
+  String get authErrorUserDisabled;
+
+  /// Firebase: too-many-requests
+  ///
+  /// In en, this message translates to:
+  /// **'Too many failed attempts. Try again later.'**
+  String get authErrorTooManyRequests;
+
+  /// Firebase: email-already-in-use
+  ///
+  /// In en, this message translates to:
+  /// **'An account with this email already exists.'**
+  String get authErrorEmailAlreadyInUse;
+
+  /// Firebase: weak-password
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too weak.'**
+  String get authErrorWeakPassword;
+
+  /// Firebase: network-request-failed
+  ///
+  /// In en, this message translates to:
+  /// **'Network error. Check your connection.'**
+  String get authErrorNetworkFailed;
 }
 
 class _AppLocalizationsDelegate

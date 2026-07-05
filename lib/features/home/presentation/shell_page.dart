@@ -1,10 +1,19 @@
 import 'dart:ui';
 
+import 'package:fin_track_pro/app/injection_container.dart';
+import 'package:fin_track_pro/config/router/routes.dart';
+import 'package:fin_track_pro/core/core.dart';
+import 'package:fin_track_pro/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:fin_track_pro/theme/theme_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class ShellPage extends StatelessWidget {
   const ShellPage({required this.navigationShell, super.key});
+
+  static final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final StatefulNavigationShell navigationShell;
 
@@ -34,7 +43,12 @@ class ShellPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: ShellPage.scaffoldKey,
       backgroundColor: Theme.of(context).colorScheme.surface,
+      drawer: BlocProvider.value(
+        value: getIt<AuthBloc>(),
+        child: const _AppDrawer(),
+      ),
       bottomNavigationBar: _GlassNavBar(
         currentIndex: navigationShell.currentIndex,
         onTap: (i) => navigationShell.goBranch(
@@ -58,6 +72,127 @@ class _AppTab {
   final IconData icon;
   final IconData activeIcon;
   final String label;
+}
+
+class _AppDrawer extends StatelessWidget {
+  const _AppDrawer();
+
+  @override
+  Widget build(BuildContext context) {
+    final user = context.watch<AuthBloc>().state.user;
+    final initials = (user?.displayName?.isNotEmpty == true)
+        ? user!.displayName![0].toUpperCase()
+        : (user?.email.isNotEmpty == true)
+            ? user!.email[0].toUpperCase()
+            : 'U';
+
+    return Drawer(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      child: Column(
+        children: [
+          // Header — same gradient as the SliverAppBar
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: ThemeConstants.heroCardGradient,
+            ),
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top + 24,
+              left: 20,
+              right: 20,
+              bottom: 28,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Center(
+                    child: Text(
+                      initials,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
+                      ),
+                    ),
+                  ),
+                ),
+                const Gap(12),
+                Text(
+                  user?.displayName ?? user?.email ?? '',
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Gap(2),
+                if (user?.displayName != null)
+                  Text(
+                    user!.email,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Colors.white70,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+
+          // Menu items
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.settings_outlined),
+                  title: Text(context.l10n.settings),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.push(RouteConstants.settings);
+                  },
+                ),
+              ],
+            ),
+          ),
+
+          // Logout button
+          Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: MediaQuery.of(context).padding.bottom + 16,
+            ),
+            child: Container(
+              height: 52,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.red.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: TextButton.icon(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  context.read<AuthBloc>().add(AuthSignOutRequested());
+                },
+                icon: const Icon(Icons.logout, color: Colors.red),
+                label: Text(
+                  context.l10n.logout,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _GlassNavBar extends StatelessWidget {
