@@ -2,8 +2,8 @@
  
  > Quick reference for project state and next actions
  
- **Last Updated:** 2026-05-03
-**Current Date:** Week of 2026-05-03
+ **Last Updated:** 2026-07-05
+**Current Date:** Week of 2026-07-05
 **Phase:** Phase 2 - Advanced Features (In Progress)
 **Phase 0 Status:** ✅ Complete (100%)
 **Phase 1 Status:** ✅ Complete (100%)
@@ -49,10 +49,11 @@
 - ✅ **Firebase Integration:** Analytics & Crashlytics configured (Phase 2)
 - ✅ **Authentication:** Firebase Auth (Email/Google) complete with UI & validation (Phase 2)
 - ✅ **Home Screen:** Refactored into modular, maintainable widgets
+- ✅ **Cloud Sync (Firestore):** Offline-first sync for Transactions/Categories/Budgets — `updatedAt` LWW merge, dual local/remote repositories, `SyncService` wired to `AuthBloc`, Firestore data namespaced per flavor (`environments/{dev|staging|prod}/users/{uid}/...`), `firestore.rules` deployed (Phase 2)
 
  ### What's Missing
  - 🟡 Demo video and screenshots
- - 🟡 Cloud Sync (Firestore)
+ - 🟡 Integration tests (Patrol) for Firestore sync — dev flavor, planned next session
  - 🟡 Pull-to-refresh
  - ✅ UI polish & advanced animations (Complete)
  
@@ -87,10 +88,10 @@
  ### 🚀 Phase 2: Advanced Features & Cloud (In Progress)
 
  ```
- Phase 2 Progress: ████████░░░░░░░░░░░░ 40% 🟡
+ Phase 2 Progress: ███████████░░░░░░░░░ 55% 🟡
 
  Focus Areas:        Onboarding, Firebase Auth, Analytics, Cloud Sync
- Completed:          Onboarding, CSV Export, Firebase Auth, Crashlytics, Home Refactor
+ Completed:          Onboarding, CSV Export, Firebase Auth, Crashlytics, Home Refactor, Firestore Cloud Sync
  ```
  
  ### Feature Breakdown
@@ -261,7 +262,7 @@
  - **Total Files:** 133+ Dart files
  - **Lines of Code:** 10,500+
  - **Features:** 7 (transactions, categories, budgets, home, analytics, settings, splash)
- - **Test Files:** 76 files / **386 tests** 🎉
+ - **Test Files:** 106 files / **2,215+ tests** 🎉
  - **Test Coverage:** **72.3%** (filtrado, excl. generados)
  - **Commits:** 26+
  - **Active Days:** 11 (Nov 23, 24, 25, 29, 30, Dec 6, 8, 13, 24, Feb 21 x2)
@@ -351,13 +352,26 @@
  - [x] Analytics Period enum unit tests
  - [x] Expand Patrol integration tests (End-to-end critical flows)
  - [ ] Demo video and portfolio screenshots
- 
+
+ ### Session Jul 5, 2026 ✅ — Firestore Cloud Sync
+ - [x] `updatedAt` field + `copyWith` on Transaction/Category/Budget (entities + Hive models)
+ - [x] Defensive Hive box recovery on incompatible schema (crash fix found mid-session)
+ - [x] Firestore remote datasources + dual local/remote repositories for the 3 features
+ - [x] `SyncService` with Last-Write-Wins merge, wired to `AuthBloc` in `main.dart`
+ - [x] Firestore data namespaced per flavor (`environments/{dev|staging|prod}/...`) — 3 flavors share one Firebase project
+ - [x] `firestore.rules` + Firebase CLI setup (`.firebaserc`, `firestore.indexes.json`), rules deployed
+ - [x] `docs/FIRESTORE_SYNC_GUIDE.md` rewritten to match the real implementation
+
+ ### Next Steps (Phase 2)
+ - [ ] Integration tests with Patrol for Firestore sync (dev flavor) — planned next session
+ - [ ] Demo video and portfolio screenshots
+
  ---
  
  **Remember:** Progress over perfection. Every weekend gets you closer to your goals! 🚀
 
- **Document Version:** 2.1
- **Last Major Update:** 2026-05-03 (Phase 2 Onboarding & Auth)
+ **Document Version:** 2.2
+ **Last Major Update:** 2026-07-05 (Phase 2 Firestore Cloud Sync)
  **Status:** 🟢 Active Development - **Phase 2 In Progress!**
 
  **Key Update:** 🎉 **PHASE 0 COMPLETE!** 🎉

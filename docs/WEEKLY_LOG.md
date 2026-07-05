@@ -26,15 +26,15 @@
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Weekends Completed | 10 (sessions) | 131 |
-| Hours Invested | ~82-90h | 1,040 |
+| Weekends Completed | 11 (sessions) | 131 |
+| Hours Invested | ~88-96h | 1,040 |
 | Current Phase | **Phase 2** (Architecture & Firebase) | Phase 4 |
 | Test Coverage | **81.5%** (filtrado) — Gate: ≥60% | ≥75% |
-| Features Complete | 7/7 Phase 0 · Phase 2 en curso | All |
+| Features Complete | 7/7 Phase 0 · Phase 2 en curso (Firestore Cloud Sync ✅) | All |
 | Articles Published | 0 | 8+ |
 | Videos Created | 0 | 6+ |
 
-**Last Updated:** 2026-04-18
+**Last Updated:** 2026-07-05
 
 ---
 
@@ -715,7 +715,42 @@
 
 ---
 
-### Session 4 - Phase 1: Missing Pages Widget Tests\n\n**Date:** 2026-03-15\n**Planned Hours:** 2h\n**Actual Hours:** ~2h\n**Phase:** 1 (Testing & CI/CD)\n\n#### 🎯 Goals\n- [x] Add widget tests for missing pages (AllTransactionsPage, AddTransactionPage, SettingsPage)\n- [x] Add localized strings to en/es ARB files\n- [x] Analyze remaining work for Phase 1 completion\n\n#### ✅ Completed\n\n**Widget Tests (+80 nuevos tests agregados):**\n- ✅ Widget tests agregados pacientemente por el usuario para todas las páginas restantes principales.\n- ✅ `AllTransactionsPage` tester coverage\n- ✅ `AddTransactionPage` tester coverage\n- ✅ Actualizadas las localizaciones `recentTransactions`, `noDataAvailable` etc en sus ARB para no corromper la pantalla de Home y otras.\n- ✅ Ejecución de build_runner con parseo limpio de Hive_ce.\n\n#### 📝 Notes & Learnings\n- Al sobrepasar la meta de cobertura (75%), la métrica actual quedó re-validada en **81.5% filtrado** gracias a los últimos 80 tests elaborados. \n- De las pruebas modales pasamos a cobertura de Pantallas complejas, reduciendo la brecha con e2e Testing.\n\n#### 📊 Metrics\n- Test Coverage: **81.5%** (↑ desde 79.2% con nuevos Widget tests)\n- Total Tests: **533** (desde 453)\n\n#### ⏭️ Next Session\n- End-to-End Integration tests en Patrol (los flujos críticos que faltan, ej. E2E de crear transacción y verificar Home).\n- Preparar Demo Video de 3 minutos para cerrar fase 1.\n\n---\n\n### Session 1 & 2 - Phase 2: Onboarding, Export & Firebase Auth
+### Session 4 - Phase 1: Missing Pages Widget Tests
+
+**Date:** 2026-03-15
+**Planned Hours:** 2h
+**Actual Hours:** ~2h
+**Phase:** 1 (Testing & CI/CD)
+
+#### 🎯 Goals
+- [x] Add widget tests for missing pages (AllTransactionsPage, AddTransactionPage, SettingsPage)
+- [x] Add localized strings to en/es ARB files
+- [x] Analyze remaining work for Phase 1 completion
+
+#### ✅ Completed
+
+**Widget Tests (+80 nuevos tests agregados):**
+- ✅ Widget tests agregados pacientemente por el usuario para todas las páginas restantes principales.
+- ✅ `AllTransactionsPage` tester coverage
+- ✅ `AddTransactionPage` tester coverage
+- ✅ Actualizadas las localizaciones `recentTransactions`, `noDataAvailable` etc en sus ARB para no corromper la pantalla de Home y otras.
+- ✅ Ejecución de build_runner con parseo limpio de Hive_ce.
+
+#### 📝 Notes & Learnings
+- Al sobrepasar la meta de cobertura (75%), la métrica actual quedó re-validada en **81.5% filtrado** gracias a los últimos 80 tests elaborados. 
+- De las pruebas modales pasamos a cobertura de Pantallas complejas, reduciendo la brecha con e2e Testing.
+
+#### 📊 Metrics
+- Test Coverage: **81.5%** (↑ desde 79.2% con nuevos Widget tests)
+- Total Tests: **533** (desde 453)
+
+#### ⏭️ Next Session
+- End-to-End Integration tests en Patrol (los flujos críticos que faltan, ej. E2E de crear transacción y verificar Home).
+- Preparar Demo Video de 3 minutos para cerrar fase 1.
+
+---
+
+### Session 1 & 2 - Phase 2: Onboarding, Export & Firebase Auth
 
 **Date:** 2026-05-01 to 2026-05-03
 **Planned Hours:** 8h  
@@ -762,6 +797,55 @@
 - Añadir tests (Unit y Widget tests) para el feature de Autenticación.
 - Implementar Pull-to-refresh en Home y Transactions.
 - Preparar Demo Video y capturas de pantalla para la Fase 1.
+
+---
+
+### Session 3 - Phase 2: Firestore Cloud Sync
+
+**Date:** 2026-07-05
+**Planned Hours:** ~6h
+**Actual Hours:** ~6h
+**Phase:** 2 (Advanced Features & Cloud)
+
+#### 🎯 Goals
+- [x] Revisar `docs/FIRESTORE_SYNC_GUIDE.md` y corregir el diseño contra el código real antes de implementar
+- [x] Agregar `updatedAt` a Transaction/Category/Budget (fundamento para el merge)
+- [x] Arreglar los ~45 tests que rompía ese cambio
+- [x] Datasources remotos Firestore + repositorios duales (local/remoto) para las 3 features
+- [x] `SyncService` con merge Last-Write-Wins + wiring a `AuthBloc`
+- [x] Separar datos por flavor en Firestore (dev/staging/prod comparten un solo proyecto Firebase)
+- [x] `firestore.rules` + setup de Firebase CLI, reglas desplegadas
+
+#### ✅ Completed
+- ✅ **Plan corregido antes de ejecutar:** la guía original tenía un bug de DI (inyectaba clases concretas en vez de interfaces — `@LazySingleton(as: Interface)` solo registra bajo el tipo interfaz en GetIt), versión de `cloud_firestore` desactualizada, y el orden de wiring en `main.dart` habría tocado boxes de Hive todavía cerradas. Se corrigió el plan antes de escribir código.
+- ✅ **`updatedAt` + `copyWith`:** agregado a las 3 entidades/modelos Hive (`Category`/`Budget` no tenían ni `copyWith`). Normalizado a nivel repositorio (`entity.copyWith(updatedAt: DateTime.now())`), no en cada call site.
+- ✅ **Fix no planeado:** un crash reportado por Crashlytics (`type 'Null' is not a subtype of type 'DateTime'`) al abrir boxes Hive con schema viejo — Dart's `DateTime` no tiene constructor `const`, así que el `defaultValue` nativo de Hive no sirve. Se resolvió con recuperación defensiva de boxes (`HiveService._openBoxSafely`).
+- ✅ **Datasources + repos duales:** `TransactionRemoteDataSource`/`CategoryRemoteDataSource`/`BudgetRemoteDataSource` (interfaz + impl Firestore) para las 3 features, siguiendo el patrón de `FirebaseAuthRemoteDataSource`. `setUserId(String? userId)` en las interfaces de dominio. Escrituras local-first + fire-and-forget a Firestore, logueadas con `LoggerService` si fallan.
+- ✅ **`SyncService`:** merge LWW extraído a función pura (`LastWriteWinsMerger`), testeable sin mockear Hive/Firestore. `onLogin`/`onLogout` conectados a `AuthBloc.stream` en `main.dart`, después de `hiveService.init()`.
+- ✅ **Namespacing por flavor:** a pedido explícito, los 3 flavors (que comparten un solo proyecto Firebase, `mis-apps-c42cc`) namespacean sus datos bajo `environments/{dev|staging|prod}/users/{uid}/...` para no mezclarse nunca.
+- ✅ **Firebase CLI:** `firestore.rules`, `.firebaserc`, `firestore.indexes.json` creados y reglas desplegadas (`firebase deploy --only firestore:rules`).
+- ✅ **Historial de commits reorganizado:** el trabajo de la sesión se separó en 6 commits atómicos (updatedAt, fix de Hive, tests, datasources+repos, SyncService+rules, chore de IDE) en vez de uno solo, cada uno pasando su propio pre-commit hook de forma independiente.
+
+#### 📝 Notes & Learnings
+- Revisar la guía de diseño contra el código real (no solo confiar en el documento) encontró un bug de DI real antes de escribir una sola línea — vale la pena ese paso siempre que la guía tenga semanas de antigüedad.
+- Cuando una migración de schema agrega un campo requerido a un modelo Hive ya en producción, `defaultValue` de Hive no sirve para tipos sin constructor `const` (como `DateTime`) — hay que diseñar recuperación defensiva desde el principio.
+- Los seeders de dev (que solo corren si la box está vacía) interactúan mal con `onLogout(clearLocalData: true)`: cada ciclo logout→reinicio→login re-siembra datos random con IDs nuevos, que el merge sube como "solo local" — acumula lotes de prueba en el Firestore de dev. Documentado en la guía, no resuelto (decisión pendiente).
+- Xcode con disco lleno produce decenas de errores en cascada ("unexpected incomplete target") que parecen fallas de compilación reales — el error de fondo está siempre en la primera línea del log.
+
+#### 🚧 Challenges & Blockers
+- Xcode se quedó sin espacio en disco a mitad de un build, y el intento de build siguiente falló por un bug de compatibilidad entre `flutterfire_cli` (symbol upload de Crashlytics) y la integración de Swift Package Manager de Flutter — se resolvió deshabilitando temporalmente ese Run Script para iterar localmente (revertido antes de commitear, ya que afecta también builds de release).
+- `firebase init firestore` sobrescribió `firestore.rules` con las reglas deny-all por defecto de la consola pese al mensaje "Skipping write" — hubo que restaurar el archivo manualmente después.
+
+#### 📊 Metrics
+- Test Coverage: sin remedir formalmente esta sesión; suite completa 2,215 tests, ~41 fallas preexistentes no relacionadas (AnalyticsBloc, confirmadas en sesión anterior)
+- Tests nuevos: ~35 (merge LWW, `SyncService`, datasources Firestore con `fake_cloud_firestore`)
+- Commits: 6 (atómicos, ver arriba)
+- Files Changed: ~40 archivos de producción/tests + 3 archivos de config de Firebase
+
+#### ⏭️ Next Session
+- Integration tests con Patrol para el sync con Firestore, **flavor dev únicamente** — contra el proyecto real (no `fake_cloud_firestore`), namespaced bajo `environments/dev/...`. Ver sección 13 de `docs/FIRESTORE_SYNC_GUIDE.md` para el contexto detallado.
+- Decidir qué hacer con la interacción seeders + logout (acumulación de datos de prueba en Firestore dev).
+- Demo Video y capturas de pantalla (sigue pendiente de sesiones anteriores).
 
 ---
 
