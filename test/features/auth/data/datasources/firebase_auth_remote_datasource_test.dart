@@ -65,15 +65,17 @@ void main() {
     group('authStateChanges', () {
       test('maps non-null Firebase User to UserEntity', () {
         final mockUser = buildMockUser();
-        when(() => mockAuth.authStateChanges())
-            .thenAnswer((_) => Stream.fromIterable([mockUser]));
+        when(
+          () => mockAuth.authStateChanges(),
+        ).thenAnswer((_) => Stream.fromIterable([mockUser]));
 
         expect(sut.authStateChanges, emits(tUserEntity));
       });
 
       test('maps null Firebase User to null', () {
-        when(() => mockAuth.authStateChanges())
-            .thenAnswer((_) => Stream.fromIterable([null]));
+        when(
+          () => mockAuth.authStateChanges(),
+        ).thenAnswer((_) => Stream.fromIterable([null]));
 
         expect(sut.authStateChanges, emits(isNull));
       });
@@ -112,10 +114,12 @@ void main() {
         final mockUser = buildMockUser();
         final mockCredential = MockUserCredential();
         when(() => mockCredential.user).thenReturn(mockUser);
-        when(() => mockAuth.signInWithEmailAndPassword(
-              email: any(named: 'email'),
-              password: any(named: 'password'),
-            )).thenAnswer((_) async => mockCredential);
+        when(
+          () => mockAuth.signInWithEmailAndPassword(
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenAnswer((_) async => mockCredential);
 
         final result = await sut.signInWithEmail(
           email: tEmail,
@@ -123,19 +127,23 @@ void main() {
         );
 
         expect(result, tUserEntity);
-        verify(() => mockAuth.signInWithEmailAndPassword(
-              email: tEmail,
-              password: 'secret123',
-            )).called(1);
+        verify(
+          () => mockAuth.signInWithEmailAndPassword(
+            email: tEmail,
+            password: 'secret123',
+          ),
+        ).called(1);
       });
 
       test('throws when Firebase returns null user', () async {
         final mockCredential = MockUserCredential();
         when(() => mockCredential.user).thenReturn(null);
-        when(() => mockAuth.signInWithEmailAndPassword(
-              email: any(named: 'email'),
-              password: any(named: 'password'),
-            )).thenAnswer((_) async => mockCredential);
+        when(
+          () => mockAuth.signInWithEmailAndPassword(
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenAnswer((_) async => mockCredential);
 
         await expectLater(
           () => sut.signInWithEmail(email: tEmail, password: 'secret'),
@@ -144,10 +152,12 @@ void main() {
       });
 
       test('propagates FirebaseAuthException from Firebase', () async {
-        when(() => mockAuth.signInWithEmailAndPassword(
-              email: any(named: 'email'),
-              password: any(named: 'password'),
-            )).thenThrow(FirebaseAuthException(code: 'wrong-password'));
+        when(
+          () => mockAuth.signInWithEmailAndPassword(
+            email: any(named: 'email'),
+            password: any(named: 'password'),
+          ),
+        ).thenThrow(FirebaseAuthException(code: 'wrong-password'));
 
         await expectLater(
           () => sut.signInWithEmail(email: tEmail, password: 'wrong'),
@@ -157,41 +167,51 @@ void main() {
     });
 
     group('signUpWithEmail', () {
-      test('creates user and calls updateDisplayName when displayName provided',
-          () async {
-        final mockUser = buildMockUser();
-        final mockCredential = MockUserCredential();
-        when(() => mockCredential.user).thenReturn(mockUser);
-        when(() => mockAuth.createUserWithEmailAndPassword(
+      test(
+        'creates user and calls updateDisplayName when displayName provided',
+        () async {
+          final mockUser = buildMockUser();
+          final mockCredential = MockUserCredential();
+          when(() => mockCredential.user).thenReturn(mockUser);
+          when(
+            () => mockAuth.createUserWithEmailAndPassword(
               email: any(named: 'email'),
               password: any(named: 'password'),
-            )).thenAnswer((_) async => mockCredential);
-        when(() => mockUser.updateDisplayName(any()))
-            .thenAnswer((_) async {});
+            ),
+          ).thenAnswer((_) async => mockCredential);
+          when(
+            () => mockUser.updateDisplayName(any()),
+          ).thenAnswer((_) async {});
 
-        final result = await sut.signUpWithEmail(
-          email: tEmail,
-          password: 'secret123',
-          displayName: tDisplayName,
-        );
+          final result = await sut.signUpWithEmail(
+            email: tEmail,
+            password: 'secret123',
+            displayName: tDisplayName,
+          );
 
-        expect(result, isA<UserEntity>());
-        verify(() => mockUser.updateDisplayName(tDisplayName)).called(1);
-      });
+          expect(result, isA<UserEntity>());
+          verify(() => mockUser.updateDisplayName(tDisplayName)).called(1);
+        },
+      );
 
-      test('creates user without calling updateDisplayName when null', () async {
-        final mockUser = buildMockUser(displayName: null);
-        final mockCredential = MockUserCredential();
-        when(() => mockCredential.user).thenReturn(mockUser);
-        when(() => mockAuth.createUserWithEmailAndPassword(
+      test(
+        'creates user without calling updateDisplayName when null',
+        () async {
+          final mockUser = buildMockUser(displayName: null);
+          final mockCredential = MockUserCredential();
+          when(() => mockCredential.user).thenReturn(mockUser);
+          when(
+            () => mockAuth.createUserWithEmailAndPassword(
               email: any(named: 'email'),
               password: any(named: 'password'),
-            )).thenAnswer((_) async => mockCredential);
+            ),
+          ).thenAnswer((_) async => mockCredential);
 
-        await sut.signUpWithEmail(email: tEmail, password: 'secret123');
+          await sut.signUpWithEmail(email: tEmail, password: 'secret123');
 
-        verifyNever(() => mockUser.updateDisplayName(any()));
-      });
+          verifyNever(() => mockUser.updateDisplayName(any()));
+        },
+      );
     });
 
     group('signInWithGoogle', () {
@@ -201,12 +221,14 @@ void main() {
         final mockUser = buildMockUser();
         final mockCredential = MockUserCredential();
 
-        when(() => mockGoogleSignIn.authenticate())
-            .thenAnswer((_) async => mockGoogleAccount);
+        when(
+          () => mockGoogleSignIn.authenticate(),
+        ).thenAnswer((_) async => mockGoogleAccount);
         when(() => mockGoogleAccount.authentication).thenReturn(mockGoogleAuth);
         when(() => mockGoogleAuth.idToken).thenReturn('id_token');
-        when(() => mockAuth.signInWithCredential(any()))
-            .thenAnswer((_) async => mockCredential);
+        when(
+          () => mockAuth.signInWithCredential(any()),
+        ).thenAnswer((_) async => mockCredential);
         when(() => mockCredential.user).thenReturn(mockUser);
 
         final result = await sut.signInWithGoogle();
@@ -231,7 +253,7 @@ void main() {
     group('signOut', () {
       test('calls both Firebase signOut and Google signOut', () async {
         when(() => mockAuth.signOut()).thenAnswer((_) async {});
-        when(() => mockGoogleSignIn.signOut()).thenAnswer((_) async => null);
+        when(() => mockGoogleSignIn.signOut()).thenAnswer((_) async {});
 
         await sut.signOut();
 

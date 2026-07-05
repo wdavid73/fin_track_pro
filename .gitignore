@@ -77,3 +77,5 @@ lib/firebase_options.dart
 test/**/goldens/macos/
 test/**/goldens/linux/
 test/**/goldens/windows/
+
+.codegraph/*

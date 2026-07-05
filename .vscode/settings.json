@@ -4,7 +4,5 @@
   "[dart]": {
     "editor.inlayHints.enabled": "on"
   },
-  "cSpell.words": [
-    "datasource"
-  ]
+  "cSpell.words": ["crashlytics", "datasource"]
 }
