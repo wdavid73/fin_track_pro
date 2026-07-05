@@ -20,11 +20,16 @@ class BudgetModel extends Budget {
   @override
   String get period => super.period;
 
+  @HiveField(4)
+  @override
+  DateTime get updatedAt => super.updatedAt;
+
   const BudgetModel({
     required super.id,
     required super.categoryId,
     required super.amount,
     super.period = 'monthly',
+    required super.updatedAt,
   });
 
   factory BudgetModel.fromEntity(Budget budget) {
@@ -33,6 +38,7 @@ class BudgetModel extends Budget {
       categoryId: budget.categoryId,
       amount: budget.amount,
       period: budget.period,
+      updatedAt: budget.updatedAt,
     );
   }
 
@@ -42,6 +48,27 @@ class BudgetModel extends Budget {
       categoryId: categoryId,
       amount: amount,
       period: period,
+      updatedAt: updatedAt,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'categoryId': categoryId,
+      'amount': amount,
+      'period': period,
+      'updatedAt': updatedAt.toIso8601String(),
+    };
+  }
+
+  factory BudgetModel.fromMap(Map<String, dynamic> map) {
+    return BudgetModel(
+      id: map['id'] as String,
+      categoryId: map['categoryId'] as String,
+      amount: (map['amount'] as num).toDouble(),
+      period: map['period'] as String,
+      updatedAt: DateTime.parse(map['updatedAt'] as String),
     );
   }
 }

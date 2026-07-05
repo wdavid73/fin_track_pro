@@ -24,12 +24,17 @@ class CategoryModel extends Category {
   @override
   String get type => super.type;
 
+  @HiveField(5)
+  @override
+  DateTime get updatedAt => super.updatedAt;
+
   const CategoryModel({
     required super.id,
     required super.name,
     required super.icon,
     required super.color,
     required super.type,
+    required super.updatedAt,
   });
 
   factory CategoryModel.fromEntity(Category category) {
@@ -39,10 +44,40 @@ class CategoryModel extends Category {
       icon: category.icon,
       color: category.color,
       type: category.type,
+      updatedAt: category.updatedAt,
     );
   }
 
   Category toEntity() {
-    return Category(id: id, name: name, icon: icon, color: color, type: type);
+    return Category(
+      id: id,
+      name: name,
+      icon: icon,
+      color: color,
+      type: type,
+      updatedAt: updatedAt,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'icon': icon,
+      'color': color,
+      'type': type,
+      'updatedAt': updatedAt.toIso8601String(),
+    };
+  }
+
+  factory CategoryModel.fromMap(Map<String, dynamic> map) {
+    return CategoryModel(
+      id: map['id'] as String,
+      name: map['name'] as String,
+      icon: map['icon'] as String,
+      color: map['color'] as int,
+      type: map['type'] as String,
+      updatedAt: DateTime.parse(map['updatedAt'] as String),
+    );
   }
 }

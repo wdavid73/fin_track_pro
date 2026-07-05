@@ -60,6 +60,7 @@ class BudgetSeeder extends Seeder {
         categoryId: category.id,
         amount: amount,
         period: 'monthly',
+        updatedAt: DateTime.now(),
       );
       budgets.add(budget);
       await budgetBox.put(budget.id, budget);

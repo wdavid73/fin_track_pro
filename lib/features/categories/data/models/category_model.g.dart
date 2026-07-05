@@ -22,13 +22,14 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
       icon: fields[2] as String,
       color: (fields[3] as num).toInt(),
       type: fields[4] as String,
+      updatedAt: fields[5] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, CategoryModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
       ..writeByte(3)
       ..write(obj.color)
       ..writeByte(4)
-      ..write(obj.type);
+      ..write(obj.type)
+      ..writeByte(5)
+      ..write(obj.updatedAt);
   }
 
   @override

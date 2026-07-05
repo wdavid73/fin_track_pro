@@ -32,6 +32,10 @@ class TransactionModel extends Transaction {
   @override
   DateTime get createdAt => super.createdAt;
 
+  @HiveField(7)
+  @override
+  DateTime get updatedAt => super.updatedAt;
+
   const TransactionModel({
     required super.id,
     required super.amount,
@@ -40,6 +44,7 @@ class TransactionModel extends Transaction {
     super.note,
     required super.date,
     required super.createdAt,
+    required super.updatedAt,
   });
 
   factory TransactionModel.fromEntity(Transaction transaction) {
@@ -51,6 +56,7 @@ class TransactionModel extends Transaction {
       note: transaction.note,
       date: transaction.date,
       createdAt: transaction.createdAt,
+      updatedAt: transaction.updatedAt,
     );
   }
 
@@ -63,6 +69,33 @@ class TransactionModel extends Transaction {
       note: note,
       date: date,
       createdAt: createdAt,
+      updatedAt: updatedAt,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'amount': amount,
+      'categoryId': categoryId,
+      'type': type,
+      'note': note,
+      'date': date.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+    };
+  }
+
+  factory TransactionModel.fromMap(Map<String, dynamic> map) {
+    return TransactionModel(
+      id: map['id'] as String,
+      amount: (map['amount'] as num).toDouble(),
+      categoryId: map['categoryId'] as String,
+      type: map['type'] as String,
+      note: map['note'] as String?,
+      date: DateTime.parse(map['date'] as String),
+      createdAt: DateTime.parse(map['createdAt'] as String),
+      updatedAt: DateTime.parse(map['updatedAt'] as String),
     );
   }
 }

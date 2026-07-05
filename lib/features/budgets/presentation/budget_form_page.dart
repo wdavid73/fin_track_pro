@@ -60,6 +60,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
       categoryId: _selectedCategoryId!,
       amount: double.parse(_amountController.text.replaceAll('.', '').trim()),
       period: _selectedPeriod,
+      updatedAt: DateTime.now(),
     );
 
     if (widget.isEditMode) {

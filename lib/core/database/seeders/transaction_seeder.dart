@@ -75,6 +75,7 @@ class TransactionSeeder extends Seeder {
             note: _generateNote(category.name, 'expense'),
             date: date,
             createdAt: date,
+            updatedAt: date,
           ),
         );
       }
@@ -96,6 +97,7 @@ class TransactionSeeder extends Seeder {
             note: 'Pago quincenal',
             date: date,
             createdAt: date,
+            updatedAt: date,
           ),
         );
       }
@@ -117,6 +119,7 @@ class TransactionSeeder extends Seeder {
             note: 'Proyecto freelance',
             date: date,
             createdAt: date,
+            updatedAt: date,
           ),
         );
       }

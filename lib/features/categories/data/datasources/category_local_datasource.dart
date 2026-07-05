@@ -51,6 +51,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '💼',
         color: Colors.green.toARGB32(),
         type: 'income',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: 'income_freelance',
@@ -58,6 +59,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '💻',
         color: Colors.blue.toARGB32(),
         type: 'income',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: 'income_investment',
@@ -65,6 +67,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '📈',
         color: Colors.purple.toARGB32(),
         type: 'income',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: 'income_other',
@@ -72,6 +75,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '💰',
         color: Colors.teal.toARGB32(),
         type: 'income',
+        updatedAt: DateTime.now(),
       ),
 
       // Expense categories
@@ -81,6 +85,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '🍔',
         color: Colors.orange.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: 'expense_transport',
@@ -88,6 +93,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '🚗',
         color: Colors.red.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: 'expense_shopping',
@@ -95,6 +101,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '🛍️',
         color: Colors.pink.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: 'expense_entertainment',
@@ -102,6 +109,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '🎬',
         color: Colors.indigo.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: 'expense_bills',
@@ -109,6 +117,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '📄',
         color: Colors.brown.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: 'expense_health',
@@ -116,6 +125,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '🏥',
         color: Colors.red.shade300.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: 'expense_education',
@@ -123,6 +133,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '📚',
         color: Colors.blue.shade700.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
       CategoryModel(
         id: 'expense_other',
@@ -130,6 +141,7 @@ class CategoryLocalDataSource implements CategoryDataSource {
         icon: '💸',
         color: Colors.grey.toARGB32(),
         type: 'expense',
+        updatedAt: DateTime.now(),
       ),
     ];
 
