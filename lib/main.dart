@@ -7,6 +7,7 @@ import 'package:fin_track_pro/core/database/hive_service.dart';
 import 'package:fin_track_pro/core/database/seeders/database_seeder.dart';
 import 'package:fin_track_pro/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:fin_track_pro/core/services/crashlytics_service.dart';
+import 'package:fin_track_pro/core/services/sync_service.dart';
 import 'package:fin_track_pro/core/widgets/app_snack_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,18 @@ Future<void> mainCommon(Flavor flavor, String envFile) async {
             ? getIt<DatabaseSeeder>()
             : null,
       );
+
+      // Wire Firestore cloud sync to auth state. Must run after Hive is
+      // initialized, since sync touches the transactions/categories/budgets
+      // boxes.
+      final syncService = getIt<SyncService>();
+      getIt<AuthBloc>().stream.listen((state) {
+        if (state.status == AuthStatus.authenticated && state.user != null) {
+          syncService.onLogin(state.user!.id);
+        } else if (state.status == AuthStatus.unauthenticated) {
+          syncService.onLogout(clearLocalData: true);
+        }
+      });
 
       final messengerKey = GlobalKey<ScaffoldMessengerState>();
       AppSnackbar().init(messengerKey);
